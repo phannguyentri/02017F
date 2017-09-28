@@ -349,11 +349,14 @@ class Purchases_model extends CI_Model
                 $item['purchase_id'] = $purchase_id;
 
                 if ($this->site->getReference('po') == $data['reference_no']) {
-                    $this->site->updateReference('po');
+                    // $this->site->updateReference('po');
                 }
                 $i = 0;
                 $total=0;
                 foreach ($items as $item) {
+                    echo "<pre>";
+                    print_r($item);
+                    echo "</pre>";
                     $this->updateQuantityItems($item['item_id'], $item['quantity']);
                     $item['purchase_id'] = $id;
                     $oldpu = $this->getItemByIDP($id);
@@ -389,7 +392,7 @@ class Purchases_model extends CI_Model
                 }
 
                 if ($data['status'] == 'received') {
-                        $this->site->syncQuantity(NULL, $purchase_id);
+                        // $this->site->syncQuantity(NULL, $purchase_id);
                 }
                 return true;
             }
@@ -402,7 +405,7 @@ class Purchases_model extends CI_Model
 
 
         }else{
-            die('2');
+            // die('2');
             unset($data['enquiery']);
             if ($this->db->insert('purchases', $data)) {
                 $purchase_id = $this->db->insert_id();
@@ -463,6 +466,13 @@ class Purchases_model extends CI_Model
         return false;
     }
 
+
+    public function updateQuantityItemsWhenDelete($purchases_id){
+        // $this->db->set('quantity', 'quantity+'.$item_quantity, FALSE);
+        // $this->db->where('id', $item_id);
+        // $this->db->update('items');
+    }
+
     public function deletePurchase($id)
     {
 
@@ -470,7 +480,11 @@ class Purchases_model extends CI_Model
 
         if ($this->db->delete('purchase_items', array('purchase_id' => $id)) && $this->db->delete('purchases', array('id' => $id))) {
             $this->db->delete('payments', array('purchase_id' => $id));
-            $this->site->syncQuantity(NULL, NULL, $purchase_items);
+            // $this->site->syncQuantity(NULL, NULL, $purchase_items);
+
+            $this->db->updateQuantityItemsWhenDelete($id);
+
+
             return true;
         }
         return FALSE;
