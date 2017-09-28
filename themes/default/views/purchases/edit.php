@@ -174,6 +174,12 @@
         <div class="row">
             <div class="col-lg-12">
 
+                <?php
+                    echo "<pre>";
+                    print_r($inv_items2);
+                    echo "</pre>";
+                 ?>
+
                 <p class="introtext"><?php echo lang('enter_info'); ?></p>
                 <?php
                 $attrib = array('data-toggle' => 'validator', 'role' => 'form', 'class' => 'edit-po-form');

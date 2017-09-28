@@ -892,7 +892,11 @@ class Purchases extends MY_Controller
             $c = rand(100000, 9999999);
             foreach ($inv_items as $item) {
                 $row = $this->site->getProductByID($item->product_id);
+                $row->purchases_item_id = $item->id;
+                $row->item_id = $item->item_id;
+                $row->item_name = $item->product_name;
                 $row->expiry = (($item->expiry && $item->expiry != '0000-00-00') ? $this->sma->fsd($item->expiry) : '');
+
                 $row->qty = $item->quantity;
                 $row->quantity_balance = $item->quantity_balance;
                 $row->discount = $item->discount ? $item->discount : '0';
@@ -911,7 +915,7 @@ class Purchases extends MY_Controller
                 }
                 $c++;
             }
-
+            $this->data['inv_items2'] = $inv_items;
             $this->data['inv_items'] = json_encode($pr);
             $this->data['id'] = $id;
             $this->data['suppliers'] = $this->site->getAllCompanies('supplier');
