@@ -436,13 +436,6 @@ class Purchases_model extends CI_Model
     }
 
 
-    public function updateQuantityItems($item_id, $item_quantity){
-        // die('4');
-        $this->db->set('quantity', 'quantity+'.$item_quantity, FALSE);
-        $this->db->where('id', $item_id);
-        $this->db->update('items');
-    }
-
     public function updatePurchase($id, $data, $items = array())
     {
         $opurchase = $this->getPurchaseByID($id);
@@ -466,24 +459,32 @@ class Purchases_model extends CI_Model
         return false;
     }
 
+    public function updateQuantityItems($item_id, $item_quantity, $option=0){
+        // die('4');
+        if ($option == 0) {
+            $this->db->set('quantity', 'quantity+'.$item_quantity, FALSE);
+        }else{
+            $this->db->set('quantity', 'quantity-'.$item_quantity, FALSE);
+        }
 
-    public function updateQuantityItemsWhenDelete($purchases_id){
-        // $this->db->set('quantity', 'quantity+'.$item_quantity, FALSE);
-        // $this->db->where('id', $item_id);
-        // $this->db->update('items');
+        $this->db->where('id', $item_id);
+        $this->db->update('items');
+    }
+
+    public function updateQuantityItemsWhenDelete($purchase_items){
+        foreach ($purchase_items as $value) {
+            $this->updateQuantityItems($value->item_id, $value->quantity, 1);
+        }
     }
 
     public function deletePurchase($id)
     {
-
         $purchase_items = $this->site->getAllPurchaseItems($id);
 
         if ($this->db->delete('purchase_items', array('purchase_id' => $id)) && $this->db->delete('purchases', array('id' => $id))) {
             $this->db->delete('payments', array('purchase_id' => $id));
+            $this->updateQuantityItemsWhenDelete($purchase_items);
             // $this->site->syncQuantity(NULL, NULL, $purchase_items);
-
-            $this->db->updateQuantityItemsWhenDelete($id);
-
 
             return true;
         }

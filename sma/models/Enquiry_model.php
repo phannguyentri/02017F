@@ -308,8 +308,8 @@ class Enquiry_model extends CI_Model
     }
 
     public function addEnquiry($data, $items)
-    {   
-        
+    {
+
         if($items != NULL){
             if ($this->db->insert('purchases', $data)) {
                 $purchase_id = $this->db->insert_id();
@@ -363,7 +363,7 @@ class Enquiry_model extends CI_Model
 
         if ($this->db->delete('purchase_items', array('purchase_id' => $id)) && $this->db->delete('purchases', array('id' => $id))) {
             $this->db->delete('payments', array('purchase_id' => $id));
-            $this->site->syncQuantity(NULL, NULL, $purchase_items);
+            // $this->site->syncQuantity(NULL, NULL, $purchase_items);
             return true;
         }
         return FALSE;
