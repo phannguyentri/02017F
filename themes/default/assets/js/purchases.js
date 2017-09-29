@@ -39,7 +39,6 @@ if (poshipping = localStorage.getItem('poshipping')) {
 
 // If there is any item in localStorage
 if (localStorage.getItem('poitems')) {
-    console.log( JSON.parse(localStorage.getItem('poitems')));
     loadItems();
 }
 
@@ -445,7 +444,6 @@ $(document).on('click', '.podel', function () {
     $(document).on("focus", '.rquantity', function () {
         old_row_qty = $(this).val();
     }).on("change", '.rquantity', function () {
-        console.log('zx', $(this).val());
         var row = $(this).closest('tr');
         if (!is_numeric($(this).val())) {
             $(this).val(old_row_qty);
@@ -455,6 +453,7 @@ $(document).on('click', '.podel', function () {
         var new_qty = parseFloat($(this).val()),
         item_id = row.attr('data-item-id');
         poitems[item_id].row.new_qty = new_qty;
+        poitems[item_id].row.qty = new_qty;
         localStorage.setItem('poitems', JSON.stringify(poitems));
         loadItems();
     });
@@ -528,7 +527,7 @@ function loadItems() {
         total_discount = 0;
         $("#poTable tbody").empty();
         poitems = JSON.parse(localStorage.getItem('poitems'));
-
+        console.log(poitems);
         $.each(poitems, function () {
 
             var item = this;
@@ -536,7 +535,12 @@ function loadItems() {
             poitems[item_id] = item;
             
             var product_id = item.row.id, item_type = item.row.type, combo_items = item.combo_items, item_cost = item.row.cost, item_qty = item.row.qty, item_bqty = item.row.quantity_balance, item_expiry = item.row.expiry, item_tax_method = item.row.tax_method, item_ds = item.row.discount, item_discount = 0, item_option = item.row.option, item_code = item.row.code, item_specification= item.row.specification;
-            var item_name = item.row.item_name;
+            var item_name = '';
+            if(item.row.item){
+                item_name= item.row.item
+            }else{
+                item_name= item.row.product_name
+            }
             
             var supplier = localStorage.getItem('posupplier'), belong = false;
 
@@ -591,17 +595,17 @@ function loadItems() {
 
             var row_no = (new Date).getTime();
            
-            new_quantity = (item.row.new_qty) ? item.row.new_qty : 0;
+            old_quantity = (item.row.old_qty) ? formatDecimal(item.row.old_qty) : 0;
 
-            console.log('new_quantity', new_quantity);
 
             var newTr = $('<tr id="row_' + row_no + '" class="row_' + item_id + '" data-item-id="' + item_id + '"></tr>');
-            tr_html = '<td><input name="product_specification[]" type="hidden" class="rspecification" value="' + item_specification + '"><input name="product_name[]" type="hidden" class="rname" value="' + item_name + '"><input name="product_option[]" type="hidden" class="roption" value="' + item_option + '"><span class="sname" id="name_' + row_no + '">' + item_name +'</span> <i class="pull-right fa fa-edit tip edit" id="' + row_no + '" data-item="' + item_id + '" title="Edit" style="cursor:pointer;"></i></td>';
+            tr_html = '<td><input name="product_specification[]" type="hidden" class="rspecification" value="' + item_specification + '"><input name="product_name[]" type="hidden" class="rname" value="' + item_name + '"><input name="product_option[]" type="hidden" class="roption" value="' + item_option + '"><span class="sname" id="name_' + row_no + '">' + item_name + ' (' + item_specification + ')'+(sel_opt != '' ? ' ('+sel_opt+')' : '')+'</span> <i class="pull-right fa fa-edit tip edit" id="' + row_no + '" data-item="' + item_id + '" title="Edit" style="cursor:pointer;"></i></td>';
             if (site.settings.product_expiry == 1) {
                 tr_html += '<td><input class="form-control date rexpiry" name="expiry[]" type="text" value="' + item_expiry + '" data-id="' + row_no + '" data-item="' + item_id + '" id="expiry_' + row_no + '"></td>';
             }
+            tr_html += '<input type="hidden" name="purchases_item_id[]" value="'+item.row.purchases_item_id+'"><input type="hidden" name="item_id[]" value="'+item.row.item_id+'">'
             tr_html += '<td class="text-right"><input class="form-control input-sm text-right rcost" name="net_cost[]" type="hidden" id="cost_' + row_no + '" value="' + item_cost + '"><input class="rucost" name="unit_cost[]" type="hidden" value="' + unit_cost + '"><input class="realucost" name="real_unit_cost[]" type="hidden" value="' + item.row.real_unit_cost + '"><span class="text-right scost" id="scost_' + row_no + '">' + formatMoney(item_cost) + '</span></td>';
-            tr_html += '<td><input name="quantity_balance[]" type="hidden" class="rbqty" value="' + item_bqty + '"><input type="hidden" name="new_quantity" id="old_quantity" value="'+new_quantity+'"><input class="form-control text-center rquantity" name="quantity[]" type="text" value="' + formatDecimal(item_qty) + '" data-id="' + row_no + '" data-item="' + item_id + '" id="quantity_' + row_no + '" onClick="this.select();"></td>';
+            tr_html += '<td><input name="quantity_balance[]" type="hidden" class="rbqty" value="' + item_bqty + '"><input type="hidden" name="old_quantity[]" id="old_quantity" value="'+old_quantity+'"><input class="form-control text-center rquantity" name="quantity[]" type="text" value="' + formatDecimal(item_qty) + '" data-id="' + row_no + '" data-item="' + item_id + '" id="quantity_' + row_no + '" onClick="this.select();"></td>';
             if (site.settings.product_discount == 1) {
                 tr_html += '<td class="text-right"><input class="form-control input-sm rdiscount" name="product_discount[]" type="hidden" id="discount_' + row_no + '" value="' + item_ds + '"><span class="text-right sdiscount text-danger" id="sdiscount_' + row_no + '">' + formatMoney(0 - (item_discount * item_qty)) + '</span></td>';
             }

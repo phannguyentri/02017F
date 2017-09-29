@@ -697,7 +697,8 @@ class Purchases extends MY_Controller
             $product_discount = 0;
             $order_discount = 0;
             $percentage = '%';
-            $i = sizeof($_POST['product']);
+            $products = array();
+            $i = sizeof($_POST['purchases_item_id']);
             for ($r = 0; $r < $i; $r++) {
                 $item_code = $_POST['product'][$r];
                 $item_net_cost = $this->sma->formatDecimal($_POST['net_cost'][$r]);
@@ -707,11 +708,11 @@ class Purchases extends MY_Controller
                 $item_option = isset($_POST['product_option'][$r]) && $_POST['product_option'][$r] != 'false' ? $_POST['product_option'][$r] : NULL;
                 $item_tax_rate = isset($_POST['product_tax'][$r]) ? $_POST['product_tax'][$r] : NULL;
                 $item_discount = isset($_POST['product_discount'][$r]) ? $_POST['product_discount'][$r] : NULL;
-                $item_expiry = isset($_POST['expiry'][$r]) ? $this->sma->fsd($_POST['expiry'][$r]) : NULL;
+                // $item_expiry = isset($_POST['expiry'][$r]) ? $this->sma->fsd($_POST['expiry'][$r]) : NULL;
                 $quantity_balance = $_POST['quantity_balance'][$r];
 
 
-                if (isset($item_code) && isset($real_unit_cost) && isset($unit_cost) && isset($item_quantity) && isset($quantity_balance)) {
+                if (/*isset($item_code) && */isset($real_unit_cost) && isset($unit_cost) && isset($item_quantity) && isset($quantity_balance)) {
                     $product_details = $this->purchases_model->getProductByCode($item_code);
                     $unit_cost = $real_unit_cost;
                     $pr_discount = 0;
@@ -770,14 +771,14 @@ class Purchases extends MY_Controller
                     $subtotal = (($item_net_cost * $item_quantity) + $pr_item_tax);
 
                     $products[] = array(
-                        'product_id' => $product_details->id,
-                        'product_code' => $item_code,
-                        'product_name' => $product_details->name,
-                        //'product_type' => $item_type,
+                        'id' => $_POST['purchases_item_id'][$r],
+                        'item_id'     => $_POST['item_id'][$r],
+                        'product_name' => $_POST['product_name'][$r],
                         'option_id' => $item_option,
                         'net_unit_cost' => $item_net_cost,
                         'unit_cost' => $this->sma->formatDecimal($item_net_cost + $item_tax),
                         'quantity' => $item_quantity,
+                        'old_quantity' => $_POST['old_quantity'][$r],
                         'quantity_balance' => $item_quantity,
                         'warehouse_id' => $warehouse_id,
                         'item_tax' => $pr_item_tax,
@@ -795,6 +796,7 @@ class Purchases extends MY_Controller
                     $total += $item_net_cost * $item_quantity;
                 }
             }
+
             if (empty($products)) {
                 $this->form_validation->set_rules('product', lang("order_items"), 'required');
             } else {
@@ -894,10 +896,11 @@ class Purchases extends MY_Controller
                 $row = $this->site->getProductByID($item->product_id);
                 $row->purchases_item_id = $item->id;
                 $row->item_id = $item->item_id;
-                $row->item_name = $item->product_name;
+                $row->product_name = $item->product_name;
                 $row->expiry = (($item->expiry && $item->expiry != '0000-00-00') ? $this->sma->fsd($item->expiry) : '');
 
                 $row->qty = $item->quantity;
+                $row->old_qty = $item->quantity;
                 $row->quantity_balance = $item->quantity_balance;
                 $row->discount = $item->discount ? $item->discount : '0';
                 $options = $this->purchases_model->getProductOptions($row->id);
