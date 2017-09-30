@@ -522,13 +522,24 @@ class Purchases_model extends CI_Model
     {
         $purchase_items = $this->site->getAllPurchaseItems($id);
         $enquiery_id = $this->getPurchaseByID($id)->parent_id;
+        $enquiery_items = $this->getPurchaseItemByPID($enquiery_id);
         echo "<pre>";
-        print_r($this->getPurchaseItemByPID($enquiery_id));
-        echo "</pre>";die();
+        print_r($enquiery_items);
+        echo "</pre>";
+
+        echo "<pre>";
+        print_r($purchase_items);
+        echo "</pre>";
+
+        foreach ($enquiery_items as $key => $value) {
+          echo $value->id.": ".($value->quantity_balance + $purchase_items[$key]->quantity_balance);
+        }
+
+        die();
 
         if ($this->db->delete('purchase_items', array('purchase_id' => $id)) && $this->db->delete('purchases', array('id' => $id))) {
             $this->db->delete('payments', array('purchase_id' => $id));
-            $this->updateQuantityItemsWhenDelete($purchase_items);
+            $this->updateQuantityItemsWhenDelete($purchase_items); // update quantity when delete purchase
 
             $enquiery_id = $this->getPurchaseByID($id)->parent_id;
             $this->db->update('purchases', array('status' => 'approval'), array('id' => $enquiery_id));
