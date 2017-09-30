@@ -161,6 +161,74 @@
             $('form.edit-po-form').submit();
         });
 
+/*---------------------------------------------------------------------------*/
+
+        $('#production_id').change(function(event) {
+
+            event.preventDefault();
+            var production_id = $( "#production_id" ).val();
+
+            for (var k in poitemss){
+                delete poitemss[k];
+                localStorage.setItem('poitemss', JSON.stringify(poitemss));
+            }
+
+            $.ajax({
+                url: '<?= site_url('enquiry/getMaterialNorms'); ?>',
+                async : false,
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    production_id: production_id
+                },
+                success: function (data) {
+                    item = {};
+
+                    for(i in data){
+                        $.ajax({
+                            url: 'enquiry/suggestions',
+                            async : false,
+                            type: 'GET',
+                            dataType: 'json',
+                            data: {
+                                select_option: 1,
+                                item_name: data[i].item,
+                            },
+                            success: function (data2) {
+                                if (data2[0].id !== 0) {
+
+                                    if (parseInt(data[i].items_quantity) < parseInt(data[i].total_quantity)) {
+                                        quantity_need = parseInt(data[i].total_quantity - data[i].items_quantity);
+                                        data2[0].row.qty = quantity_need;
+
+                                        var item_id = site.settings.item_addition == 1 ? data2[0].item_id : data2[0].id;
+                                        if (poitemss[item_id]) {
+                                            poitemss[item_id].row.qty = parseFloat(poitemss[item_id].row.qty) + 1;
+                                        } else {
+                                            poitemss[item_id] = data2[0];
+                                        }
+                                        localStorage.setItem('poitemss', JSON.stringify(poitemss));
+
+                                    }
+
+                                } else {
+                                    //audio_error.play();
+                                    bootbox.alert('<?= lang('no_match_found') ?>');
+                                }
+                            }
+                        })
+                    }
+
+                    if (localStorage.getItem('poitemss')) {
+                        loadItems();
+                    }
+
+                }
+            })
+
+        });
+
+
     });
 
 
@@ -188,7 +256,8 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <?= lang("date", "podate"); ?>
-                                    <?php echo form_input('date', (isset($_POST['date']) ? $_POST['date'] : $this->sma->hrld($purchase->date)), 'class="form-control input-tip datetime" id="podate" required="required"'); ?>
+                                    <?php echo form_input('date', (isset($_POST['date']) ? $_POST['date'] : $this->sma->hrsd($purchase->date)), 'class="form-control input-tip date" id="date" required="required"'); ?>
+
                                 </div>
                             </div>
                         <?php } ?>
@@ -198,7 +267,7 @@
                                 <?php echo form_input('reference_no', (isset($_POST['reference_no']) ? $_POST['reference_no'] : $purchase->reference_no), 'class="form-control input-tip" id="poref" required="required"'); ?>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4" style="display: none">
                             <div class="form-group">
                                 <?= lang("warehouse", "powarehouse"); ?>
                                 <?php

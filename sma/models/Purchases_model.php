@@ -270,6 +270,19 @@ class Purchases_model extends CI_Model
         return FALSE;
     }
 
+    public function getPurchaseItemByPID($purchase_id)
+    {
+        $this->db->where('purchase_id', $purchase_id);
+        $q = $this->db->get('purchase_items');
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
+    }
+
     public function getProductOptionByID($id)
     {
         $q = $this->db->get_where('product_variants', array('id' => $id), 1);
@@ -508,10 +521,18 @@ class Purchases_model extends CI_Model
     public function deletePurchase($id)
     {
         $purchase_items = $this->site->getAllPurchaseItems($id);
+        $enquiery_id = $this->getPurchaseByID($id)->parent_id;
+        echo "<pre>";
+        print_r($this->getPurchaseItemByPID($enquiery_id));
+        echo "</pre>";die();
 
         if ($this->db->delete('purchase_items', array('purchase_id' => $id)) && $this->db->delete('purchases', array('id' => $id))) {
             $this->db->delete('payments', array('purchase_id' => $id));
             $this->updateQuantityItemsWhenDelete($purchase_items);
+
+            $enquiery_id = $this->getPurchaseByID($id)->parent_id;
+            $this->db->update('purchases', array('status' => 'approval'), array('id' => $enquiery_id));
+
             // $this->site->syncQuantity(NULL, NULL, $purchase_items);
 
             return true;

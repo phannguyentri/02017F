@@ -1,5 +1,5 @@
 <script type="text/javascript">
-   
+
     if (localStorage.getItem('poitems')) {
         localStorage.removeItem('poitems');
     }
@@ -36,7 +36,7 @@
     if (localStorage.getItem('postatus')) {
         localStorage.removeItem('postatus');
     }
-    
+
 
     <?php if($quote_id) { ?>
     localStorage.setItem('powarehouse', '<?= $quote->warehouse_id ?>');
@@ -131,7 +131,7 @@
                     url: site.base_url + "purchases/addItemQuickEnquiry",
                     data: {'id': $v},
                     dataType: "json",
-                    success: function (data) { 
+                    success: function (data) {
                     $.each(data, function( index, value ) {
                         if (value.id !== 0) {
                             var row = add_purchase_item(value);
@@ -142,8 +142,8 @@
                             }
                         }
                     })
-                    },             
-                    
+                    },
+
                 });
             }
         })
@@ -243,13 +243,10 @@
 
 
                 <div class="row">
-                    
+
                     <div class="col-lg-12">
 
-                        <?php if ($Owner || $Admin) { ?>
-                        
-                       
-                  
+<!--                         <?php if ($Owner || $Admin) { ?>
 
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -292,10 +289,7 @@
                                 <input id="document" type="file" name="document" data-show-upload="false"
                                        data-show-preview="false" class="form-control file">
                             </div>
-                        </div>
-
-
-
+                        </div> -->
 
 
                         <div class="col-md-12">
@@ -303,6 +297,55 @@
                                 <div
                                     class="panel-heading"><?= lang('please_select_these_before_adding_product') ?></div>
                                 <div class="panel-body" style="padding: 5px;">
+
+                                    <?php if ($Owner || $Admin) { ?>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <?= lang("date", "podate"); ?>
+                                                <?php echo form_input('date', (isset($_POST['date']) ? $_POST['date'] : ""), 'class="form-control input-tip datetime" id="podate" required="required"'); ?>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <?= lang("reference_no", "poref"); ?>
+                                            <?php echo form_input('reference_no', (isset($_POST['reference_no']) ? $_POST['reference_no'] : $ponumber), 'class="form-control input-tip" id="poref"'); ?>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" style="display: none">
+                                        <div class="form-group">
+                                            <?= lang("warehouse", "powarehouse"); ?>
+                                            <?php
+                                            $wh[''] = '';
+                                            foreach ($warehouses as $warehouse) {
+                                                $wh[$warehouse->id] = $warehouse->name;
+                                            }
+                                            echo form_dropdown('warehouse', $wh, (isset($_POST['warehouse']) ? $_POST['warehouse'] : $Settings->default_warehouse), 'id="powarehouse" class="form-control input-tip select" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("warehouse") . '" required="required" style="width:100%;" ');
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <?= lang("status", "postatus"); ?>
+                                            <?php
+                                            $post = array('received' => lang('received'), 'pending' => lang('pending'), 'ordered' => lang('ordered'));
+                                            echo form_dropdown('status', $post, (isset($_POST['status']) ? $_POST['status'] : ''), 'id="postatus" class="form-control input-tip select" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("status") . '" required="required" style="width:100%;" ');
+                                            ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <?= lang("document", "document") ?>
+                                            <input id="document" type="file" name="document" data-show-upload="false"
+                                                   data-show-preview="false" class="form-control file">
+                                        </div>
+                                    </div>
+
+
+
+
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <?= lang("supplier", "posupplier"); ?>
@@ -327,7 +370,7 @@
                         </div>
 
                         <div class="col-md-12">
-                       
+
                                 <div class="form-group">
                                     <?= lang("Phiếu yêu cầu mua hàng", "enquiery"); ?>
                                     <?php
@@ -341,7 +384,7 @@
                                     </div>
 
 
-                        
+
                         <div class="col-md-12" id="sticker">
                             <div class="well well-sm">
                                 <div class="form-group" style="margin-bottom:0;">
