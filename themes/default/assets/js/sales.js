@@ -42,7 +42,7 @@ $(document).ready(function (e) {
         nsCustomer();
     }
 
-// Order level shipping and discount localStorage 
+// Order level shipping and discount localStorage
 if (sldiscount = localStorage.getItem('sldiscount')) {
 	$('#sldiscount').val(sldiscount);
 }
@@ -212,7 +212,7 @@ $('#pcc_no_1').change(function (e) {
 	if(ccn1 == 4)
 		CardType = 'Visa';
 	else if(ccn1 == 5)
-		CardType = 'MasterCard';	
+		CardType = 'MasterCard';
 	else if(ccn1 == 3)
 		CardType = 'Amex';
 	else if(ccn1 == 6)
@@ -400,7 +400,7 @@ if (slwarehouse = localStorage.getItem('slwarehouse')) {
 		}
 	});
 
-	// Order tax calculation 
+	// Order tax calculation
 	if (site.settings.tax2 != 0) {
 		$('#sltax2').change(function () {
 			localStorage.setItem('sltax2', $(this).val());
@@ -409,7 +409,7 @@ if (slwarehouse = localStorage.getItem('slwarehouse')) {
 		});
 	}
 
-	// Order discount calculation 
+	// Order discount calculation
 	var old_sldiscount;
 	$('#sldiscount').focus(function () {
 		old_sldiscount = $(this).val();
@@ -429,8 +429,8 @@ if (slwarehouse = localStorage.getItem('slwarehouse')) {
 	});
 
 
-	/* ---------------------- 
-	 * Delete Row Method 
+	/* ----------------------
+	 * Delete Row Method
 	 * ---------------------- */
 	$(document).on('click', '.sldel', function () {
 		var row = $(this).closest('tr');
@@ -446,14 +446,14 @@ if (slwarehouse = localStorage.getItem('slwarehouse')) {
 
 
 	/* -----------------------
-	 * Edit Row Modal Hanlder 
+	 * Edit Row Modal Hanlder
 	 ----------------------- */
 	 $(document).on('click', '.edit', function () {
 		var row = $(this).closest('tr');
 		var row_id = row.attr('id');
 		item_id = row.attr('data-item-id');
 		item = slitems[item_id];
-		var qty = row.children().children('.rquantity').val(), 
+		var qty = row.children().children('.rquantity').val(),
 		product_option = row.children().children('.roption').val(),
 		unit_price = formatDecimal(row.children().children('.realuprice').val()),
 		discount = row.children().children('.rdiscount').val();
@@ -513,7 +513,7 @@ if (slwarehouse = localStorage.getItem('slwarehouse')) {
 				$("<option />", {value: this.id, text: this.name}).appendTo(opt);
 				o++;
 			});
-		} 
+		}
 
 		$('#poptions-div').html(opt);
 		$('select.select').select2({minimumResultsForSearch: 6});
@@ -588,7 +588,7 @@ if (slwarehouse = localStorage.getItem('slwarehouse')) {
 	});
 
 	/* -----------------------
-	 * Edit Row Method 
+	 * Edit Row Method
 	 ----------------------- */
 	 $(document).on('click', '#editItem', function () {
 
@@ -619,13 +619,13 @@ if (slwarehouse = localStorage.getItem('slwarehouse')) {
 		slitems[item_id].row.serial = $('#pserial').val();
 		localStorage.setItem('slitems', JSON.stringify(slitems));
 		$('#prModal').modal('hide');
-		
+
 		loadItems();
 		return;
 	});
 
 	/* -----------------------
-	 * Product option change  
+	 * Product option change
 	 ----------------------- */
 	 $(document).on('change', '#poption', function () {
 		var row = $('#' + $('#row_id').val()), opt = $(this).val();
@@ -637,11 +637,11 @@ if (slwarehouse = localStorage.getItem('slwarehouse')) {
 					$('#pprice').val(this.price);
 				}
 			});
-		} 
+		}
 	});
 
 	 /* ------------------------------
-	 * Sell Gift Card modal 
+	 * Sell Gift Card modal
 	 ------------------------------- */
 	 $(document).on('click', '#sellGiftCard', function (e) {
 		if (count == 1) {
@@ -667,10 +667,10 @@ if (slwarehouse = localStorage.getItem('slwarehouse')) {
 		gccustomer = $('#gccustomer').val(),
 		gcexpiry = $('#gcexpiry').val() ? $('#gcexpiry').val() : '',
 		gcprice = parseFloat($('#gcprice').val());
-		if(gccode == '' || gcvalue == '' || gcprice == '' || gcvalue == 0 || gcprice == 0) { 
+		if(gccode == '' || gcvalue == '' || gcprice == '' || gcvalue == 0 || gcprice == 0) {
 			$('#gcerror').text('Please fill the required fields');
-			$('.gcerror-con').show(); 
-			return false; 
+			$('.gcerror-con').show();
+			return false;
 		}
 
 		var gc_data = new Array();
@@ -707,7 +707,7 @@ if (slwarehouse = localStorage.getItem('slwarehouse')) {
 	});
 
 	/* ------------------------------
-	 * Show manual item addition modal 
+	 * Show manual item addition modal
 	 ------------------------------- */
 	 $(document).on('click', '#addManually', function (e) {
 		if (count == 1) {
@@ -800,7 +800,7 @@ if (slwarehouse = localStorage.getItem('slwarehouse')) {
 	});
 
 	/* --------------------------
-	 * Edit Row Quantity Method 
+	 * Edit Row Quantity Method
 	 -------------------------- */
 
 
@@ -827,7 +827,7 @@ if (slwarehouse = localStorage.getItem('slwarehouse')) {
 	// });
 
 	/* --------------------------
-	 * Edit Row Price Method 
+	 * Edit Row Price Method
 	 -------------------------- */
 	 var old_price;
 	 $(document).on("focus", '.rprice', function () {
@@ -903,7 +903,7 @@ function loadItems(billers = null, edit = null, production_items = null) {
 			console.log('item', item);
 			var item_id = site.settings.item_addition == 1 ? item.item_id : item.id;
 			slitems[item_id] = item;
-			
+
 			var product_id = item.row.id, item_type = item.row.type, combo_items = item.combo_items, item_price = item.row.price, item_qty = item.row.qty, item_aqty = item.row.quantity, item_tax_method = item.row.tax_method, item_ds = item.row.discount, item_discount = 0, item_option = item.row.option, item_code = item.row.code, item_serial = item.row.serial, item_name = item.row.name.replace(/"/g, "&#034;").replace(/'/g, "&#039;");
 			var unit_price = item.row.real_unit_price;
 
@@ -977,7 +977,7 @@ function loadItems(billers = null, edit = null, production_items = null) {
 			// 	tr_html += '<td class="text-right"><input class="form-control input-sm text-right rproduct_tax" name="product_tax[]" type="hidden" id="product_tax_' + row_no + '" value="' + pr_tax.id + '"><span class="text-right sproduct_tax" id="sproduct_tax_' + row_no + '">' + (parseFloat(pr_tax_rate) != 0 ? '(' + pr_tax_rate + ')' : '') + ' ' + formatMoney(pr_tax_val * item_qty) + '</span></td>';
 			// }
 			// tr_html += '<td class="text-right"><span class="text-right ssubtotal" id="subtotal_' + row_no + '">' + formatMoney(((parseFloat(item_price) + parseFloat(pr_tax_val)) * parseFloat(item_qty))) + '</span></td>';
-			
+
 			tr_html += "<td>"
 			// if (edit == null) {
 			// 	tr_html += '<select name="employees_'+product_id+'[]" class="form-control select_billers" multiple="multiple"> ';
@@ -1032,7 +1032,7 @@ function loadItems(billers = null, edit = null, production_items = null) {
 
 					}
 				}
-				
+
 			}else if(edit == 'edit_again'){
 				// console.log(slitems);
 				tr_html += '<input name="employees_'+product_id+'[]" class="form-control select_billers" multiple="multiple"> ';
@@ -1060,7 +1060,7 @@ function loadItems(billers = null, edit = null, production_items = null) {
 				$('#row_' + row_no).addClass('danger');
 				// if(site.settings.overselling != 1) { $('#add_sale, #edit_sale').attr('disabled', true); }
 			} else if (item_type == 'combo') {
-				if(combo_items === false) { 
+				if(combo_items === false) {
 					$('#row_' + row_no).addClass('danger');
 					// if(site.settings.overselling != 1) { $('#add_sale, #edit_sale').attr('disabled', true); }
 				} else {
@@ -1068,10 +1068,10 @@ function loadItems(billers = null, edit = null, production_items = null) {
 					   if(parseFloat(this.quantity) < (parseFloat(this.qty)*item_qty)) {
 						   $('#row_' + row_no).addClass('danger');
 						   // if(site.settings.overselling != 1) { $('#add_sale, #edit_sale').attr('disabled', true); }
-					   } 
+					   }
 				   });
 				}
-			}  
+			}
 
 		});
 
@@ -1087,7 +1087,7 @@ function loadItems(billers = null, edit = null, production_items = null) {
 		tfoot += '<th class="text-right">'+formatMoney(total)+'</th><th class="text-center"><i class="fa fa-trash-o" style="opacity:0.5; filter:alpha(opacity=50);"></i></th></tr>';
 		// $('#slTable tfoot').html(tfoot);
 
-		// Order level discount calculations        
+		// Order level discount calculations
 		if (sldiscount = localStorage.getItem('sldiscount')) {
 			var ds = sldiscount;
 			if (ds.indexOf("%") !== -1) {
@@ -1104,7 +1104,7 @@ function loadItems(billers = null, edit = null, production_items = null) {
 			//total_discount += parseFloat(order_discount);
 		}
 
-		// Order level tax calculations    
+		// Order level tax calculations
 		if (site.settings.tax2 != 0) {
 			if (sltax2 = localStorage.getItem('sltax2')) {
 				$.each(tax_rates, function () {
@@ -1192,7 +1192,7 @@ function loadItems(billers = null, edit = null, production_items = null) {
 	} else {
 		slitems[item_id] = item;
 	}
-	
+
 	localStorage.setItem('slitems', JSON.stringify(slitems));
 
 	loadItems(billers, edit);
