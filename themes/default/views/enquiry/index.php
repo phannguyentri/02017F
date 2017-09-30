@@ -1,3 +1,8 @@
+<style type="text/css">
+    .width1{
+        width: 1% !important;
+    }
+</style>
 <script>
     $(document).ready(function () {
         var oTable = $('#POData').dataTable({
@@ -16,7 +21,7 @@
             "aoColumns": [{
                 "bSortable": false,
                 "mRender": checkbox
-            }, {"mRender": fld}, null, {"mRender": currencyFormat}, {"mRender": row_status}, {"bSortable": false}],
+            }, {"mRender": fsd}, null, {"mRender": currencyFormat}, {"mRender": row_status}, {"bSortable": false}],
             'fnRowCallback': function (nRow, aData, iDisplayIndex) {
                 var oSettings = oTable.fnSettings();
                 nRow.id = aData[0];
@@ -27,16 +32,16 @@
                 var total = 0, paid = 0, balance = 0;
                 for (var i = 0; i < aaData.length; i++) {
                     total += parseFloat(aaData[aiDisplay[i]][3]);
-                
+
                 }
                 var nCells = nRow.getElementsByTagName('th');
                 nCells[3].innerHTML = currencyFormat(total);
-            
+
             }
         }).fnSetFilteringDelay().dtFilter([
             {column_number: 1, filter_default_label: "[<?=lang('date');?> (yyyy-mm-dd)]", filter_type: "text", data: []},
             {column_number: 2, filter_default_label: "[<?=lang('Số tham chiếu');?>]", filter_type: "text", data: []},
-           
+
             {column_number: 4, filter_default_label: "[<?=lang('Trạng thái');?>]", filter_type: "text", data: []},
         ], "footer");
 
@@ -131,15 +136,15 @@
                            class="table table-bordered table-hover table-striped">
                         <thead>
                         <tr class="active">
-                            <th style="min-width:30px; width: 30px; text-align: center;">
+                            <th class="width1" style="min-width:30px; width: 30px; text-align: center;">
                                 <input class="checkbox checkft" type="checkbox" name="check"/>
                             </th>
                             <th><?php echo $this->lang->line("date"); ?></th>
                             <th><?php echo $this->lang->line("Số tham chiếu"); ?></th>
-                           
-                           
+
+
                             <th><?php echo $this->lang->line("grand_total"); ?></th>
-                         
+
                              <th><?php echo $this->lang->line("Trạng thái"); ?></th>
                             <th style="width:100px;"><?php echo $this->lang->line("actions"); ?></th>
                         </tr>
@@ -155,9 +160,9 @@
                                 <input class="checkbox checkft" type="checkbox" name="check"/>
                             </th>
                             <th></th>
-                            <th></th>                            
-                           
-                            <th><?php echo $this->lang->line("grand_total"); ?></th>                           
+                            <th></th>
+
+                            <th><?php echo $this->lang->line("grand_total"); ?></th>
                             <th></th>
                             <th style="width:100px; text-align: center;"><?php echo $this->lang->line("actions"); ?></th>
                         </tr>
@@ -177,5 +182,5 @@
 <?php } ?>
 
 <script type="text/javascript">
-    
+
 </script>

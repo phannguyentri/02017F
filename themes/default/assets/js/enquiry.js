@@ -514,7 +514,7 @@ function nsSupplier() {
 }
 
 function loadItems() {
-
+    console.log('zzz', JSON.parse(localStorage.getItem('poitemss')));
     if (localStorage.getItem('poitemss')) {
         total = 0;
         count = 1;
@@ -558,7 +558,7 @@ function loadItems() {
                 var pr_tax_val = 0, pr_tax_rate = 0;
                 if (site.settings.tax1 == 1) {
                     if (pr_tax !== false) {
-                        if (pr_tax.type == 1) {
+                        if ( 1 == 1) {
 
                             if (item_tax_method == '0') {
                                 pr_tax_val = formatDecimal(((unit_cost) * parseFloat(pr_tax.rate)) / (100 + parseFloat(pr_tax.rate)));
@@ -588,7 +588,7 @@ function loadItems() {
 
             var row_no = (new Date).getTime();
            
-            var newTr = $('<tr id="row_' + row_no + '" class="row_' + item_id + '" data-item-id="' + item_id + '"></tr>');
+            var newTr = $('<tr id="row_' + row_no + '" class="dong row_' + item_id + '" data-item-id="' + item_id + '"></tr>');
             tr_html = '<td><input name="product_specification[]" type="hidden" class="rspecification" value="' + item_specification + '"><input name="product_name[]" type="hidden" class="rname" value="' + item_name + '"><input name="product_option[]" type="hidden" class="roption" value="' + item_option + '"><span class="sname" id="name_' + row_no + '">' + item_name + ' (' + item_specification + ')'+(sel_opt != '' ? ' ('+sel_opt+')' : '')+'</span></td>';
             if (site.settings.product_expiry == 1) {
                 tr_html += '<td><input class="form-control date rexpiry" name="expiry[]" type="text" value="' + item_expiry + '" data-id="' + row_no + '" data-item="' + item_id + '" id="expiry_' + row_no + '"></td>';
@@ -682,7 +682,7 @@ function loadItems() {
  * @returns {Boolean}
  ---------------------------- */
  function add_enquiry_item(item) {
-    
+    // console.log('zzz',item);
     if (item == null) {
         return;
     }
@@ -692,7 +692,6 @@ function loadItems() {
     } else {
         poitemss[item_id] = item;
     }
-    
     localStorage.setItem('poitemss', JSON.stringify(poitemss));
     loadItems();
     return true;

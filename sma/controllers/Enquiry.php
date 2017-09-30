@@ -287,11 +287,9 @@ class Enquiry extends MY_Controller
             $unit_cost = "unit_cost";
             $tax_rate = "tax_rate";
             $reference = $this->input->post('reference_no') ? $this->input->post('reference_no') : $this->site->getReference('re');
-            if ($this->Owner || $this->Admin) {
-                $date = $this->sma->fld(trim($this->input->post('date')));
-            } else {
-                $date = date('Y-m-d H:i:s');
-            }
+
+                $date = date('Y-m-d');
+
             $warehouse_id = $this->input->post('warehouse');
             $supplier_id = $this->input->post('supplier');
             $status = $this->input->post('status');
@@ -570,6 +568,7 @@ class Enquiry extends MY_Controller
             $this->data['productions'] = $this->site->getProductions();
             $this->data['ponumber'] = ''; //$this->site->getReference('po');
             $this->load->helper('string');
+            $this->data['date'] = date('Y-m-d');
             $value = random_string('alnum', 20);
             $this->session->set_userdata('user_csrf', $value);
             $this->data['csrf'] = $this->session->userdata('user_csrf');
@@ -1192,14 +1191,30 @@ class Enquiry extends MY_Controller
 
     /* --------------------------------------------------------------------------- */
 
+    function getMaterialNorms(){
+        // echo $this->input->get('production_id');die();
+        $production_id = $this->input->get('production_id');
+        $this->load->model('productions_model');
+        if ($data = $this->productions_model->getMaterialNormsByProductionId($production_id)) {
+            echo json_encode($data);
+        }else{
+            json_encode(array('error' => 1));
+        }
+
+    }
+
     function suggestions()
     {
         $term = $this->input->get('term', TRUE);
+        if ($this->input->get('select_option')) {
+            $term = $this->input->get('item_name');
+        }
+
         $supplier_id = $this->input->get('supplier_id', TRUE);
 
-        if (strlen($term) < 1 || !$term) {
-            die("<script type='text/javascript'>setTimeout(function(){ window.top.location.href = '" . site_url('welcome') . "'; }, 10);</script>");
-        }
+        // if (strlen($term) < 1 || !$term) {
+        //     die("<script type='text/javascript'>setTimeout(function(){ window.top.location.href = '" . site_url('welcome') . "'; }, 10);</script>");
+        // }
 
         $spos = strpos($term, ' ');
         if ($spos !== false) {

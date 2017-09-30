@@ -174,12 +174,6 @@
         <div class="row">
             <div class="col-lg-12">
 
-                <?php
-                    echo "<pre>";
-                    print_r($inv_items2);
-                    echo "</pre>";
-                 ?>
-
                 <p class="introtext"><?php echo lang('enter_info'); ?></p>
                 <?php
                 $attrib = array('data-toggle' => 'validator', 'role' => 'form', 'class' => 'edit-po-form');
@@ -190,7 +184,7 @@
                 <div class="row">
                     <div class="col-lg-12">
 
-                        <?php if ($Owner || $Admin) { ?>
+<!--                         <?php if ($Owner || $Admin) { ?>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <?= lang("date", "podate"); ?>
@@ -232,13 +226,63 @@
                                 <input id="document" type="file" name="document" data-show-upload="false"
                                        data-show-preview="false" class="form-control file">
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="col-md-12">
                             <div class="panel panel-warning">
                                 <div
                                     class="panel-heading"><?= lang('please_select_these_before_adding_product') ?></div>
                                 <div class="panel-body" style="padding: 5px;">
+
+
+
+                                    <?php if ($Owner || $Admin) { ?>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <?= lang("date", "podate"); ?>
+                                                <?php echo form_input('date', (isset($_POST['date']) ? $_POST['date'] : $this->sma->hrld($purchase->date)), 'class="form-control input-tip datetime" id="podate" required="required"'); ?>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <?= lang("reference_no", "poref"); ?>
+                                            <?php echo form_input('reference_no', (isset($_POST['reference_no']) ? $_POST['reference_no'] : $purchase->reference_no), 'class="form-control input-tip" id="poref" required="required"'); ?>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" style="display: none">
+                                        <div class="form-group">
+                                            <?= lang("warehouse", "powarehouse"); ?>
+                                            <?php
+                                            $wh[''] = '';
+                                            foreach ($warehouses as $warehouse) {
+                                                $wh[$warehouse->id] = $warehouse->name;
+                                            }
+                                            echo form_dropdown('warehouse', $wh, (isset($_POST['warehouse']) ? $_POST['warehouse'] : $purchase->warehouse_id), 'id="powarehouse" class="form-control input-tip select" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("warehouse") . '" required="required" style="width:100%;" ');
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <?= lang("status", "postatus"); ?>
+                                            <?php
+                                            $post = array('received' => lang('received'), 'pending' => lang('pending'), 'ordered' => lang('ordered'));
+                                            echo form_dropdown('status', $post, (isset($_POST['status']) ? $_POST['status'] : $purchase->status), 'id="postatus" class="form-control input-tip select" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("status") . '" required="required" style="width:100%;" ');
+                                            ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <?= lang("document", "document") ?>
+                                            <input id="document" type="file" name="document" data-show-upload="false"
+                                                   data-show-preview="false" class="form-control file">
+                                        </div>
+                                    </div>
+
+
+
+
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <?= lang("supplier", "posupplier"); ?>
