@@ -362,39 +362,38 @@ class Purchases_model extends CI_Model
                 }
                 $i = 0;
                 $total=0;
+                $oldpus = $this->getItemByIDP($id);
+                $flag = 0;
                 foreach ($items as $item) {
                     $this->updateQuantityItems($item['item_id'], $item['quantity']);
                     $item['purchase_id'] = $id;
-                    $oldpu = $this->getItemByIDP($id);
 
-                        if($oldpu[$i]->item_id == $item['item_id']){
+                    foreach ($oldpus as $oldpu) {
+                        if($oldpu->item_id == $item['item_id']){
 
-                            $total = $oldpu[$i]->quantity_balance - $item['quantity_balance'];
+                            $total = $oldpu->quantity_balance - $item['quantity_balance'];
 
-                            if($this->db->update('purchase_items', array('quantity_balance' => $total), array('purchase_id' => $item['purchase_id'],'item_id' => $item['item_id']))){
-
+                            if ($total <= 0) {
+                                $this->db->update('purchase_items', array('quantity_balance' => $total, 'status' => 'done'), array('purchase_id' => $id,'item_id' => $item['item_id']));
+                            }else{
+                                $flag = 1;
+                                $this->db->update('purchase_items', array('quantity_balance' => $total, 'status' => 'approval'), array('purchase_id' => $id,'item_id' => $item['item_id']));
                             }
-
+                            $item['purchase_id'] = $purchase_id;
+                            $this->db->insert('purchase_items', $item);
                         }
                         $i++;
-                        $item['purchase_id'] = $purchase_id;
-                        $this->db->insert('purchase_items', $item);
 
-                        // $this->updateQuantityItems($item['item_id'], $item['quantity']);
+                    }
 
                 }
 
                 $unit_total1 = $this->getSumItemByIDP($id);
-                $total_1 -= $unit_total1->quantity_balance;
 
-
-
-                if(($total_1*1) <= 0 && $unit_total1->quantity_balance <=0){
-
+                if($flag == 0){
                     $this->db->update('purchases', array('status'=>'done') ,array('id' => $id));
-                    $this->db->update('purchase_items', array('status'=>'done') ,array('purchase_id' => $id));
-
-
+                }else{
+                    $this->db->update('purchases', array('status'=>'approval') ,array('id' => $id));
                 }
 
                 if ($data['status'] == 'received') {
@@ -444,33 +443,75 @@ class Purchases_model extends CI_Model
     {
 
         $opurchase = $this->getPurchaseByID($id);
+        $enquiery_id = $opurchase->parent_id;
+        $enquiries = $this->getItemByIDP($enquiery_id);
+
         $oitems = $this->getAllPurchaseItems($id);
-        if ($this->db->update('purchases', $data, array('id' => $id)) /*&& $this->db->delete('purchase_items', array('purchase_id' => $id))*/) {
-            // $purchase_id = $id;
-            // foreach ($items as $item) {
-            //     $item['purchase_id'] = $id;
-            //     $this->db->insert('purchase_items', $item);
-            // }
+        $flag = 0;
+        if ($this->db->update('purchases', $data, array('id' => $id))) {
 
             foreach ($items as $item) {
                 $old_qty = $item['old_quantity'];
                 $current_qty = $item['quantity'];
                 unset($item['old_quantity']);
-                if ($this->updatePurchaseItem($item)) {
+                if ($this->updatePurchaseItem($item, $old_qty, $current_qty, $enquiries)) {
                     $this->updateQuantityItemsWhenEdit($item['item_id'], $old_qty, $current_qty);
                 }
             }
 
-            if ($opurchase->status == 'received') {
-                // $this->site->syncQuantity(NULL, NULL, $oitems);
+            $new_enquiries = $this->getItemByIDP($enquiery_id);
+            foreach ($new_enquiries as $enquiery) {
+                if ($enquiery->quantity_balance > 0) {
+                    $flag = 1;
+                    break;
+                }
             }
-            if ($data['status'] == 'received') {
-                // $this->site->syncQuantity(NULL, $id);
+
+            if ($flag == 0) {
+                $this->db->update('purchases', array('status'=>'done') ,array('id' => $enquiery_id));
+            }else{
+                $this->db->update('purchases', array('status'=>'approval') ,array('id' => $enquiery_id));
             }
+
             $this->site->syncPurchasePayments($id);
             return true;
         }
 
+        return false;
+    }
+
+    public function updateQuantityBalanceWhenEdit($enquiery_id, $quantity_balance){
+        $this->db->where('id', $enquiery_id);
+        if ($quantity_balance <= 0) {
+            $this->db->set('status', 'done');
+        }else{
+            $this->db->set('status', 'approval');
+        }
+        $this->db->update('purchase_items', array('quantity_balance' => $quantity_balance));
+    }
+
+    public function updatePurchaseItem($item, $old_qty, $current_qty, $enquiries){
+        foreach ($enquiries as $enquiery) {
+            if ($enquiery->item_id == $item['item_id']) {
+                if ($old_qty > $current_qty) {
+                    $change_quantity_balance = $old_qty - $current_qty;
+                    $quantity_balance = $enquiery->quantity_balance + $change_quantity_balance;
+                    $this->updateQuantityBalanceWhenEdit($enquiery->id,$quantity_balance);
+                }elseif ($old_qty < $current_qty) {
+                    $change_quantity_balance = $current_qty - $old_qty;
+                    $quantity_balance = $enquiery->quantity_balance - $change_quantity_balance;
+                    $this->updateQuantityBalanceWhenEdit($enquiery->id,$quantity_balance, 1);
+                }
+            }
+        }
+
+
+        $item_id = $item['id'];
+        unset($item['id']);
+        $this->db->where('id', $item_id);
+        if ($this->db->update('purchase_items', $item)) {
+            return true;
+        }
         return false;
     }
 
@@ -487,17 +528,6 @@ class Purchases_model extends CI_Model
         }
         return false;
 
-    }
-
-
-    public function updatePurchaseItem($item){
-        $item_id = $item['id'];
-        unset($item['id']);
-        $this->db->where('id', $item_id);
-        if ($this->db->update('purchase_items', $item)) {
-            return true;
-        }
-        return false;
     }
 
     // $option 0: when add purchases, $option 1: when delete purchases
@@ -518,31 +548,31 @@ class Purchases_model extends CI_Model
         }
     }
 
+    public function updateQuantityBalanceWhenDelete($purchase_item_id, $purchase_quantity){
+        $this->db->set('quantity_balance', 'quantity_balance+'.$purchase_quantity, FALSE);
+        $this->db->where('id', $purchase_item_id);
+        $this->db->update('purchase_items', array('status'=>'approval'));
+    }
+
     public function deletePurchase($id)
     {
         $purchase_items = $this->site->getAllPurchaseItems($id);
         $enquiery_id = $this->getPurchaseByID($id)->parent_id;
         $enquiery_items = $this->getPurchaseItemByPID($enquiery_id);
-        echo "<pre>";
-        print_r($enquiery_items);
-        echo "</pre>";
 
-        echo "<pre>";
-        print_r($purchase_items);
-        echo "</pre>";
-
-        foreach ($enquiery_items as $key => $value) {
-          echo $value->id.": ".($value->quantity_balance + $purchase_items[$key]->quantity_balance);
+        foreach ($enquiery_items as $enquiery_item) {
+            foreach ($purchase_items as $purchase_item) {
+                if ($purchase_item->item_id == $enquiery_item->item_id) {
+                    $this->updateQuantityBalanceWhenDelete($enquiery_item->id, $purchase_item->quantity_balance);
+                }
+            }
         }
 
-        die();
-
         if ($this->db->delete('purchase_items', array('purchase_id' => $id)) && $this->db->delete('purchases', array('id' => $id))) {
+            $this->db->update('purchases', array('status' => 'approval'), array('id' => $enquiery_id));
+
             $this->db->delete('payments', array('purchase_id' => $id));
             $this->updateQuantityItemsWhenDelete($purchase_items); // update quantity when delete purchase
-
-            $enquiery_id = $this->getPurchaseByID($id)->parent_id;
-            $this->db->update('purchases', array('status' => 'approval'), array('id' => $enquiery_id));
 
             // $this->site->syncQuantity(NULL, NULL, $purchase_items);
 
