@@ -2219,6 +2219,17 @@ class Productions_model extends CI_Model
         }
         return FALSE;
     }
+    public function getPurchasesByParentArrayId($ids){
+      $this->db->where_in('parent_id', $ids);
+      $q = $this->db->get('purchases');
+      if ($q->num_rows() > 0) {
+          foreach (($q->result()) as $row) {
+              $data[] = $row;
+          }
+          return $data;
+      }
+      return FALSE;
+    }
 
     public function getPurchasesJoinPurchaseItems($arr_purchases_id, $item_id){
         $this->db->where_in('purchases.id', $arr_purchases_id);

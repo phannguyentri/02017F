@@ -630,6 +630,17 @@
                       echo "<pre>";
                       print_r($material_norms);
                       echo "</pre>";
+
+
+                      echo "<pre>";
+                      print_r($inv->id);
+                      echo "</pre>";
+
+                      echo "<pre>";
+                      $ids = $this->productions_model->getPurchasesByProductionId($inv->id);
+                      print_r($this->productions_model->getPurchasesByParentArrayId($ids));
+                      echo "</pre>";
+
                       ?>
 
                      <table class="table table-bordered table-hover table-striped print-table order-table">
