@@ -625,6 +625,13 @@
                       }
 
                      ?>
+
+                     <?php
+                      echo "<pre>";
+                      print_r($material_norms);
+                      echo "</pre>";
+                      ?>
+
                      <table class="table table-bordered table-hover table-striped print-table order-table">
                         <thead>
                            <tr>
@@ -632,8 +639,9 @@
                               <th>Đơn giá</th>
                               <th>Số lượng cần sử dụng</th>
                               <th>Số lượng tồn kho</th>
-                              <th>Số lượng thu mua</th>
+                              <th>Số lượng cần thu mua</th>
                               <th>Ngày nhập</th>
+                              <th>Số lượng đã thu mua</th>
                               <th>Trạng thái</th>
                            </tr>
                         </thead>
