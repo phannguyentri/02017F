@@ -223,10 +223,22 @@ $('#podiscount').focus(function () {
     /* ---------------------- 
      * Delete Row Method 
      * ---------------------- */
+var html_hidden_input = '';
 
 $(document).on('click', '.podel', function () {
     var row = $(this).closest('tr');
+    
+    purchare_item_id = parseInt(row.children('.purchases_item_id').val());
+    pitem_id = parseInt(row.children('.item_id').val()); 
+    quantity = parseFloat(row.children().children('.rquantity').val());
+
+    html_hidden_input += '<input type="hidden" name="list_del['+purchare_item_id+'][quantity]" value="'+quantity+'" >';
+    html_hidden_input += '<input type="hidden" name="list_del['+purchare_item_id+'][item_id]" value="'+pitem_id+'" >';
+    console.log(html_hidden_input);
+    $('#contain-hidden-input').html(html_hidden_input);
+
     var item_id = row.attr('data-item-id');
+
     if (site.settings.product_discount == 1) {
         idiscount = formatMoney($.trim(row.children().children('.rdiscount').text()));
         total_discount -= idiscount;
@@ -251,14 +263,13 @@ $(document).on('click', '.podel', function () {
     $('#gtotal').text(formatMoney(gtotal));
     if (count == 1) {
         $('#posupplier').select2('readonly', false);
-            //$('#pocurrency').select2('readonly', false);
-        }
+    }
      
-        delete poitems[item_id];
-        localStorage.setItem('poitems', JSON.stringify(poitems));
-        row.remove();
+    delete poitems[item_id];
+    localStorage.setItem('poitems', JSON.stringify(poitems));
+    row.remove();
 
-    });
+});
 
     /* -----------------------
      * Edit Row Modal Hanlder 
@@ -603,7 +614,7 @@ function loadItems() {
             if (site.settings.product_expiry == 1) {
                 tr_html += '<td><input class="form-control date rexpiry" name="expiry[]" type="text" value="' + item_expiry + '" data-id="' + row_no + '" data-item="' + item_id + '" id="expiry_' + row_no + '"></td>';
             }
-            tr_html += '<input type="hidden" name="purchases_item_id[]" value="'+item.row.purchases_item_id+'"><input type="hidden" name="item_id[]" value="'+item.row.item_id+'">'
+            tr_html += '<input class="purchases_item_id" type="hidden" name="purchases_item_id[]" value="'+item.row.purchases_item_id+'"><input class="item_id" type="hidden" name="item_id[]" value="'+item.row.item_id+'">'
             tr_html += '<td class="text-right"><input class="form-control input-sm text-right rcost" name="net_cost[]" type="hidden" id="cost_' + row_no + '" value="' + item_cost + '"><input class="rucost" name="unit_cost[]" type="hidden" value="' + unit_cost + '"><input class="realucost" name="real_unit_cost[]" type="hidden" value="' + item.row.real_unit_cost + '"><span class="text-right scost" id="scost_' + row_no + '">' + formatMoney(item_cost) + '</span></td>';
             tr_html += '<td><input name="quantity_balance[]" type="hidden" class="rbqty" value="' + item_bqty + '"><input type="hidden" name="old_quantity[]" id="old_quantity" value="'+old_quantity+'"><input class="form-control text-center rquantity" name="quantity[]" type="text" value="' + formatDecimal(item_qty) + '" data-id="' + row_no + '" data-item="' + item_id + '" id="quantity_' + row_no + '" onClick="this.select();"></td>';
             if (site.settings.product_discount == 1) {

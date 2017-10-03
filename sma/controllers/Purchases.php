@@ -663,9 +663,12 @@ class Purchases extends MY_Controller
     {
         $this->sma->checkPermissions();
 
+
         if ($this->input->get('id')) {
             $id = $this->input->get('id');
         }
+
+
         $this->form_validation->set_message('is_natural_no_zero', $this->lang->line("no_zero_required"));
         $this->form_validation->set_rules('reference_no', $this->lang->line("ref_no"), 'required');
         $this->form_validation->set_rules('warehouse', $this->lang->line("warehouse"), 'required|is_natural_no_zero');
@@ -673,6 +676,11 @@ class Purchases extends MY_Controller
 
         $this->session->unset_userdata('csrf_token');
         if ($this->form_validation->run() == true) {
+            $list_del = $this->input->post('list_del');
+            // echo "<pre>";
+            // print_r($list_del);
+            // echo "</pre>";die();
+
             $quantity = "quantity";
             $product = "product";
             $unit_cost = "unit_cost";
@@ -878,7 +886,7 @@ class Purchases extends MY_Controller
             // $this->sma->print_arrays($data, $products);
         }
 
-        if ($this->form_validation->run() == true && $this->purchases_model->updatePurchase($id, $data, $products)) {
+        if ($this->form_validation->run() == true && $this->purchases_model->updatePurchase($id, $data, $products, $list_del, $this->input->post('parent_id'))) {
             $this->session->set_userdata('remove_pols', 1);
             $this->session->set_flashdata('message', $this->lang->line("purchase_added"));
             redirect('purchases');

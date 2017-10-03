@@ -431,7 +431,7 @@ class Purchases_model extends CI_Model
                 }
                 if ($data['status'] == 'received') {
 
-                    $this->site->syncQuantity(NULL, $purchase_id);
+                    // $this->site->syncQuantity(NULL, $purchase_id);
                 }
                 return true;
             }
@@ -439,12 +439,62 @@ class Purchases_model extends CI_Model
         return false;
     }
 
-    public function updatePurchase($id, $data, $items = array())
+    public function getPurchaseItemById($id){
+        $q = $this->db->get_where('purchase_items', array('id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+    public function deletePurchaseItem($id, $quantity, $item_id, $enquiries, $parent_id){
+        // die('2');
+        if($this->db->delete('purchase_items', array('id' => $id))){
+            $this->updateQuantityItems($item_id, $quantity, 1);
+            $this->updateEnquiryWhenDeleteItem($item_id, $quantity, $enquiries, $parent_id);
+        }
+
+    }
+
+
+    public function updateEnquiryWhenDeleteItem($item_id, $quantity, $enquiries, $parent_id){
+        foreach ($enquiries as $enquiery) {
+            if ($enquiery->item_id == $item_id) {
+                $this->db->set('quantity_balance', 'quantity_balance+'.$quantity, FALSE);
+                $this->db->where('id', $enquiery->id);
+                $this->db->update('purchase_items');
+
+                if ($this->getPurchaseItemById($enquiery->id)->quantity_balance > 0) {
+                    if($this->db->update('purchase_items', array('status' => 'approval'), array('id' => $enquiery->id))){
+                        $this->db->update('purchases', array('status' => 'approval'), array('id' => $parent_id));
+                    }
+                }
+            }
+        }
+    }
+
+    public function updatePurchase($id, $data, $items = array(), $list_del, $parent_id)
     {
 
-        $opurchase = $this->getPurchaseByID($id);
         $enquiery_id = $opurchase->parent_id;
         $enquiries = $this->getItemByIDP($enquiery_id);
+        $enquiries_del = $this->getItemByIDP($parent_id);
+
+        // echo "<pre>";
+        // print_r($enquiries_del);
+        // echo "</pre>";die();
+
+        if ($list_del) {
+            // die('1');
+            foreach ($list_del as $key => $value) {
+                // echo $key;
+                // die();
+                $this->deletePurchaseItem($key, $value['quantity'], $value['item_id'], $enquiries_del, $parent_id);
+            }
+        }
+
+        $opurchase = $this->getPurchaseByID($id);
+
 
         $oitems = $this->getAllPurchaseItems($id);
         $flag = 0;

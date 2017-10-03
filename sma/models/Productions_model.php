@@ -2210,6 +2210,8 @@ class Productions_model extends CI_Model
 
     public function getPurchasesByParentId($parent_id){
         $this->db->where('parent_id', $parent_id);
+
+
         $q = $this->db->get('purchases');
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -2219,22 +2221,44 @@ class Productions_model extends CI_Model
         }
         return FALSE;
     }
-    public function getPurchasesByParentArrayId($ids){
-      $this->db->where_in('parent_id', $ids);
-      $q = $this->db->get('purchases');
-      if ($q->num_rows() > 0) {
-          foreach (($q->result()) as $row) {
-              $data[] = $row;
-          }
-          return $data;
-      }
-      return FALSE;
+
+    // $ids is array parent_id
+    public function getTotalBought($ids){
+        $this->db->select('product_name, item_id');
+        $this->db->select_sum('quantity');
+        $this->db->where_in('parent_id', $ids);
+        $this->db->join('purchase_items','purchase_items.purchase_id = purchases.id', 'left');
+        $this->db->group_by('item_id');
+        $q = $this->db->get('purchases');
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+              }
+            return $data;
+        }
+        return FALSE;
     }
 
-    public function getPurchasesJoinPurchaseItems($arr_purchases_id, $item_id){
+    public function getDatePurchaseItems($arr_purchases_id, $item_id){
+        // $this->db->select('purchase_items.id, reference_no, purchase_items.item_id, product_name');
         $this->db->where_in('purchases.id', $arr_purchases_id);
         $this->db->where('purchase_items.item_id', $item_id);
         $this->db->group_by('purchase_items.date');
+        $this->db->join('purchase_items','purchase_items.purchase_id=purchases.id','left');
+        $q = $this->db->get('purchases');
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
+    }
+
+    public function getInfoPurcharesDate($arr_purchases_id, $item_id){
+        $this->db->select('purchase_items.id, purchase_items.purchase_id, reference_no, purchase_items.item_id, product_name, purchase_items.date');
+        $this->db->where_in('purchases.id', $arr_purchases_id);
+        $this->db->where('purchase_items.item_id', $item_id);
         $this->db->join('purchase_items','purchase_items.purchase_id=purchases.id','left');
         $q = $this->db->get('purchases');
         if ($q->num_rows() > 0) {

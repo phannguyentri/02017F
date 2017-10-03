@@ -250,6 +250,8 @@
                                             <?php echo form_input('reference_no', (isset($_POST['reference_no']) ? $_POST['reference_no'] : $purchase->reference_no), 'class="form-control input-tip" id="poref" required="required"'); ?>
                                         </div>
                                     </div>
+
+                                    <input type="hidden" name="parent_id" value="<?=$inv->parent_id ?>">
                                     <div class="col-md-4" style="display: none">
                                         <div class="form-group">
                                             <?= lang("warehouse", "powarehouse"); ?>
@@ -364,6 +366,7 @@
                             </div>
                         </div>
                         <div class="clearfix"></div>
+                        <div id="contain-hidden-input"></div>
                         <input type="hidden" name="total_items" value="" id="total_items" required="required"/>
 
                         <div class="col-md-12">

@@ -288,7 +288,8 @@
                   </div>
                   <!-- End -->
                </div>
-               <div id="proccess-con" class="tab-pane fade in">
+
+               <div id="proccess-con" class="tab-pane in active">
                   <!-- <div class="row"> -->
                   <div class="col-xs-12" style="position: relative;">
                      <div class="col-xs-1"><i class="fa fa-3x fa-file-text-o padding010 text-muted"></i></div>
@@ -334,9 +335,6 @@
                                ?>
                               <td style="width: 100px; text-align:center; vertical-align:middle;"><?= $this->sma->formatNumber($total_detail) ?></td>
                               <?php
-                                  // echo "<pre>";
-                                  // print_r($row);
-                                  // echo "</pre>";
                                  $emps="";
                                  foreach ($row->employees as  $val) {
                                      $emps.=' <span class="label label-info">'.$val->employee.'</span>';
@@ -345,7 +343,7 @@
 
                                <?php
                                 $list_emp = array();
-                                // echo "<pre>";print_r($row->delivery_time[0]->stages3);echo "</pre>";
+
                                 foreach ($row->delivery_time[0]->stages3 as $value) {
                                   $arr_emp = explode(',', $value->employee);
                                   $list_emp[] = $arr_emp;
@@ -500,7 +498,7 @@
                                                             <div class="col-md-12" style="padding:0px;"><span style="padding:0px; font-weight: bold;">Số lượng hoàn thành:</span> <?=($value1->quantity) ? $value1->quantity : 0?></div>
                                                             <!--  <div class="col-md-12">Số lượng lỗi: <?=$value1->error_quantity?></div> -->
                                                          </div>
-                                                         <div class="col-md-12" style="padding:0px;">
+                                                          <div class="col-md-12" style="padding:0px;">
                                                             <div class="col-md-12" style="padding:0px;">
                                                                <span style="padding:0px; font-weight: bold;">Nhân viên</span>:
                                                                <div class="table-container box_comment col-md-12" style="padding:0px;">
@@ -532,7 +530,7 @@
 
 
                                                             </div>
-</div>
+                                                          </div>
 
 
 
@@ -590,14 +588,9 @@
                   <!-- </div> -->
                </div>
 
-
-
-
-
-
-
-
-
+               <div id="statistics-con" class="tab-pane fade in">
+                  <div id="ov-chart" style="min-width: 100% ; max-width: 100%; height: 400px; margin: 0 auto"></div>
+               </div>
 
                <div id="material-norms" class="tab-pane fade in">
                   <div class="col-xs-12" style="position: relative;">
@@ -613,7 +606,8 @@
 
                   <div class="table-responsive">
                     <?php
-                      $arr_final_progress = array();
+                      $ids = $this->productions_model->getPurchasesByProductionId($inv->id);
+                      $arr_total_boughts = $this->productions_model->getTotalBought($ids);
 
                       $arr_purchases_id = array();
                       foreach ($enquiery as $value) {
@@ -626,23 +620,6 @@
 
                      ?>
 
-                     <?php
-                      echo "<pre>";
-                      print_r($material_norms);
-                      echo "</pre>";
-
-
-                      echo "<pre>";
-                      print_r($inv->id);
-                      echo "</pre>";
-
-                      echo "<pre>";
-                      $ids = $this->productions_model->getPurchasesByProductionId($inv->id);
-                      print_r($this->productions_model->getPurchasesByParentArrayId($ids));
-                      echo "</pre>";
-
-                      ?>
-
                      <table class="table table-bordered table-hover table-striped print-table order-table">
                         <thead>
                            <tr>
@@ -651,7 +628,7 @@
                               <th>Số lượng cần sử dụng</th>
                               <th>Số lượng tồn kho</th>
                               <th>Số lượng cần thu mua</th>
-                              <th>Ngày nhập</th>
+                              <th>Ngày nhập(Chi tiết)</th>
                               <th>Số lượng đã thu mua</th>
                               <th>Trạng thái</th>
                            </tr>
@@ -677,13 +654,34 @@
                                 <td class="text-center">
                                   <?php
                                     if (!empty($arr_purchases_id)) {
-                                    $final_purchases = $this->productions_model->getPurchasesJoinPurchaseItems($arr_purchases_id, $value->item_id);
+                                      $final_purchases = $this->productions_model->getDatePurchaseItems($arr_purchases_id, $value->item_id);
+                                      $info_date_purchases = $this->productions_model->getInfoPurcharesDate($arr_purchases_id, $value->item_id);
+
                                       foreach ($final_purchases as $val) {
-                                        echo $val->date."</br>";
+                                        $html_date = $this->sma->hrsd($val->date).'</br>(';
+                                        $html_info_date = array();
+                                        foreach ($info_date_purchases as $info_date) {
+                                          if ($val->date == $info_date->date) {
+                                            $html_info_date[] = '<a href="'.base_url().'purchases/edit/'.$info_date->purchase_id.'" target="_blank">'.$info_date->reference_no.'</a>';
+                                          }
+                                        }
+                                        $html_date .= implode($html_info_date, ', ');
+                                        $html_date .= ')</br>';
+                                        echo $html_date;
                                       }
                                     }
                                   ?>
 
+                                </td>
+                                <td class="text-center">
+                                  <?php
+                                    foreach ($arr_total_boughts as $arr_total_bought) {
+                                      if ($arr_total_bought->item_id == $value->item_id) {
+                                        echo $this->sma->formatNumber($arr_total_bought->quantity);
+                                      }
+                                    }
+
+                                   ?>
 
                                 </td>
                                 <td>
@@ -700,16 +698,12 @@
                             </tr>
 
                         <?php endforeach ?>
+
                         </tbody>
                       </table>
                </div>
 
 
-
-
-               <div id="statistics-con" class="tab-pane fade in">
-                  <div id="ov-chart" style="min-width: 100% ; max-width: 100%; height: 400px; margin: 0 auto"></div>
-               </div>
             </div>
          </div>
       </div>
@@ -732,7 +726,7 @@
                followPointer: true,
                chart: {type: 'bar',width: $width },
                credits: {enabled: false},
-               title: {text: ''},
+               title: {text: 'Thông kê tiến độ'},
                xAxis: {categories: <?= json_encode($products); ?>},
                legend: {
                    layout: 'vertical',
@@ -768,7 +762,7 @@
                },
                series: [{
                    name:'Tiến độ hoàn thành (%)',
-                   data: [<?php echo implode(',', $arr_final_progress); ?>]
+                   data: [<?php echo implode($arr_final_progress, ','); ?>]
                }],
            });
        });
