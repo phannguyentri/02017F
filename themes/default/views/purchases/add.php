@@ -123,11 +123,12 @@
             }
         });
 
-         $('#enquiery').change(function(){
+        $('#enquiery').change(function(){
             $v = $(this).val();
             if($v){
                 $.ajax({
-                    type: "get", async: false,
+                    type: "get",
+                    async: false,
                     url: site.base_url + "purchases/addItemQuickEnquiry",
                     data: {'id': $v},
                     dataType: "json",
@@ -147,6 +148,7 @@
                 });
             }
         })
+
         $('#add_item').bind('keypress', function (e) {
             if (e.keyCode == 13) {
                 e.preventDefault();

@@ -980,7 +980,22 @@ class Productions_model extends CI_Model
         return FALSE;
     }
 
-        public function getAllStagesT ($production_id,$product_id,$delivery_time)
+
+    public function getAllStagesByProductionAndProductId($production_id, $product_id)
+    {
+        $q = $this->db->get_where('production_stages', array('production_id' => $production_id, 'product_id' => $product_id));
+        if ($q->num_rows() > 0) {
+             foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+
+        return FALSE;
+    }
+
+
+    public function getAllStagesT ($production_id,$product_id,$delivery_time)
     {
 
         $q = $this->db->get_where('production_stages', array('production_id' => $production_id,'product_id'=>$product_id,'delivery_time'=>$delivery_time));
@@ -1954,6 +1969,21 @@ class Productions_model extends CI_Model
         }
         return FALSE;
     }
+
+    public function getProductionItemPID($production_id)
+    {
+        $this->db->select('production_items.id, production_items.quantity, production_items.product_id, products.quantity_config,');
+        $this->db->join('products', 'products.id = production_items.product_id');
+        $q = $this->db->get_where('production_items', array('sale_id' => $production_id));
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
+    }
+
     public function updatePayment($id, $data = array())
     {
         if ($this->db->update('payments', $data, array('id' => $id))) {
@@ -2269,4 +2299,22 @@ class Productions_model extends CI_Model
         }
         return FALSE;
     }
+
+    public function getInfoProductionChart(){
+        $this->db->select('productions.id, productions.reference_no, grand_total');
+        $this->db->select_sum('payments_new.amount');
+        $this->db->group_by('productions.id');
+        $this->db->where('productions.sale_status', 'pending');
+        $this->db->join('payments_new', 'payments_new.production_id=productions.id', 'left');
+
+        $q = $this->db->get('productions');
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
+    }
+
 }

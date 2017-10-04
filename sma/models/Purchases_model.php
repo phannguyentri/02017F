@@ -218,6 +218,26 @@ class Purchases_model extends CI_Model
         return FALSE;
     }
 
+    public function getPurchaseItemsBalanceNotZero($purchase_id)
+    {
+        $this->db->select('purchase_items.*,items.specification,items.cost, tax_rates.code as tax_code, tax_rates.name as tax_name, tax_rates.rate as tax_rate, products.unit, products.details as details, product_variants.name as variant')
+            ->join('products', 'products.id=purchase_items.product_id', 'left')
+            ->join('items', 'items.id=purchase_items.item_id', 'left')
+            ->join('product_variants', 'product_variants.id=purchase_items.option_id', 'left')
+            ->join('tax_rates', 'tax_rates.id=purchase_items.tax_rate_id', 'left')
+            ->group_by('purchase_items.id')
+            ->order_by('id', 'asc');
+
+        $q = $this->db->get_where('purchase_items', array('purchase_id' => $purchase_id, 'quantity_balance <>' => 0));
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
+    }
+
     public function getItemByID($id)
     {
         $q = $this->db->get_where('purchase_items', array('id' => $id), 1);

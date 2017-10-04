@@ -55,7 +55,7 @@ class Purchases extends MY_Controller
         $supplier_id = $this->input->get('supplier_id', TRUE);
 
 
-        $rows =  $this->purchases_model->getAllPurchaseItems($this->input->get('id'));
+        $rows =  $this->purchases_model->getPurchaseItemsBalanceNotZero($this->input->get('id'));
 
         if ($rows) {
 

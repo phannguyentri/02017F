@@ -319,6 +319,12 @@
                            </tr>
                         </thead>
                         <tbody>
+                            <?php
+                              echo "<pre>";
+                              print_r($rows);
+                              echo "</pre>";
+
+                             ?>
                            <?php $r = 1;
                               $tax_summary = array();
                               foreach ($rows as $row):
@@ -378,10 +384,12 @@
                                     }
                                   }
 
-                                  // $count_stages = count($row->delivery_time[0]->stages3);
                                   $progress = 0;
                                   foreach ($row->delivery_time[0]->stages3 as $value) {
-                                    $progress += ($value->quantity > $row->quantity) ? 100 : ($value->quantity/$row->quantity)*100;
+                                    if ($value->date_start != NULL && $value->date_end != NULL){
+                                      $progress += ($value->quantity > $total_detail) ? 100 : ($value->quantity/$total_detail)*100;
+                                    }
+
                                   }
                                   $final_progress = ($progress/($count_stages*100))*100;
                                   echo number_format($final_progress,2)."%";

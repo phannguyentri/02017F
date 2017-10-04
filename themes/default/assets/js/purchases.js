@@ -538,9 +538,9 @@ function loadItems() {
         total_discount = 0;
         $("#poTable tbody").empty();
         poitems = JSON.parse(localStorage.getItem('poitems'));
-        console.log(poitems);
+        
         $.each(poitems, function () {
-
+            console.log(this);
             var item = this;
             var item_id = site.settings.item_addition == 1 ? item.item_id : item.id;
             poitems[item_id] = item;

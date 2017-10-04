@@ -33,6 +33,12 @@ class Welcome extends MY_Controller
         $this->data['chatData'] = $this->db_model->getChartData();
         $this->data['stock'] = $this->db_model->getStockValue();
         $this->data['bs'] = $this->db_model->getBestSeller();
+
+        $this->load->model('productions_model');
+        $this->data['productions_chart'] = $this->productions_model->getInfoProductionChart();
+        // foreach ($this->data['productions_chart'] as $val) {
+        //     $this->data['rows'][] = $this->productions_model->getAllInvoiceItems($val->id);
+        // }
         $lmsdate = date('Y-m-d', strtotime('first day of last month')) . ' 00:00:00';
         $lmedate = date('Y-m-d', strtotime('last day of last month')) . ' 23:59:59';
         $this->data['lmbs'] = $this->db_model->getBestSeller($lmsdate, $lmedate);

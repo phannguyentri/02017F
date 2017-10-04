@@ -1,3 +1,8 @@
+<style type="text/css">
+    .highcharts-container {
+        overflow: auto !important;
+    }
+</style>
 <?php
 function row_status($x)
 {
@@ -5,7 +10,7 @@ function row_status($x)
         return '';
     }elseif($x == 'cancel') {
         return '<div class="text-center"><span class="label label-danger">'.'Hủy bỏ'.'</span></div>';
-    }elseif($x == 'approve') {       
+    }elseif($x == 'approve') {
         return '<div class="text-center"><span class="label label-warning">'.'Đang duyệt'.'</span></div>';
     }elseif($x == 'approval') {
         return '<div class="text-center"><span class="label label-warning">'.'Đã duyệt'.'</span></div>';
@@ -43,10 +48,39 @@ function row_status($x)
         </div>
         <div class="box-content">
             <div class="row">
+
+                <div class="col-lg-12">
+                    <ul id="myTab" class="nav nav-tabs">
+                       <li class="active"><a data-toggle="tab" href="#proccess-con" class="tab-grey">Tiến độ sản xuất</a></li>
+                       <li><a data-toggle="tab" href="#amount-con" class="tab-grey">Tiến độ thanh toán</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="proccess-con" class="tab-pane active">
+                            <div class="row">
+                                <div id="amount-chart" style="width:inherit;"></div>
+                            </div>
+                        </div>
+
+                        <div id="amount-con" class="tab-pane">
+                            <div class="row">
+                                <div id="ov-chart" style="width:inherit;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
                 <div class="col-md-12">
                     <p class="introtext"><?php echo lang('overview_chart_heading'); ?></p>
 
-                    <div id="ov-chart" style="width:100%; height:450px;"></div>
+
                     <p class="text-center"><?= lang("chart_lable_toggle"); ?></p>
                 </div>
             </div>
@@ -262,7 +296,7 @@ function row_status($x)
                             <?php if ($Owner || $Admin || $GP['sales-index']) { ?>
                             <li class=""><a href="#sales"><?= lang('sales') ?></a></li>
                             <?php } if ($Owner || $Admin || $GP['quotes-index']) { ?>
-                          
+
                             <?php } if ($Owner || $Admin || $GP['purchases-index']) { ?>
                             <li class=""><a href="#purchases"><?= lang('purchases') ?></a></li>
                             <li class=""><a href="#enquiry"><?= lang('enquiry') ?></a></li>
@@ -607,7 +641,67 @@ function row_status($x)
             </div>
         </div>
     </div>
+<?php
+    $arr_total_final_process = array();
+    $arr_uncomplete = array();
 
+    foreach ($productions_chart as $val) {
+
+        $total_final_process = 0;
+        $production_items = $this->productions_model->getProductionItemPID($val->id);
+
+        foreach ($production_items as $value) {
+
+            $production_stages = $this->productions_model->getAllStagesByProductionAndProductId($val->id, $value->product_id);
+            $count_stages = 0;
+            $progress = 0;
+            foreach ($production_stages as $production_stage) {
+                if ($production_stage->date_start != NULL && $production_stage->date_end != NULL) {
+                    $count_stages++;
+                }
+            }
+            foreach ($production_stages as $production_stage) {
+
+                if ($production_stage->date_start != NULL && $production_stage->date_end != NULL) {
+                    $total_detail = $value->quantity_config*$value->quantity;
+                    $progress += ($production_stage->quantity > $total_detail) ? 100 : ($production_stage->quantity/$total_detail)*100;
+                }
+
+            }
+            $final_progress = ($progress/($count_stages*100))*100;
+            $total_final_process += $final_progress;
+
+        }
+
+        // echo "<h1>Total Final Process: ".$total_final_process.",".count($production_items)."</h1>";
+        // echo "<h1>Total Final Percent: ".($total_final_process/(count($production_items)*100)*100)."</h1>";
+        $arr_total_final_process[]  = $this->sma->formatNumber($total_final_process/(count($production_items)*100)*100);
+        $arr_uncomplete[]           = $this->sma->formatNumber(100 - ($total_final_process/(count($production_items)*100)*100));
+
+    }
+
+    // echo "<pre>";
+    // print_r($arr_total_final_process);
+    // echo "</pre>";
+
+
+
+
+    $arr_reference_no   = array();
+    $arr_amount         = array();
+    $arr_grand_total    = array();
+    $arr_unpaid         = array();
+
+    foreach ($productions_chart as $val) {
+        $arr_reference_no[] = $val->reference_no;
+        $arr_amount[]       = ($val->amount) ? $val->amount : 0;
+        $arr_grand_total[]  = $val->grand_total;
+        $arr_unpaid[]       = (($val->grand_total - $val->amount) > 0) ? $val->grand_total - $val->amount : 0;
+    }
+
+
+
+ ?>
 </div>
 
 <script type="text/javascript">
@@ -633,165 +727,116 @@ function row_status($x)
     <script src="<?= $assets; ?>js/hc/highcharts.js"></script>
     <script type="text/javascript">
         $(function () {
+            arr_reference_no = <?= json_encode($arr_reference_no) ?>;
+            console.log(arr_reference_no.toString());
             Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
                 return {
                     radialGradient: {cx: 0.5, cy: 0.3, r: 0.7},
                     stops: [[0, color], [1, Highcharts.Color(color).brighten(-0.3).get('rgb')]]
                 };
             });
-            $('#ov-chart').highcharts({
-                chart: {},
-                credits: {enabled: false},
-                title: {text: ''},
-                xAxis: {categories: <?= json_encode($months); ?>},
-                yAxis: {min: 0, title: ""},
+
+            $('#amount-chart').highcharts({
+                chart: {
+                    type: 'column'
+                },
+
+                title: {
+                    text: ''
+                },
+
+                xAxis: {
+                    categories: <?= json_encode($arr_reference_no); ?>
+                },
+
+                yAxis: {
+                    allowDecimals: false,
+                    min: 0,
+                    title: {
+                        text: 'Số phần trăm'
+                    }
+                },
+
                 tooltip: {
-                    shared: true,
-                    followPointer: true,
                     formatter: function () {
-                        if (this.key) {
-                            return '<div class="tooltip-inner hc-tip" style="margin-bottom:0;">' + this.key + '<br><strong>' + currencyFormat(this.y) + '</strong> (' + formatNumber(this.percentage) + '%)';
-                        } else {
-                            var s = '<div class="well well-sm hc-tip" style="margin-bottom:0;"><h2 style="margin-top:0;">' + this.x + '</h2><table class="table table-striped"  style="margin-bottom:0;">';
-                            $.each(this.points, function () {
-                                s += '<tr><td style="color:{series.color};padding:0">' + this.series.name + ': </td><td style="color:{series.color};padding:0;text-align:right;"> <b>' +
-                                currencyFormat(this.y) + '</b></td></tr>';
-                            });
-                            s += '</table></div>';
-                            return s;
-                        }
-                    },
-                    useHTML: true, borderWidth: 0, shadow: false, valueDecimals: site.settings.decimals,
-                    style: {fontSize: '14px', padding: '0', color: '#000000'}
+                        return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + this.y + '%<br/>' +
+                            'Trong: ' + this.point.stackTotal + '%';
+                    }
                 },
+
+                plotOptions: {
+                    column: {
+                        stacking: 'normal'
+                    }
+                },
+
                 series: [{
-                    type: 'column',
-                    name: '<?= lang("sp_tax"); ?>',
-                    data: [<?php
-                    echo implode(', ', $mtax1);
-                    ?>]
+                    name: 'Đã hoàn thành',
+                    data: [<?= implode($arr_total_final_process, ',') ?>],
+                    stack: 'process',
+                    color: '#90ed7d'
+                }, {
+                    name: 'Chưa hoàn thành',
+                    data: [<?= implode($arr_uncomplete, ',') ?>],
+                    stack: 'process',
+                    color: '#434348'
+                }]
+            });
+
+            $('#ov-chart').highcharts({
+                chart: {
+                    type: 'column'
                 },
-                    {
-                        type: 'column',
-                        name: '<?= lang("order_tax"); ?>',
-                        data: [<?php
-                    echo implode(', ', $mtax2);
-                    ?>]
-                    },
-                    {
-                        type: 'column',
-                        name: '<?= lang("sales"); ?>',
-                        data: [<?php
-                    echo implode(', ', $msales);
-                    ?>]
-                    }, {
-                        type: 'spline',
-                        name: '<?= lang("purchases"); ?>',
-                        data: [<?php
-                    echo implode(', ', $mpurchases);
-                    ?>],
-                        marker: {
-                            lineWidth: 2,
-                            states: {
-                                hover: {
-                                    lineWidth: 4
-                                }
-                            },
-                            lineColor: Highcharts.getOptions().colors[3],
-                            fillColor: 'white'
-                        }
-                    }, {
-                        type: 'spline',
-                        name: '<?= lang("pp_tax"); ?>',
-                        data: [<?php
-                    echo implode(', ', $mtax3);
-                    ?>],
-                        marker: {
-                            lineWidth: 2,
-                            states: {
-                                hover: {
-                                    lineWidth: 4
-                                }
-                            },
-                            lineColor: Highcharts.getOptions().colors[3],
-                            fillColor: 'white'
-                        }
-                    }, {
-                        type: 'pie',
-                        name: '<?= lang("stock_value"); ?>',
-                        data: [
-                            ['', 0],
-                            ['', 0],
-                            ['<?= lang("stock_value_by_price"); ?>', <?php echo $stock->stock_by_price; ?>],
-                            ['<?= lang("stock_value_by_cost"); ?>', <?php echo $stock->stock_by_cost; ?>],
-                        ],
-                        center: [80, 42],
-                        size: 80,
-                        showInLegend: false,
-                        dataLabels: {
-                            enabled: false
-                        }
-                    }]
+
+                title: {
+                    text: ''
+                },
+
+                xAxis: {
+                    categories: <?= json_encode($arr_reference_no); ?>
+                },
+
+                yAxis: {
+                    allowDecimals: false,
+                    min: 0,
+                    title: {
+                        text: 'Số tiền'
+                    }
+                },
+
+                tooltip: {
+                    formatter: function () {
+                        return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + this.y + '<br/>' +
+                            'Tổng: ' + this.point.stackTotal;
+                    }
+                },
+
+                plotOptions: {
+                    column: {
+                        stacking: 'normal'
+                    }
+                },
+
+                series: [{
+                    name: 'Đã thanh toán',
+                    data: [<?= implode($arr_amount, ',') ?>],
+                    stack: 'payment',
+                    color: '#90ed7d'
+                }, {
+                    name: 'Chưa thanh toán',
+                    data: [<?= implode($arr_unpaid, ',') ?>],
+                    stack: 'payment',
+                    color: '#f7a35c'
+                }]
+
             });
         });
     </script>
 
     <script type="text/javascript">
-        $(function () {
-            $('#lmbschart').highcharts({
-                chart: {type: 'column'},
-                title: {text: ''},
-                credits: {enabled: false},
-                xAxis: {type: 'category', labels: {rotation: -60, style: {fontSize: '13px'}}},
-                yAxis: {min: 0, title: {text: ''}},
-                legend: {enabled: false},
-                series: [{
-                    name: '<?=lang('sold');?>',
-                    data: [<?php
-                    foreach ($lmbs as $r) {
-                        if($r->SoldQty > 0) {
-                            echo "['".$r->name."', ".$r->SoldQty."],";
-                        }
-                    }
-                    ?>],
-                    dataLabels: {
-                        enabled: true,
-                        rotation: -90,
-                        color: '#000',
-                        align: 'right',
-                        y: -25,
-                        style: {fontSize: '12px'}
-                    }
-                }]
-            });
-            $('#bschart').highcharts({
-                chart: {type: 'column'},
-                title: {text: ''},
-                credits: {enabled: false},
-                xAxis: {type: 'category', labels: {rotation: -60, style: {fontSize: '13px'}}},
-                yAxis: {min: 0, title: {text: ''}},
-                legend: {enabled: false},
-                series: [{
-                    name: '<?=lang('sold');?>',
-                    data: [<?php
-                foreach ($bs as $r) {
-                    if($r->SoldQty > 0) {
-                        echo "['".$r->name."', ".$r->SoldQty."],";
-                    }
-                }
-                ?>],
-                    dataLabels: {
-                        enabled: true,
-                        rotation: -90,
-                        color: '#000',
-                        align: 'right',
-                        y: -25,
-                        style: {fontSize: '12px'}
-                    }
-                }]
-            });
 
-        });
     </script>
    <!--  <div class="row" style="margin-bottom: 15px;">
         <div class="col-sm-6">
