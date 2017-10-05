@@ -1,4 +1,4 @@
-<style type="text/css">
+﻿<style type="text/css">
     .highcharts-container {
         overflow: auto !important;
     }
@@ -873,4 +873,3 @@ function row_status($x)
         </div>
     </div> -->
 <?php } ?>
-
