@@ -70,19 +70,13 @@ function row_status($x)
                     </div>
                 </div>
 
-
-
-
-
-
-
-
                 <div class="col-md-12">
-                    <p class="introtext"><?php echo lang('overview_chart_heading'); ?></p>
+<!--                     <p class="introtext"><?php echo lang('overview_chart_heading'); ?></p> -->
 
 
                     <p class="text-center"><?= lang("chart_lable_toggle"); ?></p>
                 </div>
+
             </div>
         </div>
     </div>
@@ -650,9 +644,9 @@ function row_status($x)
         $total_final_process = 0;
         $production_items = $this->productions_model->getProductionItemPID($val->id);
 
-        foreach ($production_items as $value) {
+        foreach ($production_items as $production_item) {
 
-            $production_stages = $this->productions_model->getAllStagesByProductionAndProductId($val->id, $value->product_id);
+            $production_stages = $this->productions_model->getAllStagesByProductionAndProductId($val->id, $production_item->product_id);
             $count_stages = 0;
             $progress = 0;
             foreach ($production_stages as $production_stage) {
@@ -663,7 +657,7 @@ function row_status($x)
             foreach ($production_stages as $production_stage) {
 
                 if ($production_stage->date_start != NULL && $production_stage->date_end != NULL) {
-                    $total_detail = $value->quantity_config*$value->quantity;
+                    $total_detail = $production_item->quantity_config*$production_item->quantity;
                     $progress += ($production_stage->quantity > $total_detail) ? 100 : ($production_stage->quantity/$total_detail)*100;
                 }
 
@@ -761,7 +755,7 @@ function row_status($x)
                     formatter: function () {
                         return '<b>' + this.x + '</b><br/>' +
                             this.series.name + ': ' + this.y + '%<br/>' +
-                            'Trong: ' + this.point.stackTotal + '%';
+                            'Tổng: ' + this.point.stackTotal + '%';
                     }
                 },
 
@@ -780,7 +774,7 @@ function row_status($x)
                     name: 'Chưa hoàn thành',
                     data: [<?= implode($arr_uncomplete, ',') ?>],
                     stack: 'process',
-                    color: '#434348'
+                    color: '#7cb5ec'
                 }]
             });
 
