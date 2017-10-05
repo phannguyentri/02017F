@@ -39,7 +39,7 @@ class Timekeepers extends MY_Controller
         $this->load->model('departments_model');
         // $this->data['billers'] = $this->billers->getAllBillerByDepartmentId($department_id);
         $this->data['departments'] = $this->departments_model->getAllDepartments();
-        $this->page_construct('timekeepers/index', $meta, $this->data);
+        $this->page_construct('timekeepers/add', $meta, $this->data);
     }
 
     public function getAllBiller(){

@@ -220,7 +220,7 @@
         }
 
     }
-    
+
 
 
     $.fn.TimeSheet = function(opt){
@@ -332,7 +332,9 @@
                 curRowHtml='<tr class="TimeSheet-row">'
                 for(var col= 0, curCell=''; col<=sheetOption.data.dimensions[1]; ++col){
                     if(col===0){
-                        curCell = '<td title="'+(sheetOption.data.rowHead[row].title ? sheetOption.data.rowHead[row].title:"")+'"class="TimeSheet-rowHead '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'" style="'+(sheetOption.data.rowHead[row].style ? sheetOption.data.rowHead[row].style : '')+'">'+sheetOption.data.rowHead[row].name+'</td>';
+                        // console.log(sheetOption.data.rowHead[row]);
+                        // console.log(sheetOption.data.rowHead[row].title);
+                        curCell = '<td title="" class="TimeSheet-rowHead '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'" style="'+(sheetOption.data.rowHead[row].style ? sheetOption.data.rowHead[row].style : '')+'">'+sheetOption.data.rowHead[row].name+'</td>';
                     }else{
                         curCell = '<td class="TimeSheet-cell '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+(col===sheetOption.data.dimensions[1]?'rightMost':'')+'" data-row="'+row+'" data-col="'+(col-1)+'"></td>';
                     }
