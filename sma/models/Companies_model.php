@@ -20,6 +20,18 @@ class Companies_model extends CI_Model
         return FALSE;
     }
 
+    public function getAllBillerByDepartmentId($department_id){
+        $this->db->select('id, department_id, name, cf1, award_points');
+        $q = $this->db->get_where('companies', array('department_id' => $department_id));
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
+    }
+
     public function getAllCustomerCompanies()
     {
         $q = $this->db->get_where('companies', array('group_name' => 'customer'));

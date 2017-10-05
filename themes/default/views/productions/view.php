@@ -319,12 +319,7 @@
                            </tr>
                         </thead>
                         <tbody>
-                            <?php
-                              echo "<pre>";
-                              print_r($rows);
-                              echo "</pre>";
 
-                             ?>
                            <?php $r = 1;
                               $tax_summary = array();
                               foreach ($rows as $row):

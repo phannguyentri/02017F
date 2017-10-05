@@ -38,11 +38,25 @@
                         <?= lang("last_name", "name"); ?>
                         <?php echo form_input('name', $biller->name, 'class="form-control tip" id="name" required="required"'); ?>
                     </div>
+                    <div class="form-group">
+                        <label>Phòng ban</label>
+                        <select name="department" class="form-control select" id="department" style="width: 100%;">
+                            <?php
+                                foreach ($departments as $department) {
+                                    if ($biller->department_id == $department->id) {
+                                        echo '<option value="'.$department->id.'" selected>'.$department->name.'</option>';
+                                    }else{
+                                        echo '<option value="'.$department->id.'">'.$department->name.'</option>';
+                                    }
+                                }
+                             ?>
+                        </select>
+                    </div>
                     <div class="form-group company">
                         <?= lang("company", "company"); ?>
                         <?php echo form_input('company', $biller->company, 'class="form-control tip" id="company" required="required"'); ?>
                     </div>
-                    
+
                     <div class="form-group">
                         <?= lang("vat_no", "vat_no"); ?>
                         <?php echo form_input('vat_no', $biller->vat_no, 'class="form-control" id="vat_no"'); ?>
@@ -52,7 +66,7 @@
                         <input type="email" name="email" class="form-control" required="required" id="email_address"
                                value="<?= $biller->email ?>"/>
                     </div>
-                    
+
 
                 </div>
                 <div class="col-md-6">
@@ -73,7 +87,7 @@
                         <?= lang("city", "city"); ?>
                         <?php echo form_input('city', $biller->city, 'class="form-control" id="city"'); ?>
                     </div>
-                    
+
                     <div class="form-group">
                         <?= lang("country", "country"); ?>
                         <?php echo form_input('country', $biller->country, 'class="form-control" id="country"'); ?>

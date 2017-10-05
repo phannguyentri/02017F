@@ -97,6 +97,7 @@ class Productions_model extends CI_Model
         }
     }
 
+
     public function getProductNames2($cate_id)
     {
 

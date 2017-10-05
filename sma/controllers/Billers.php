@@ -52,8 +52,10 @@ class Billers extends MY_Controller
         $this->form_validation->set_rules('email', $this->lang->line("email_address"), 'is_unique[companies.email]');
 
         if ($this->form_validation->run() == true) {
+
             $data = array(
                 'name' => $this->input->post('name'),
+                'department_id' => $this->input->post('department'),
                 'email' => $this->input->post('email'),
                 'group_id' => NULL,
                 'group_name' => 'biller',
@@ -74,7 +76,7 @@ class Billers extends MY_Controller
                 'cf6' => $this->input->post('cf6'),
                 'invoice_footer' => $this->input->post('invoice_footer'),
             );
-           
+
         } elseif ($this->input->post('add_biller')) {
             $this->session->set_flashdata('error', validation_errors());
             redirect('billers');
@@ -87,6 +89,9 @@ class Billers extends MY_Controller
             $this->data['logos'] = $this->getLogoList();
             $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
             $this->data['modal_js'] = $this->site->modal_js();
+
+            $this->load->model('departments_model');
+            $this->data['departments'] = $this->departments_model->getAllDepartments();
             $this->load->view($this->theme . 'billers/add', $this->data);
         }
     }
@@ -105,7 +110,9 @@ class Billers extends MY_Controller
         }
 
         if ($this->form_validation->run('companies/add') == true) {
-            $data = array('name' => $this->input->post('name'),
+            $data = array(
+                'name' => $this->input->post('name'),
+                'department_id' => $this->input->post('department'),
                 'email' => $this->input->post('email'),
                 'group_id' => NULL,
                 'group_name' => 'biller',
@@ -139,6 +146,8 @@ class Billers extends MY_Controller
             $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
             $this->data['logos'] = $this->getLogoList();
             $this->data['modal_js'] = $this->site->modal_js();
+            $this->load->model('departments_model');
+            $this->data['departments'] = $this->departments_model->getAllDepartments();
             $this->load->view($this->theme . 'billers/edit', $this->data);
         }
     }

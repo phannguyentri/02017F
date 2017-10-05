@@ -5,6 +5,7 @@
             </button>
             <h4 class="modal-title" id="myModalLabel"><?php echo lang('add_biller'); ?></h4>
         </div>
+
         <?php $attrib = array('data-toggle' => 'validator', 'role' => 'form');
         echo form_open_multipart("billers/add", $attrib); ?>
         <div class="modal-body">
@@ -37,11 +38,23 @@
                         <?= lang("last_name", "name"); ?>
                         <?php echo form_input('name', '', 'class="form-control tip" id="name" data-bv-notempty="true"'); ?>
                     </div>
+
+                    <div class="form-group">
+                        <label>Phòng ban</label>
+                        <select name="department" class="form-control select" id="department" style="width: 100%;">
+                            <?php
+                                foreach ($departments as $department) {
+                                    echo '<option value="'.$department->id.'">'.$department->name.'</option>';
+                                }
+                             ?>
+                        </select>
+                    </div>
+
                     <div class="form-group company">
                         <?= lang("company", "company"); ?>
                         <?php echo form_input('company', '', 'class="form-control tip" id="company" data-bv-notempty="true"'); ?>
                     </div>
-                    
+
                     <div class="form-group">
                         <?= lang("vat_no", "vat_no"); ?>
                         <?php echo form_input('vat_no', '', 'class="form-control" id="vat_no"'); ?>
@@ -50,8 +63,8 @@
                         <?= lang("email_address", "email_address"); ?>
                         <input type="email" name="email" class="form-control" required="required" id="email_address"/>
                     </div>
-                    
-                    
+
+
 
                 </div>
                 <div class="col-md-6">
