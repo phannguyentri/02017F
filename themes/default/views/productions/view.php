@@ -302,6 +302,22 @@
                      <div class="clearfix"></div>
                   </div>
                   <div class="table-responsive">
+
+
+                    <?php
+
+                      $arr_quantity = array();
+
+                      foreach ($this->productions_model->getStage_IDC(100, 70) as $z) {
+                        if ($z->date_start && $z->date_end) {
+                          $arr_quantity[] = ($z->quantity) ? $z->quantity : 0;
+                        }
+                      }
+
+                      $real_completed = (min($arr_quantity)) ? (min($arr_quantity)) : 0;
+                      echo "<h1>".$real_completed."</h1>";
+                     ?>
+
                     <?php
                       $arr_final_progress = array();
                      ?>
@@ -313,6 +329,7 @@
                               <th>Số lượng cấu thành</th>
                               <th>Số lượng sản xuất</th>
                               <th>Tổng số chi tiết</th>
+                              <th>Hoàn thành thực tế</th>
                               <th><?= lang("Nhân viên"); ?></th>
                               <th><?= lang("Tiến độ"); ?></th>
                               <th><?= lang("Trạng thái"); ?></th>
@@ -322,9 +339,9 @@
 
                            <?php $r = 1;
                               $tax_summary = array();
-                              foreach ($rows as $row):
-                                 ?>
-                            <tr >
+                              foreach ($rows as $row): ?>
+
+                            <tr>
 
                               <td class="collapse1" data-id="demo<?=$row->id?>"  style="text-align:center; width:40px; vertical-align:middle;"><span class="fa fa-plus " data-id="demo<?=$row->id?>"></span>
                               </td>
@@ -335,6 +352,20 @@
                                 $total_detail = $row->quantity_config*$row->quantity;
                                ?>
                               <td style="width: 100px; text-align:center; vertical-align:middle;"><?= $this->sma->formatNumber($total_detail) ?></td>
+
+                              <?php
+                                $arr_quantity = array();
+
+                                foreach ($row->delivery_time[0]->stages3 as $stage) {
+                                  if ($stage->date_start && $stage->date_end) {
+                                    $arr_quantity[] = ($stage->quantity) ? $stage->quantity : 0;
+                                  }
+                                }
+
+                                $real_completed = (min($arr_quantity)) ? (min($arr_quantity)) : 0;
+
+                               ?>
+                              <td><?=$real_completed ?></td>
                               <?php
                                  $emps="";
                                  foreach ($row->employees as  $val) {

@@ -71,6 +71,7 @@ class Productions extends MY_Controller
             <li>' . $update_status_production_link . '</li>
             <li>' . $add_payment_link . '</li>
             <li>' . $payments_link . '</li>
+            <li>' . $add_delivery_link . '</li>
             <li>' . $deliveries_link . '</li>
             <li>' . $edit_link . '</li>
             <li>' . $delete_link . '</li>
@@ -102,13 +103,53 @@ class Productions extends MY_Controller
         echo $this->datatables->generate();
     }
 
+    function add_delivery($id){
+        $this->sma->checkPermissions();
+
+        $this->form_validation->set_rules('delivery_time', 'Ngày giao', 'required');
+
+        if ($this->form_validation->run() == true) {
+
+            $products = array();
+
+            $i = isset($_POST['product_id']) ? sizeof($_POST['product_id']) : 0;
+            for ($r = 0; $r < $i; $r++) {
+                $products[] = array(
+                    'production_id' => $_POST['production_id'],
+                    'product_id'    => $_POST['product_id'][$r],
+                    'delivery_quantity' => $_POST['quantity'][$r],
+                    'delivery_time'     => $this->sma->fsd(trim($_POST['delivery_time'])),
+                );
+            }
+            if (empty($products)) {
+                $this->form_validation->set_rules('product', lang("order_items"), 'required');
+            }
+
+            if ($this->productions_model->addProductionDeliveriesNew($products)) {
+                $this->session->set_flashdata('message', 'Thêm giao nhận thành công!');
+                redirect("productions");
+            }else{
+                $this->session->set_flashdata('error', 'Thêm giao nhận thất bại');
+                redirect("productions");
+            }
+
+        }
+
+
+        $this->data['products'] = $this->productions_model->getProductionItemByProductionId($id);
+        $this->data['id'] = $id;
+        $this->load->view($this->theme . 'productions/add_delivery', $this->data);
+    }
+
     function deliveries($id){
         $this->sma->checkPermissions();
 
         $this->data['production'] = $this->productions_model->getProduction($id);
-        $this->data['deliveries'] = $this->productions_model->GetdDliveryTimeByProductionID($id);
+        $this->data['deliveries'] = $this->productions_model->getdDeliveryTimeByProductionID($id);
         $this->load->view($this->theme . 'productions/deliveries', $this->data);
     }
+
+
 
     function updateDelivery(){
         $this->sma->checkPermissions();

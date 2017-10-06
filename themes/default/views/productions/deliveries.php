@@ -21,25 +21,28 @@
                         <table id="slTable" class="table items table-striped table-bordered table-condensed table-hover">
                             <thead>
                                 <tr>
-                                    <th>Ngày bắt đầu</th>
+                                    <!-- <th>Ngày bắt đầu</th> -->
+                                    <th>Tên sản phẩm</th>
                                     <th>Ngày giao hàng</th>
-                                    <th>Trạng thái</th>
-                                    <!-- <th style="width: 30px !important; text-align: center;"><i class="fa fa-trash-o" style="opacity:0.5; filter:alpha(opacity=50);"></i></th> -->
+                                    <th>Số lượng giao</th>
+                                    <th style="width: 30px !important; text-align: center;"><i class="fa fa-trash-o" style="opacity:0.5; filter:alpha(opacity=50);"></i></th>
                                 </tr>
                             </thead>
                             <tbody>
                             <?php foreach ($deliveries as $value): ?>
                                 <tr>
-                                    <td><?=$value->delivery_date_start ?></td>
-                                    <td><?=$value->delivery_date_end ?></td>
-                                    <td class="text-center">
+                                    <td><?=$value->name ?></td>
+                                    <td><?=$value->delivery_time ?></td>
+                         <!--            <td class="text-center">
                                         <?php if ($value->delivery_status == 0): ?>
                                             <input type="checkbox" class="checkbox" name="delivery" attr-id="<?=$value->id ?>" attr-val="0">
                                         <?php else: ?>
                                             <input type="checkbox" class="checkbox" name="delivery" attr-id="<?=$value->id ?>" checked="checked" attr-val="1">
                                         <?php endif ?>
 
-                                    </td>
+                                    </td> -->
+                                    <td><?=$value->delivery_quantity ?></td>
+                                    <th class="text-center"><a href="#"><i class="fa fa-trash-o" style="filter:alpha(opacity=50);"></i></a></th>
                                 </tr>
                             <?php endforeach ?>
 

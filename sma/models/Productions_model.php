@@ -1019,10 +1019,25 @@ class Productions_model extends CI_Model
         return FALSE;
     }
 
-     public function GetdDliveryTimeByProductionID($id)
+    public function GetdDliveryTimeByProductionID($id)
     {
 
         $q = $this->db->get_where('sma_production_deliveries', array('production_id'=>$id));
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+
+        return FALSE;
+    }
+
+
+    public function getdDeliveryTimeByProductionID($id)
+    {
+        $this->db->join('products', 'products.id = production_deliveries.product_id');
+        $q = $this->db->get_where('production_deliveries', array('production_id'=>$id));
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
                 $data[] = $row;
@@ -1889,10 +1904,33 @@ class Productions_model extends CI_Model
 
                 if(count($this->getStage_ID($id,$data['product_id']))==count($this->getStage_IDC($id,$data['product_id']))){
 
-                    if($this->db->update('production_items',array('status'=>'completed'),array('sale_id'=>$id,'product_id'=>$data['product_id']))) {
-                         if(count($this->getProduction_item($id))==count($this->getProduction_item_completed($id))){
+                    if($this->db->update('production_items',array('status'=>'completed'),array('sale_id'=>$id, 'product_id'=>$data['product_id']))) {
+
+                        //BEGIN code insert table completed_products when all stage completed
+                        $arr_completed_stages = $this->getStage_IDC($id, $data['product_id']);
+                        $arr_quantity = array();
+
+                        foreach ($arr_completed_stages as $z) {
+                            if ($z->date_start && $z->date_end) {
+                                $arr_quantity[] = ($z->quantity) ? $z->quantity : 0;
+                            }
+                        }
+
+                        $real_completed = (min($arr_quantity)) ? (min($arr_quantity)) : 0;
+                        $this->db->insert('completed_products',
+                            array(
+                                'production_id' => $id,
+                                'product_id'    => $data['product_id'],
+                                'completed_quantity' => $real_completed
+                            )
+                        );
+                        //END
+
+                        $this->updateProductQuantityProductById($data['product_id'], $real_completed);
+
+                        if(count($this->getProduction_item($id))==count($this->getProduction_item_completed($id))){
                             $this->db->update('productions',array('sale_status'=>'completed'),array('id'=>$id));
-                         }
+                        }
                     }
                 }
 
@@ -1976,6 +2014,19 @@ class Productions_model extends CI_Model
         $this->db->select('production_items.id, production_items.quantity, production_items.product_id, products.quantity_config,');
         $this->db->join('products', 'products.id = production_items.product_id');
         $q = $this->db->get_where('production_items', array('sale_id' => $production_id));
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
+    }
+
+    public function getProductionItemByProductionId($production_id)
+    {
+
+        $q = $this->db->get_where('production_items', array('sale_id' => $production_id, 'status' => 'completed'));
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
                 $data[] = $row;
@@ -2318,4 +2369,37 @@ class Productions_model extends CI_Model
         return FALSE;
     }
 
+    public function addProductionDeliveriesNew($data){
+        // echo "<pre>";
+        // print_r($data);
+        // echo "</pre>";die();
+        $return = true;
+        foreach ($data as $value) {
+            if ($this->db->insert('production_deliveries', $value)) {
+                $product_id = $value['product_id'];
+                $quantity = $value['delivery_quantity'];
+                $this->updateProductQuantityProductById($product_id, $quantity, 1);
+            }else{
+                $return = false;
+            }
+        }
+        return $return;
+    }
+
+    /**
+     * [updateProductQuantityProductById description]
+     * @param  integer  $product_id [description]
+     * @param  integer  $quantity   [description]
+     * @param  0|1      $option     [description]
+     */
+    public function updateProductQuantityProductById($product_id, $quantity, $option = 0){
+        $this->db->where('id', $product_id);
+        if ($option == 0) {
+            $this->db->set('product_quantity', 'product_quantity+'.$quantity, FALSE);
+        }else{
+            $this->db->set('product_quantity', 'product_quantity-'.$quantity, FALSE);
+        }
+
+        if ($this->db->update('products'));
+    }
 }

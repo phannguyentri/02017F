@@ -117,6 +117,26 @@
       'countDays' : today.getDate(),
       'year' : today.getFullYear()
     }
+
+    /**
+     * @param {int} The month number, 0 based
+     * @param {int} The year, not zero based, required to account for leap years
+     * @return {Date[]} List with date objects for each day of the month
+     */
+    function getDaysInMonth(month, year) {
+         // Since no month has fewer than 28 days
+         var date = new Date(year, month, 1);
+         var days = [];
+         console.log('month', month, 'date.getMonth()', date.getMonth())
+         while (date.getMonth() === month) {
+            days.push(new Date(date));
+            date.setDate(date.getDate() + 1);
+         }
+         return days;
+    }
+
+    console.log(getDaysInMonth(4, 2012))
+
   }
   console.log(daysInMonth(10, 2017));
 
@@ -146,12 +166,6 @@
                     numRow = Object.keys(nameList).length;
 
                     var dimensions = [numRow,31];
-
-                    var dayList = [
-                        {name:"2015-09-01"},{name:"2015-09-02"},{name:"2015-09-03"},{name:"2015-09-04"},{name:"2015-09-05"},
-                        {name:"2015-09-06"},{name:"2015-09-07"},{name:"2015-09-08"},{name:"2015-09-09"},{name:"2015-09-10"},
-                        {name:"2015-09-11"},{name:"2015-09-12"}
-                    ];
 
                     var hourList = [
                         {name:"01",title:"01:00-02:00"},
@@ -234,8 +248,6 @@
                             updateRemark(sheet);
                         }
                     });
-
-
 
 
 
