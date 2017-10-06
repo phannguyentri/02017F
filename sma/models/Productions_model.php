@@ -2025,7 +2025,6 @@ class Productions_model extends CI_Model
 
     public function getProductionItemByProductionId($production_id)
     {
-
         $q = $this->db->get_where('production_items', array('sale_id' => $production_id, 'status' => 'completed'));
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -2034,6 +2033,18 @@ class Productions_model extends CI_Model
             return $data;
         }
         return FALSE;
+    }
+
+    public function getCompletedProductsByProductionId($production_id){
+      $this->db->join('products', 'products.id = completed_products.product_id');
+      $q = $this->db->get_where('completed_products', array('production_id' => $production_id));
+      if ($q->num_rows() > 0) {
+          foreach (($q->result()) as $row) {
+              $data[] = $row;
+          }
+          return $data;
+      }
+      return FALSE;
     }
 
     public function updatePayment($id, $data = array())

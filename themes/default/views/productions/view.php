@@ -303,21 +303,6 @@
                   </div>
                   <div class="table-responsive">
 
-
-                    <?php
-
-                      $arr_quantity = array();
-
-                      foreach ($this->productions_model->getStage_IDC(100, 70) as $z) {
-                        if ($z->date_start && $z->date_end) {
-                          $arr_quantity[] = ($z->quantity) ? $z->quantity : 0;
-                        }
-                      }
-
-                      $real_completed = (min($arr_quantity)) ? (min($arr_quantity)) : 0;
-                      echo "<h1>".$real_completed."</h1>";
-                     ?>
-
                     <?php
                       $arr_final_progress = array();
                      ?>

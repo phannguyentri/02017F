@@ -43,19 +43,9 @@
                                 <?php foreach ($products as $product): ?>
                                     <tr>
                                         <input type="hidden" name="product_id[]" value="<?=$product->product_id ?>">
-                                        <td><?=$product->product_name ?></td>
-                                        <?php
-                                            $stages = $this->productions_model->getStage_ID($id, $product->product_id);
-                                            $arr_quantity = array();
-                                            foreach ($stages as $stage) {
-                                                if ($stage->date_start && $stage->date_end) {
-                                                    $arr_quantity[] = ($stage->quantity) ? $stage->quantity : 0;
-                                                }
-                                            }
-                                            $real_completed = (min($arr_quantity)) ? (min($arr_quantity)) : 0;
-                                         ?>
+                                        <td><?=$product->name ?></td>
                                         <td>
-                                            <input type="text" class="form-control quantity" data-name="<?=$product->product_name ?>" data-max="<?=$real_completed ?>" value="<?=$real_completed ?>" name="quantity[]" required>
+                                            <input type="text" class="form-control quantity" data-name="<?=$product->name ?>" data-max="<?=$product->completed_quantity ?>" value="<?=$product->completed_quantity ?>" name="quantity[]" required>
                                         </td>
                                     </tr>
                                 <?php endforeach ?>

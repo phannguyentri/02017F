@@ -136,7 +136,7 @@ class Productions extends MY_Controller
         }
 
 
-        $this->data['products'] = $this->productions_model->getProductionItemByProductionId($id);
+        $this->data['products'] = $this->productions_model->getCompletedProductsByProductionId($id);
         $this->data['id'] = $id;
         $this->load->view($this->theme . 'productions/add_delivery', $this->data);
     }
