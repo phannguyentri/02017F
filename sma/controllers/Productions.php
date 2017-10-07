@@ -125,7 +125,7 @@ class Productions extends MY_Controller
                 $this->form_validation->set_rules('product', lang("order_items"), 'required');
             }
 
-            if ($this->productions_model->addProductionDeliveriesNew($products)) {
+            if ($this->productions_model->addProductionDeliveries($products)) {
                 $this->session->set_flashdata('message', 'Thêm giao nhận thành công!');
                 redirect("productions");
             }else{
@@ -135,17 +135,34 @@ class Productions extends MY_Controller
 
         }
 
-
+        $this->data['production'] = $this->productions_model->getProduction($id);
         $this->data['products'] = $this->productions_model->getCompletedProductsByProductionId($id);
         $this->data['id'] = $id;
         $this->load->view($this->theme . 'productions/add_delivery', $this->data);
+    }
+
+    function edit_delivery($id){
+
+        $this->data['delivery'] = $this->productions_model->getProductionDeliveryByIDJoinProducts($id);
+        $this->load->view($this->theme . 'productions/edit_delivery', $this->data);
+    }
+
+    function delete_delivery($id){
+        $delivery = $this->productions_model->getProductionDeliveryByID($id);
+
+        if ($this->productions_model->deleteDelivery($delivery)) {
+            echo json_encode(array('status'=>'success','msg'=>'Hủy bỏ đợt giao nhận thành công'));
+        }else{
+            echo json_encode(array('status'=>'error','msg'=>'Hủy bỏ đợt giao nhận thất bại'));
+        }
+
     }
 
     function deliveries($id){
         $this->sma->checkPermissions();
 
         $this->data['production'] = $this->productions_model->getProduction($id);
-        $this->data['deliveries'] = $this->productions_model->getdDeliveryTimeByProductionID($id);
+        $this->data['deliveries'] = $this->productions_model->getDeliveryTimeByProductionID($id);
         $this->load->view($this->theme . 'productions/deliveries', $this->data);
     }
 
@@ -684,366 +701,6 @@ class Productions extends MY_Controller
             }
         }
     }
-
-
-
-    // function add($quote_id = NULL)
-    // {
-    //     // echo "<pre>";
-    //     // print_r($this->input->post('employees'));
-    //     // print_r($this->input->post('product_id'));
-    //     // echo("</pre>");die();
-
-    //     $this->sma->checkPermissions();
-
-    //     $this->form_validation->set_message('is_natural_no_zero', lang("no_zero_required"));
-    //     $this->form_validation->set_rules('reference_no', lang("reference_no"), 'required');
-    //     $this->form_validation->set_rules('customer', lang("customer"), 'required');
-
-    //     if ($this->form_validation->run() == true) {
-    //         $quantity  = "quantity";
-    //         $product   = "product";
-    //         $unit_cost = "unit_cost";
-    //         $tax_rate  = "tax_rate";
-    //         $reference = $this->input->post('reference_no') ? $this->input->post('reference_no') : $this->site->getReference('so');
-    //         if ($this->Owner || $this->Admin) {
-    //             $date     = $this->sma->fsd(trim($this->input->post('date')));
-    //             $due_date = $this->sma->fsd(trim($this->input->post('due_date')));
-    //         } else {
-    //             $date     = date('Y-m-d');
-    //             $due_date = date('Y-m-d');
-    //         }
-
-
-
-    //         $warehouse_id     = $this->input->post('warehouse');
-    //         $customer_id      = $this->input->post('customer');
-    //         $biller_id        = $this->input->post('biller');
-    //         $total_items      = $this->input->post('total_items');
-    //         $sale_status      = $this->input->post('sale_status');
-    //         $payment_status   = $this->input->post('payment_status');
-    //         $payment_term     = $this->input->post('payment_term');
-    //         // $due_date = $payment_term ? date('Y-m-d', strtotime('+' . $payment_term . ' days')) : NULL;
-    //         $shipping         = $this->input->post('shipping') ? $this->input->post('shipping') : 0;
-    //         $customer_details = $this->site->getCompanyByID($customer_id);
-    //         $customer         = $customer_details->company ? $customer_details->company : $customer_details->name;
-    //         $biller_details   = $this->site->getCompanyByID($biller_id);
-    //         $biller           = $biller_details->company != '-' ? $biller_details->company : $biller_details->name;
-    //         $note             = $this->sma->clear_tags($this->input->post('note'));
-    //         $staff_note       = $this->sma->clear_tags($this->input->post('staff_note'));
-    //         $quote_id         = $this->input->post('quote_id') ? $this->input->post('quote_id') : NULL;
-
-    //         $total            = 0;
-    //         $product_tax      = 0;
-    //         $order_tax        = 0;
-    //         $product_discount = 0;
-    //         $order_discount   = 0;
-    //         $percentage       = '%';
-
-    //         $i = isset($_POST['product_code']) ? sizeof($_POST['product_code']) : 0;
-
-    //         for ($r = 0; $r < $i; $r++) {
-    //             $item_id         = $_POST['product_id'][$r];
-    //             $item_type       = $_POST['product_type'][$r];
-    //             $item_code       = $_POST['product_code'][$r];
-    //             $item_name       = $_POST['product_name'][$r];
-    //             $item_option     = isset($_POST['product_option'][$r]) && $_POST['product_option'][$r] != 'false' ? $_POST['product_option'][$r] : NULL;
-    //             //$option_details = $this->productions_model->getProductOptionByID($item_option);
-    //             $real_unit_price = $this->sma->formatDecimal($_POST['real_unit_price'][$r]);
-    //             $unit_price      = $this->sma->formatDecimal($_POST['unit_price'][$r]);
-    //             $item_quantity   = $_POST['quantity'][$r];
-    //             $item_serial     = isset($_POST['serial'][$r]) ? $_POST['serial'][$r] : '';
-    //             $item_tax_rate   = isset($_POST['product_tax'][$r]) ? $_POST['product_tax'][$r] : NULL;
-    //             $item_discount   = isset($_POST['product_discount'][$r]) ? $_POST['product_discount'][$r] : NULL;
-
-    //             if (isset($item_code) && isset($real_unit_price) && isset($unit_price) && isset($item_quantity)) {
-
-
-    //                 $product_details = $item_type != 'manual' ? $this->productions_model->getProductByCode($item_code) : NULL;
-    //                 $unit_price      = $real_unit_price;
-    //                 $pr_discount     = 0;
-
-    //                 if (isset($item_discount)) {
-    //                     $discount = $item_discount;
-    //                     $dpos     = strpos($discount, $percentage);
-    //                     if ($dpos !== false) {
-    //                         $pds         = explode("%", $discount);
-    //                         $pr_discount = (($this->sma->formatDecimal($unit_price)) * (Float) ($pds[0])) / 100;
-    //                     } else {
-    //                         $pr_discount = $this->sma->formatDecimal($discount);
-    //                     }
-    //                 }
-
-    //                 $unit_price       = $this->sma->formatDecimal($unit_price - $pr_discount);
-    //                 $item_net_price   = $unit_price;
-    //                 $pr_item_discount = $this->sma->formatDecimal($pr_discount * $item_quantity);
-    //                 $product_discount += $pr_item_discount;
-    //                 $pr_tax      = 0;
-    //                 $pr_item_tax = 0;
-    //                 $item_tax    = 0;
-    //                 $tax         = "";
-    //                 if (isset($item_tax_rate) && $item_tax_rate != 0) {
-    //                     $pr_tax = $item_tax_rate;
-
-
-    //                     $tax_details = $this->site->getTaxRateByID($pr_tax);
-    //                     if ($tax_details->type == 1 && $tax_details->rate != 0) {
-
-    //                         if ($product_details && $product_details->tax_method == 1) {
-    //                             $item_tax = $this->sma->formatDecimal((($unit_price) * $tax_details->rate) / 100);
-    //                             $tax      = $tax_details->rate . "%";
-    //                         } else {
-    //                             $item_tax       = $this->sma->formatDecimal((($unit_price) * $tax_details->rate) / (100 + $tax_details->rate));
-    //                             $tax            = $tax_details->rate . "%";
-    //                             $item_net_price = $unit_price - $item_tax;
-    //                         }
-
-    //                     } elseif ($tax_details->type == 2) {
-
-    //                         if ($product_details && $product_details->tax_method == 1) {
-    //                             $item_tax = $this->sma->formatDecimal((($unit_price) * $tax_details->rate) / 100);
-    //                             $tax      = $tax_details->rate . "%";
-    //                         } else {
-    //                             $item_tax       = $this->sma->formatDecimal((($unit_price) * $tax_details->rate) / (100 + $tax_details->rate));
-    //                             $tax            = $tax_details->rate . "%";
-    //                             $item_net_price = $unit_price - $item_tax;
-    //                         }
-
-    //                         $item_tax = $this->sma->formatDecimal($tax_details->rate);
-    //                         $tax      = $tax_details->rate;
-
-    //                     }
-    //                     $pr_item_tax = $this->sma->formatDecimal($item_tax * $item_quantity);
-
-    //                 }
-    //                 $product_tax += $pr_item_tax;
-    //                 $subtotal = (($item_net_price * $item_quantity) + $pr_item_tax);
-    //                 $employees = implode(",",$_POST['employees_'.$item_id]);
-
-    //                 $products[] = array(
-    //                     'product_id' => $item_id,
-    //                     'product_code' => $item_code,
-    //                     'product_name' => $item_name,
-    //                     'product_type' => $item_type,
-    //                     'option_id' => $item_option,
-    //                     'net_unit_price' => $item_net_price,
-    //                     'unit_price' => $this->sma->formatDecimal($item_net_price + $item_tax),
-    //                     'quantity' => $item_quantity,
-    //                     'warehouse_id' => $warehouse_id,
-    //                     'item_tax' => $pr_item_tax,
-    //                     'tax_rate_id' => $pr_tax,
-    //                     'tax' => $tax,
-    //                     'discount' => $item_discount,
-    //                     'item_discount' => $pr_item_discount,
-    //                     'subtotal' => $this->sma->formatDecimal($subtotal),
-    //                     'serial_no' => $item_serial,
-    //                     'real_unit_price' => $real_unit_price,
-    //                     'employees' => (!empty($employees)) ? $employees : NULL,
-    //                 );
-
-    //                 // var_dump($_POST['employees_'.$item_id]);die();
-    //                 $total += $item_net_price * $item_quantity;
-    //             }
-    //             // echo "<pre>";
-    //             // print_r($products);
-    //             // echo("</pre>");
-    //             // var_dump(json_encode($_POST['employees_37']));die();
-    //         }
-
-    //         if (empty($products)) {
-    //             $this->form_validation->set_rules('product', lang("order_items"), 'required');
-    //         } else {
-    //             krsort($products);
-    //         }
-
-    //         if ($this->input->post('order_discount')) {
-    //             $order_discount_id = $this->input->post('order_discount');
-    //             $opos              = strpos($order_discount_id, $percentage);
-    //             if ($opos !== false) {
-    //                 $ods            = explode("%", $order_discount_id);
-    //                 $order_discount = $this->sma->formatDecimal((($total + $product_tax) * (Float) ($ods[0])) / 100);
-    //             } else {
-    //                 $order_discount = $this->sma->formatDecimal($order_discount_id);
-    //             }
-    //         } else {
-    //             $order_discount_id = NULL;
-    //         }
-    //         $total_discount = $this->sma->formatDecimal($order_discount + $product_discount);
-
-    //         if ($this->Settings->tax2) {
-    //             $order_tax_id = $this->input->post('order_tax');
-    //             if ($order_tax_details = $this->site->getTaxRateByID($order_tax_id)) {
-    //                 if ($order_tax_details->type == 2) {
-    //                     $order_tax = $this->sma->formatDecimal($order_tax_details->rate);
-    //                 }
-    //                 if ($order_tax_details->type == 1) {
-    //                     $order_tax = $this->sma->formatDecimal((($total + $product_tax - $order_discount) * $order_tax_details->rate) / 100);
-    //                 }
-    //             }
-    //         } else {
-    //             $order_tax_id = NULL;
-    //         }
-
-    //         $total_tax   = $this->sma->formatDecimal($product_tax + $order_tax);
-    //         $grand_total = $this->sma->formatDecimal($this->sma->formatDecimal($total) + $total_tax + $this->sma->formatDecimal($shipping) - $order_discount);
-    //         $data        = array(
-    //             'date' => $date,
-    //             'due_date' => $due_date,
-    //             'reference_no' => $reference,
-    //             'customer_id' => $customer_id,
-    //             'customer' => $customer,
-    //             'biller_id' => $biller_id,
-    //             'biller' => $biller,
-    //             'warehouse_id' => $warehouse_id,
-    //             'note' => $note,
-    //             'staff_note' => $staff_note,
-    //             'total' => $this->sma->formatDecimal($total),
-    //             'product_discount' => $this->sma->formatDecimal($product_discount),
-    //             'order_discount_id' => $order_discount_id,
-    //             'order_discount' => $order_discount,
-    //             'total_discount' => $total_discount,
-    //             'product_tax' => $this->sma->formatDecimal($product_tax),
-    //             'order_tax_id' => $order_tax_id,
-    //             'order_tax' => $order_tax,
-    //             'total_tax' => $total_tax,
-    //             'shipping' => $this->sma->formatDecimal($shipping),
-    //             'grand_total' => $grand_total,
-    //             'total_items' => $total_items,
-    //             'sale_status' => 'not_start',
-    //             'payment_status' => $payment_status,
-    //             'payment_term' => $payment_term,
-    //             'working' => $this->input->post('implementation_unit'),
-    //             'due_date' => $due_date,
-    //             'paid' => 0,
-    //             'created_by' => $this->session->userdata('user_id'),
-    //             'created_at' => date('Y-m-d')
-    //             // 'employees' => json_encode($this->input->post('employees'));
-    //         );
-    //         $delivery_mode=$this->input->post('delivery_mode');
-    //         if($delivery_mode==1)
-    //         {
-    //             $data['delivery_mode']=1;
-    //             $arrDeliveries=array('mode'=>$delivery_mode,'date'=>array(array('start'=>$date,'end'=>$due_date,'percent'=>100)));
-    //         }
-    //         else
-    //         {
-    //             $data['delivery_mode']=0;
-    //             $deliveries=$this->input->post('delivery_date');
-    //             $arrDeliveries=array('mode'=>$delivery_mode,'date'=>$deliveries);
-    //         }
-
-    //         if ($payment_status == 'partial' || $payment_status == 'paid') {
-    //             if ($this->input->post('paid_by') == 'gift_card') {
-    //                 $gc            = $this->site->getGiftCardByNO($this->input->post('gift_card_no'));
-    //                 $amount_paying = $grand_total >= $gc->balance ? $gc->balance : $grand_total;
-    //                 $gc_balance    = $gc->balance - $amount_paying;
-    //                 $payment       = array(
-    //                     'date' => $date,
-    //                     'reference_no' => $this->input->post('payment_reference_no'),
-    //                     'amount' => $this->sma->formatDecimal($amount_paying),
-    //                     'paid_by' => $this->input->post('paid_by'),
-    //                     'cheque_no' => $this->input->post('cheque_no'),
-    //                     'cc_no' => $this->input->post('gift_card_no'),
-    //                     'cc_holder' => $this->input->post('pcc_holder'),
-    //                     'cc_month' => $this->input->post('pcc_month'),
-    //                     'cc_year' => $this->input->post('pcc_year'),
-    //                     'cc_type' => $this->input->post('pcc_type'),
-    //                     'created_by' => $this->session->userdata('user_id'),
-    //                     'note' => $this->input->post('payment_note'),
-    //                     'type' => 'received',
-    //                     'gc_balance' => $gc_balance
-    //                 );
-    //             } else {
-    //                 $payment = array(
-    //                     'date' => $date,
-    //                     'reference_no' => $this->input->post('payment_reference_no'),
-    //                     'amount' => $this->sma->formatDecimal($this->input->post('amount-paid')),
-    //                     'paid_by' => $this->input->post('paid_by'),
-    //                     'cheque_no' => $this->input->post('cheque_no'),
-    //                     'cc_no' => $this->input->post('pcc_no'),
-    //                     'cc_holder' => $this->input->post('pcc_holder'),
-    //                     'cc_month' => $this->input->post('pcc_month'),
-    //                     'cc_year' => $this->input->post('pcc_year'),
-    //                     'cc_type' => $this->input->post('pcc_type'),
-    //                     'created_by' => $this->session->userdata('user_id'),
-    //                     'note' => $this->input->post('payment_note'),
-    //                     'type' => 'received'
-    //                 );
-    //             }
-    //         } else {
-    //             $payment = array();
-    //         }
-
-    //         if ($_FILES['document']['size'] > 0) {
-    //             $this->load->library('upload');
-    //             $config['upload_path']   = $this->digital_upload_path;
-    //             $config['allowed_types'] = $this->digital_file_types;
-    //             $config['max_size']      = $this->allowed_file_size;
-    //             $config['overwrite']     = FALSE;
-    //             $config['encrypt_name']  = TRUE;
-    //             $this->upload->initialize($config);
-    //             if (!$this->upload->do_upload('document')) {
-    //                 $error = $this->upload->display_errors();
-    //                 $this->session->set_flashdata('error', $error);
-    //                 redirect($_SERVER["HTTP_REFERER"]);
-    //             }
-    //             $photo              = $this->upload->file_name;
-    //             $data['attachment'] = $photo;
-    //         }
-
-    //         // $this->sma->print_arrays($data, $products, $payment);
-    //     }
-
-    //     $production_id = '';
-    //     if ($this->form_validation->run() == true && $production_id = $this->productions_model->addProduction($data, $products, $payment,$arrDeliveries)) {
-    //         // $this->session->set_userdata('remove_slls', 1);
-    //         if ($quote_id) {
-    //             $this->db->update('quotes', array(
-    //                 'status' => 'completed'
-    //             ), array(
-    //                 'id' => $quote_id
-    //             ));
-    //         }
-    //         $this->session->set_flashdata('message', lang("Thêm lệnh sản xuất thành công"));
-    //         redirect("productions/edit/" . $production_id);
-    //     } else {
-
-    //         if ($quote_id) {
-    //             $this->data['items']      = $this->site->getAllProductionItems($quote_id);
-    //             $this->data['production'] = $this->productions_model->getInvoiceByID($quote_id);
-    //         }
-
-    //         $this->data['error']       = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
-    //         $this->data['quote_id']    = $quote_id;
-    //         $this->data['billers']     = $this->site->getAllCompanies('biller');
-    //         $this->data['warehouses']  = $this->site->getAllWarehouses();
-    //         $this->data['tax_rates']   = $this->site->getAllTaxRates();
-    //         $this->data['categories'] = $this->site->getAllCategories();
-    //         //$this->data['currencies'] = $this->productions_model->getAllCurrencies();
-    //         $this->data['slnumber']    = ''; //$this->site->getReference('so');
-    //         $this->data['payment_ref'] = $this->site->getReference('pay');
-    //         $bc                        = array(
-    //             array(
-    //                 'link' => base_url(),
-    //                 'page' => lang('home')
-    //             ),
-    //             array(
-    //                 'link' => site_url('productions'),
-    //                 'page' => lang('Lệnh sản xuất')
-    //             ),
-    //             array(
-    //                 'link' => '#',
-    //                 'page' => lang('Thêm lệnh sản xuất')
-    //             )
-    //         );
-    //         $meta                      = array(
-    //             'page_title' => lang('Thêm lệnh sản xuất'),
-    //             'bc' => $bc
-    //         );
-    //         // var_dump($this->data['slnumber']);die();
-    //         $this->page_construct('productions/add', $meta, $this->data);
-    //     }
-    // }
 
     function edit($id = NULL)
     {
@@ -1680,7 +1337,7 @@ class Productions extends MY_Controller
         $a = $this->productions_model->getProduction($id);
         if($a->sale_status=='not_start'){
             if ($this->productions_model->updateStatusProductionC($id)) {
-                echo json_encode(array('status'=>'success','msg'=>'Hủy bỏ lệnh sản xuất thành công'))  ;
+                echo json_encode(array('status'=>'success','msg'=>'Hủy bỏ lệnh sản xuất thành công'));
 
             }
         } else {

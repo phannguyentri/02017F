@@ -17,41 +17,46 @@
                         </p>
                     </div>
 
-                    <div class="controls table-controls">
-                        <table id="slTable" class="table items table-striped table-bordered table-condensed table-hover">
-                            <thead>
-                                <tr>
-                                    <!-- <th>Ngày bắt đầu</th> -->
-                                    <th>Tên sản phẩm</th>
-                                    <th>Ngày giao hàng</th>
-                                    <th>Số lượng giao</th>
-                                    <th style="width: 30px !important; text-align: center;"><i class="fa fa-trash-o" style="opacity:0.5; filter:alpha(opacity=50);"></i></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            <?php foreach ($deliveries as $value): ?>
-                                <tr>
-                                    <td><?=$value->name ?></td>
-                                    <td><?=$value->delivery_time ?></td>
-                         <!--            <td class="text-center">
-                                        <?php if ($value->delivery_status == 0): ?>
-                                            <input type="checkbox" class="checkbox" name="delivery" attr-id="<?=$value->id ?>" attr-val="0">
-                                        <?php else: ?>
-                                            <input type="checkbox" class="checkbox" name="delivery" attr-id="<?=$value->id ?>" checked="checked" attr-val="1">
-                                        <?php endif ?>
+                    <?php if ($deliveries): ?>
+                        <div class="controls table-controls">
+                            <table id="slTable" class="table items table-striped table-bordered table-condensed table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Ngày giao hàng</th>
+                                        <th>Số lượng giao</th>
+                                        <th style="width: 30px !important; text-align: center;"><i class="fa fa-trash-o" style="opacity:0.5; filter:alpha(opacity=50);"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <?php foreach ($deliveries as $value): ?>
+                                    <tr id="<?=$value->id ?>">
+                                        <td><?=$value->name ?></td>
+                                        <td><?=$value->delivery_time ?></td>
 
-                                    </td> -->
-                                    <td><?=$value->delivery_quantity ?></td>
-                                    <th class="text-center"><a href="#"><i class="fa fa-trash-o" style="filter:alpha(opacity=50);"></i></a></th>
-                                </tr>
-                            <?php endforeach ?>
+                                        <td><?=$value->delivery_quantity ?></td>
+                                        <td class="text-center">
+                                            <a href="<?=base_url().'productions/delete_delivery/'.$value->id ?>" class="po" title="Xóa đợt giao nhận" data-content="<p>Bạn có chắc không?</p><a class='btn btn-danger po-cancel' href='#' class='delete_deli' data-id='<?=$value->id ?>'>Vâng tôi chắc chắn</a> <button data-id='<?=$value->id ?>' class='btn po-close'>Không</button>" rel="popover"><i class="fa fa-trash-o"></i></a><a href="http://localhost/02017F/productions/edit_delivery/<?=$value->id ?>" data-toggle="modal" data-target="#myModal2"><i class="fa fa-plus"></i> </a>
+                                        </td>
+                                        <!-- <th class="text-center"><a href="<?=base_url().'productions/delete_delivery/'.$value->id ?>" class="po" title="Xóa đợt giao nhận" data-content="<p>Bạn có chắc không?</p><a class='btn btn-danger po-cancel' href='<?=base_url().'productions/delete_delivery/'.$value->id ?>'>Vâng tôi chắc chắn</a> <button class='btn po-close'>Không</button>" rel="popover"><i class="fa fa-trash-o"></i></a></th> -->
+                                    </tr>
+                                <?php endforeach ?>
 
-                            </tbody>
-                            <tfoot>
+                                </tbody>
+                                <tfoot>
 
-                            </tfoot>
-                        </table>
-                    </div>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                    <?php else: ?>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="alert alert-info"><button type="button" class="close" data-dismiss="alert">×</button>Chưa có đợt giao nhận nào trong lệnh sản xuất <?=$production->reference_no ?></div>
+                            </div>
+                        </div>
+                    <?php endif ?>
+
                 </div>
         </div>
 
@@ -67,57 +72,32 @@
         });
     });
 
-    $('.checkbox').on('ifChecked', function (event) {
-        delivery_id = $(this).attr('attr-id');
-        current_status = $(this).attr('attr-val');
-        console.log(current_status);
 
-        $.ajax({
-            type: 'get',
-            url: '<?= site_url('productions/updateDelivery'); ?>',
-            dataType: "json",
-            context: this,
-            data: {
-                delivery_id: delivery_id,
-                current_status: current_status
-            },
-            success: function (data) {
-                $(this).attr('attr-val', 1);
-                if (data.status_error == 0) {
-                    bootbox.alert("Cập nhật thành công");
-                }else{
-                    bootbox.alert("Cập nhật thất bại");
-                }
 
-            }
-        });
+    $(document).on('click','.po-cancel',function() {
 
-    });
+            let a = $(this).val();
+            console.log($(this).attr('data-id'));
 
-    $('.checkbox').on('ifUnchecked', function (event) {
+            delivery_id = $(this).attr('data-id');
+            $.ajax({
+                type: 'get',
+                url: '<?= site_url('productions/delete_delivery'); ?>/'+delivery_id,
+                context: this,
+                dataType: "json",
+                data: {
+                    delivery_id: delivery_id
+                },
+                success: function (response) {
+                    console.log($('#'+delivery_id));
+                    $('#'+delivery_id).remove();
+                    $('.alert-danger').parent().remove();
+                },
+                error: function (request, error) {
+                    alert(" Can't do because: " + error);
+                },
+            });
 
-        delivery_id = $(this).attr('attr-id');
-        current_status = $(this).attr('attr-val');
-
-        $.ajax({
-            type: 'get',
-            url: '<?= site_url('productions/updateDelivery'); ?>',
-            dataType: "json",
-            context: this,
-            data: {
-                delivery_id: delivery_id,
-                current_status: current_status
-            },
-            success: function (data) {
-                $(this).attr('attr-val', 0);
-                if (data.status_error == 0) {
-                    bootbox.alert("Cập nhật thành công");
-                }else{
-                    bootbox.alert("Cập nhật thất bại");
-                }
-
-            }
-        });
 
     });
 </script>

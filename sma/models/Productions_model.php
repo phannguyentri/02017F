@@ -1034,8 +1034,9 @@ class Productions_model extends CI_Model
     }
 
 
-    public function getdDeliveryTimeByProductionID($id)
+    public function getDeliveryTimeByProductionID($id)
     {
+        $this->db->select('production_deliveries.id, production_deliveries.production_id, production_deliveries.product_id, products.name, production_deliveries.delivery_time, production_deliveries.delivery_quantity');
         $this->db->join('products', 'products.id = production_deliveries.product_id');
         $q = $this->db->get_where('production_deliveries', array('production_id'=>$id));
         if ($q->num_rows() > 0) {
@@ -1779,13 +1780,6 @@ class Productions_model extends CI_Model
         return FALSE;
     }
 
-    public function deleteDelivery($id)
-    {
-        if ($this->db->delete('deliveries', array('id' => $id))) {
-            return true;
-        }
-        return FALSE;
-    }
 
     public function getInvoicePayments($sale_id)
     {
@@ -1926,7 +1920,7 @@ class Productions_model extends CI_Model
                         );
                         //END
 
-                        $this->updateProductQuantityProductById($data['product_id'], $real_completed);
+                        $this->updateQuantityProductById($data['product_id'], $real_completed);
 
                         if(count($this->getProduction_item($id))==count($this->getProduction_item_completed($id))){
                             $this->db->update('productions',array('sale_status'=>'completed'),array('id'=>$id));
@@ -2380,16 +2374,14 @@ class Productions_model extends CI_Model
         return FALSE;
     }
 
-    public function addProductionDeliveriesNew($data){
-        // echo "<pre>";
-        // print_r($data);
-        // echo "</pre>";die();
+    public function addProductionDeliveries($data){
         $return = true;
         foreach ($data as $value) {
             if ($this->db->insert('production_deliveries', $value)) {
                 $product_id = $value['product_id'];
                 $quantity = $value['delivery_quantity'];
-                $this->updateProductQuantityProductById($product_id, $quantity, 1);
+                $this->updateQuantityProductById($product_id, $quantity, 1);
+                $this->updateCompletedProductsQuantity($value['production_id'], $product_id, $quantity, 1);
             }else{
                 $return = false;
             }
@@ -2398,12 +2390,12 @@ class Productions_model extends CI_Model
     }
 
     /**
-     * [updateProductQuantityProductById description]
+     * [updateQuantityProductById description]
      * @param  integer  $product_id [description]
      * @param  integer  $quantity   [description]
      * @param  0|1      $option     [description]
      */
-    public function updateProductQuantityProductById($product_id, $quantity, $option = 0){
+    public function updateQuantityProductById($product_id, $quantity, $option = 0){
         $this->db->where('id', $product_id);
         if ($option == 0) {
             $this->db->set('product_quantity', 'product_quantity+'.$quantity, FALSE);
@@ -2411,6 +2403,61 @@ class Productions_model extends CI_Model
             $this->db->set('product_quantity', 'product_quantity-'.$quantity, FALSE);
         }
 
-        if ($this->db->update('products'));
+        $this->db->update('products');
+    }
+
+    /**
+     * [updateQuantityProductById description]
+     * @param  integer  $production_id  [description]
+     * @param  integer  $product_id     [description]
+     * @param  integer  $quantity       [description]
+     * @param  0|1      $option         [description]
+     */
+    public function updateCompletedProductsQuantity($production_id, $product_id, $quantity, $option = 0){
+        $this->db->where('production_id', $production_id);
+        $this->db->where('product_id', $product_id);
+        if ($option == 0) {
+            $this->db->set('completed_quantity', 'completed_quantity+'.$quantity, FALSE);
+        }else{
+            $this->db->set('completed_quantity', 'completed_quantity-'.$quantity, FALSE);
+        }
+
+        $this->db->update('completed_products');
+    }
+
+    public function getProductionDeliveryByID($id)
+    {
+        $q = $this->db->get_where('production_deliveries', array('id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+    public function getProductionDeliveryByIDJoinProducts($id)
+    {
+        $this->db->select('production_deliveries.id, production_deliveries.delivery_quantity, production_deliveries.production_id, production_deliveries.product_id, production_deliveries.delivery_time,
+            products.name');
+        $this->db->join('products', 'products.id = production_deliveries.product_id');
+        $q = $this->db->get_where('production_deliveries', array('production_deliveries.id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+    /**
+     * [deleteDelivery description]
+     * @param  object $delivery [description]
+     * @return boolean          [description]
+     */
+    public function deleteDelivery($delivery)
+    {
+        if ($this->db->delete('production_deliveries', array('id' => $delivery->id))) {
+            $this->updateQuantityProductById($delivery->product_id, $delivery->delivery_quantity);
+            $this->updateCompletedProductsQuantity($delivery->production_id, $delivery->product_id, $delivery->delivery_quantity);
+            return true;
+        }
+        return FALSE;
     }
 }
