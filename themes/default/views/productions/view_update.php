@@ -26,7 +26,7 @@
                     // echo "</pre>";
                  ?>
             </div>
-            <div class="form-group">
+<!--             <div class="form-group">
                 <?= lang("Đợt giao hàng", "delivery_id") ?>
                 <?php
                 $cat=array();
@@ -38,7 +38,7 @@
                 }
                 echo form_dropdown('delivery_id', $cat, (isset($_POST['product_id']) ? $_POST['product_id'] : ($product ? $product->product_id_id : '')), 'class="form-control select" id="delivery_id" placeholder="' . lang("select") . " " . lang("Thành phẩm") . '"  style="width:100%" required="required"')
                 ?>
-            </div>
+            </div> -->
 
             <div class="form-group">
                 <?= lang("Giai đoạn", "stage_id") ?>
@@ -124,14 +124,14 @@
                 startView: 2,
                 forceParse: 0
             }).datetimepicker('update', new Date());
-        $('#product_id,#delivery_id').change(function () {
+        $('#product_id').change(function () {
             var v = $('#product_id').val();
-            var delivery_id = $("#delivery_id option:checked").val();
+            // var delivery_id = $("#delivery_id option:checked").val();
 
             $('#current_completed').text('');
             $('#check-completed').slideUp();
 
-            if (v && delivery_id) {
+            if (v) {
 
                 var items=<?=$rowss?>;
                 $.each(items, function( index, value ) {
@@ -146,11 +146,11 @@
                 $.ajax({
                     type: "get",
                     async: false,
-                    url: "<?= site_url('productions/getAllStagesNotNullDate') ?>/"+<?=$id?> + "/" + v
-                    +"/"+ delivery_id,
+                    url: "<?= site_url('productions/getAllStagesNotNullDate') ?>/"+<?=$id?> + "/" + v,
                     dataType: "json",
                     success: function (scdata) {
-                    console.log(v)
+                    console.log('v',v);
+                    console.log('scdata', scdata);
                         if (scdata != null) {
 
                             $("#stage_id").select2("destroy").empty().attr("placeholder", "<?= lang('Chọn giai đoạn') ?>").select2({

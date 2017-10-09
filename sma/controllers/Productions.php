@@ -142,8 +142,37 @@ class Productions extends MY_Controller
     }
 
     function edit_delivery($id){
+        $this->sma->checkPermissions();
+
+        $this->form_validation->set_rules('delivery_time', 'Ngày giao', 'required');
+
+        if ($this->form_validation->run() == true) {
+            $old_qtt = $_POST['old_qtt'];
+            $delivery = array(
+                'delivery_quantity' => $_POST['quantity'],
+                'delivery_time'     => $this->sma->fsd(trim($_POST['delivery_time'])),
+
+            );
+            if (empty($delivery)) {
+                $this->form_validation->set_rules('product', lang("order_items"), 'required');
+            }
+
+            if ($this->productions_model->updateProductionDeliveries($id, $delivery, $old_qtt, $_POST['production_id'], $_POST['product_id'])) {
+                $this->session->set_flashdata('message', 'Sửa giao nhận thành công!');
+                redirect("productions");
+            }else{
+                $this->session->set_flashdata('error', 'Sửa giao nhận thất bại');
+                redirect("productions");
+            }
+
+        }
+
 
         $this->data['delivery'] = $this->productions_model->getProductionDeliveryByIDJoinProducts($id);
+        $completed_quantity = $this->productions_model->getCompletedByProductionProductId($this->data['delivery']->production_id, $this->data['delivery']->product_id)->completed_quantity;
+
+        $this->data['max_completed'] = $completed_quantity + $this->data['delivery']->delivery_quantity;
+        $this->data['id'] = $id;
         $this->load->view($this->theme . 'productions/edit_delivery', $this->data);
     }
 
@@ -601,9 +630,12 @@ class Productions extends MY_Controller
         echo $data;
     }
 
-    function getAllStagesNotNullDate($production_id = NULL, $product_id = NULL,$delivery_id=NULL)
+    function getAllStagesNotNullDate($production_id = NULL, $product_id = NULL)
     {
-        if ($rows = $this->productions_model->getAllProductionStagesNotNullDate($production_id, $product_id,$delivery_id)) {
+        // echo $production_id;
+        // echo $product_id;
+        // die();
+        if ($rows = $this->productions_model->getAllProductionStagesNotNullDate($production_id, $product_id)) {
             $data = json_encode($rows);
         } else {
             $data = false;
@@ -1392,11 +1424,8 @@ class Productions extends MY_Controller
         $this->data['material_norms'] = $this->productions_model->getMaterialNormsByProductionId($id);
         $this->data['enquiery']    = $this->productions_model->getPurchasesByProductionId($id);
 
-        // echo "<pre>";
-        // print_r($this->data['material_norms']);
-        // echo "</pre>";
-        // die();
         $rows                      = $this->productions_model->getAllInvoiceItems($id);
+
 
 
         $rows1 = $this->productions_model->getAllInvoiceItemsC($id);
@@ -1489,7 +1518,6 @@ class Productions extends MY_Controller
 
         }
 
-
         //--------------------------
 
         foreach ($rows as $value) {
@@ -1556,6 +1584,9 @@ class Productions extends MY_Controller
 
         }
 
+        // echo "<pre>";
+        // print_r($rows);
+        // echo "</pre>";die();
 
         $this->data['sum_WT'] = array('sum_weight_comp'=>$sum_weight_comp,'sum_weightt_comp'=>$sum_weightt_comp);
 

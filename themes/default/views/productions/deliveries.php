@@ -1,3 +1,4 @@
+
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
@@ -35,8 +36,8 @@
                                         <td><?=$value->delivery_time ?></td>
 
                                         <td><?=$value->delivery_quantity ?></td>
-                                        <td class="text-center">
-                                            <a href="<?=base_url().'productions/delete_delivery/'.$value->id ?>" class="po" title="Xóa đợt giao nhận" data-content="<p>Bạn có chắc không?</p><a class='btn btn-danger po-cancel' href='#' class='delete_deli' data-id='<?=$value->id ?>'>Vâng tôi chắc chắn</a> <button data-id='<?=$value->id ?>' class='btn po-close'>Không</button>" rel="popover"><i class="fa fa-trash-o"></i></a><a href="http://localhost/02017F/productions/edit_delivery/<?=$value->id ?>" data-toggle="modal" data-target="#myModal2"><i class="fa fa-plus"></i> </a>
+                                        <td class="text-center" style="width: 8%;">
+                                            <a href="<?=base_url().'productions/delete_delivery/'.$value->id ?>" class="po" title="Xóa đợt giao nhận" data-content="<p>Bạn có chắc không?</p><a class='btn btn-danger po-cancel' href='#' class='delete_deli' data-id='<?=$value->id ?>'>Vâng tôi chắc chắn</a> <button data-id='<?=$value->id ?>' class='btn po-close'>Không</button>" rel="popover"><i class="fa fa-trash-o"></i></a> <a href="http://localhost/02017F/productions/edit_delivery/<?=$value->id ?>" data-toggle="modal" data-target="#myModal2"><i class="fa fa-edit"></i> </a>
                                         </td>
                                         <!-- <th class="text-center"><a href="<?=base_url().'productions/delete_delivery/'.$value->id ?>" class="po" title="Xóa đợt giao nhận" data-content="<p>Bạn có chắc không?</p><a class='btn btn-danger po-cancel' href='<?=base_url().'productions/delete_delivery/'.$value->id ?>'>Vâng tôi chắc chắn</a> <button class='btn po-close'>Không</button>" rel="popover"><i class="fa fa-trash-o"></i></a></th> -->
                                     </tr>

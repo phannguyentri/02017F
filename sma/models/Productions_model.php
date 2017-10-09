@@ -856,10 +856,10 @@ class Productions_model extends CI_Model
         $this->db->where('date_start <>', 'null');
         $this->db->where('date_end <>', 'null');
 
-        if(is_numeric($delivery_id))
-        {
-            $this->db->where('delivery_time',$delivery_id);
-        }
+        // if(is_numeric($delivery_id))
+        // {
+        //     $this->db->where('delivery_time',$delivery_id);
+        // }
         $this->db->where('stage_status <>','completed');
         $q = $this->db->get_where("production_stages", array('production_id' => $production_id,'product_id' => $product_id));
         if ($q->num_rows() > 0) {
@@ -1855,10 +1855,7 @@ class Productions_model extends CI_Model
         if (!$data['stage_status']) {
             $status = $sta_status->stage_status;
         }
-        // echo "<pre>";
-        // print_r($data['stage_status']);
-        // echo "</pre>";
-        // die();
+
         if(isset($data['stage_id']))
         {
             if($data['stage_status']===0)
@@ -2031,7 +2028,7 @@ class Productions_model extends CI_Model
 
     public function getCompletedProductsByProductionId($production_id){
       $this->db->join('products', 'products.id = completed_products.product_id');
-      $q = $this->db->get_where('completed_products', array('production_id' => $production_id));
+      $q = $this->db->get_where('completed_products', array('production_id' => $production_id, 'completed_quantity <>' => 0));
       if ($q->num_rows() > 0) {
           foreach (($q->result()) as $row) {
               $data[] = $row;
@@ -2460,4 +2457,30 @@ class Productions_model extends CI_Model
         }
         return FALSE;
     }
+
+    public function getCompletedByProductionProductId($production_id, $product_id){
+        $q = $this->db->get_where('completed_products', array('production_id' => $production_id, 'product_id' => $product_id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+    public function updateProductionDeliveries($id, $data, $old_qtt, $production_id, $product_id){
+        if ($this->db->update('production_deliveries', $data, array('id' => $id))) {
+            if ($old_qtt > $data['delivery_quantity']) {
+                $change_qtt = $old_qtt - $data['delivery_quantity'];
+                $this->updateCompletedProductsQuantity($production_id, $product_id, $change_qtt);
+                $this->updateQuantityProductById($product_id, $change_qtt);
+            }elseif ($old_qtt < $data['delivery_quantity']) {
+                $change_qtt = $data['delivery_quantity'] - $old_qtt;
+                $this->updateCompletedProductsQuantity($production_id, $product_id, $change_qtt, 1);
+                $this->updateQuantityProductById($product_id, $change_qtt, 1);
+            }
+
+            return TRUE;
+        }
+        return FALSE;
+    }
+
 }

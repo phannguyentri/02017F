@@ -305,6 +305,7 @@
 
                     <?php
                       $arr_final_progress = array();
+
                      ?>
                      <table class="table table-bordered table-hover table-striped print-table order-table">
                         <thead>

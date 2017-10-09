@@ -60,6 +60,13 @@
                                 </tfoot>
                             </table>
                         </div>
+
+                        <div id="comment"></div>
+                        <div class="modal-footer">
+                            <?php echo form_submit('update_production', lang('Lưu'), 'class="btn btn-primary"'); ?>
+                        </div>
+
+                        <?php echo form_close(); ?>
                     </div>
 
                 <?php else: ?>
@@ -74,12 +81,7 @@
         </div>
 
 
-        <div id="comment"></div>
-        <div class="modal-footer">
-            <?php echo form_submit('update_production', lang('Lưu'), 'class="btn btn-primary"'); ?>
-        </div>
 
-        <?php echo form_close(); ?>
     </div>
 
 </div>
@@ -89,7 +91,7 @@
         if(Number.isInteger(parseInt($(this).val()))){
             if ($(this).val() >= 0) {
                 if (parseInt($(this).val()) > parseInt($(this).attr('data-max'))) {
-                    alert('Số lượng hoàn thành thực tế của '+$(this).attr('data-name')+' là '+$(this).attr('data-max')+', bạn không thể nhập số lớn hơn.');
+                    bootbox.alert('Số lượng hoàn thành thực tế của '+$(this).attr('data-name')+' là '+$(this).attr('data-max')+', bạn không thể nhập số lớn hơn.');
                     $(this).val($(this).attr('data-max'));
                 }
             }else{

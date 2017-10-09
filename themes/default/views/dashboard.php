@@ -686,8 +686,12 @@ function row_status($x)
     $arr_grand_total    = array();
     $arr_unpaid         = array();
 
+    echo "<pre>";
+    print_r($productions_chart);
+    echo "</pre>";
+
     foreach ($productions_chart as $val) {
-        $arr_reference_no[] = $val->reference_no;
+        $arr_reference_no[] = '<a href="'.base_url().'productions/view_process/'.$val->id.'" >'.$val->reference_no.'</a>';
         $arr_amount[]       = ($val->amount) ? $val->amount : 0;
         $arr_grand_total[]  = $val->grand_total;
         $arr_unpaid[]       = (($val->grand_total - $val->amount) > 0) ? $val->grand_total - $val->amount : 0;
@@ -697,7 +701,7 @@ function row_status($x)
 
  ?>
 </div>
-
+<a href=""></a>
 <script type="text/javascript">
     $(document).ready(function () {
         $('.order').click(function () {

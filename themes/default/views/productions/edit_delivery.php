@@ -30,10 +30,12 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <input type="hidden" name="product_id[]" value="71">
+                                    <input type="hidden" name="old_qtt" value="<?=$delivery->delivery_quantity ?>">
+                                    <input type="hidden" name="product_id" value="<?=$delivery->product_id ?>">
+                                    <input type="hidden" name="production_id" value="<?=$delivery->production_id ?>">
                                     <td><?=$delivery->name ?></td>
                                     <td>
-                                        <input type="text" class="form-control quantity" data-name="<?=$delivery->name ?>" data-max="0" value="<?=$delivery->delivery_quantity ?>" name="quantity[]" required="">
+                                        <input type="text" class="form-control quantity" data-name="<?=$delivery->name ?>" data-max="<?=$max_completed ?>" value="<?=$delivery->delivery_quantity ?>" name="quantity" required="">
                                     </td>
                                 </tr>
                             </tbody>
@@ -59,3 +61,24 @@
     </div>
 
 </div>
+
+<script type="text/javascript">
+    $(document).on('keyup', '.quantity', function () {
+
+        if(Number.isInteger(parseInt($(this).val()))){
+            if ($(this).val() >= 0) {
+                if (parseInt($(this).val()) > parseInt($(this).attr('data-max'))) {
+                    bootbox.alert('Số lượng hoàn thành thực tế của '+$(this).attr('data-name')+' là '+$(this).attr('data-max')+', bạn không thể nhập số lớn hơn.');
+                    $(this).val(<?=$delivery->delivery_quantity ?>);
+                }
+            }else{
+                $(this).val(<?=$delivery->delivery_quantity ?>);
+            }
+
+        }else{
+            $(this).val(<?=$delivery->delivery_quantity ?>);
+        }
+
+    });
+
+</script>
