@@ -298,7 +298,7 @@
                         <p style="font-weight:bold;"><?= lang("date"); ?>: <?= $this->sma->hrsd($inv->date); ?></p>
                         <p style="font-weight:bold;"><?= lang("Trạng thái"); ?>: <?= lang($inv->sale_status); ?></p>
                      </div>
-                     <div class="col-xs-3" style="text-align: right;position: absolute;bottom: 10px;right: -10px;"><a class="btn btn-primary" href="http://localhost/02017F/productions/view_update/<?= $inv->id ?>" data-toggle="modal" data-target="#myModal"><i style="padding-right:15px;" class="fa fa-plus-circle"></i> Cập nhật tiến độ</a></div>
+                     <div class="col-xs-3" style="text-align: right;position: absolute;bottom: 10px;right: -10px;"><a class="btn btn-primary" href="<?=base_url() ?>productions/view_update/<?= $inv->id ?>" data-toggle="modal" data-target="#myModal"><i style="padding-right:15px;" class="fa fa-plus-circle"></i> Cập nhật tiến độ</a></div>
                      <div class="clearfix"></div>
                   </div>
                   <div class="table-responsive">
@@ -342,7 +342,7 @@
                               <?php
                                 $arr_quantity = array();
 
-                                foreach ($row->delivery_time[0]->stages3 as $stage) {
+                                foreach ($row->stages_final as $stage) {
                                   if ($stage->date_start && $stage->date_end) {
                                     $arr_quantity[] = ($stage->quantity) ? $stage->quantity : 0;
                                   }
@@ -362,7 +362,7 @@
                                <?php
                                 $list_emp = array();
 
-                                foreach ($row->delivery_time[0]->stages3 as $value) {
+                                foreach ($row->stages_final as $value) {
                                   $arr_emp = explode(',', $value->employee);
                                   $list_emp[] = $arr_emp;
                                 }
@@ -390,14 +390,14 @@
                               <td style="width: 100px; text-align:center; vertical-align:middle;">
                                 <?php
                                   $count_stages = 0;
-                                  foreach ($row->delivery_time[0]->stages3 as $value) {
+                                  foreach ($row->stages_final as $value) {
                                     if ($value->date_start != NULL && $value->date_end != NULL) {
                                       $count_stages++;
                                     }
                                   }
 
                                   $progress = 0;
-                                  foreach ($row->delivery_time[0]->stages3 as $value) {
+                                  foreach ($row->stages_final as $value) {
                                     if ($value->date_start != NULL && $value->date_end != NULL){
                                       $progress += ($value->quantity > $total_detail) ? 100 : ($value->quantity/$total_detail)*100;
                                     }
@@ -410,191 +410,183 @@
                               </td>
                               <!-- pending -->
                               <?php
-                                 // if($row->stage_status = $row->status =='completed')
-                                 // {
+                                if($row->status=='completed'){
+                                  $status='<div class="text-center"><span class="label label-success">Hoàn thành</span></div>';
+                                }
 
 
-                                   if($row->status=='completed')
-                                      {
-                                        $status='<div class="text-center"><span class="label label-success">Hoàn thành</span></div>';
-                                      }
-                                 // }
-                                 // else{
-
-                                   if($row->status=='pending')
-                                      {
-                                        $status='<div class="text-center"><span class="label label-warning">Đang xử lí</span></div>';
-                                      }
-                                 // }
-                                 ?>
+                                if($row->status=='pending'){
+                                  $status='<div class="text-center"><span class="label label-warning">Đang xử lí</span></div>';
+                                }
+                              ?>
                               <td style="text-align:right; width:120px; padding-right:10px;"><?=$status?></td>
                            </tr>
 
                            <tr class="collegg" id="demo<?=$row->id?>"  style="display: none" >
-                              <td class="active" colspan="8">
+                              <td class="active" colspan="9">
                                  <div class="table-responsive">
-                                    <?php  foreach ($row->delivery_time as $value) {  ?>
-                                    <table class="table-bordered table-hover table-striped" style="width: 98%; margin-left: 31px; border-bottom: 0px;  padding: 6px; background: #428bca; color: #fff; font-size: 25px;">
-                                       <thead>
-                                          <tr>
-                                             <th class="center">Đợt: <?php echo $this->sma->hrsd($value->delivery_date_start).' - '.$this->sma->hrsd($value->delivery_date_end) ?></th>
-                                          </tr>
-                                       </thead>
-                                    </table>
-                                    <table class="table-bordered table-hover table-striped" style="width: 98%; margin-left: 31px; background-color: #bddad6;margin-bottom: 20px;">
-                                       <thead>
-                                          <tr>
-                                             <th style="width: 35px;"><?= lang("#"); ?></th>
-                                             <th style="width: 75px"><?= lang("Giai đoạn"); ?></th>
-                                             <th><?= lang("Chi tiết"); ?></th>
-                                          </tr>
-                                       </thead>
+                                    <?php if ($row->stages_final): ?>
+                                      <table class="table-bordered table-hover table-striped" style="width: 98%; margin-left: 31px; background-color: #bddad6;margin-bottom: 20px;">
+                                         <thead>
+                                            <tr>
+                                               <th style="width: 35px;"><?= lang("#"); ?></th>
+                                               <th style="width: 75px"><?= lang("Giai đoạn"); ?></th>
+                                               <th><?= lang("Chi tiết"); ?></th>
+                                            </tr>
+                                         </thead>
 
-                                       <?php $i=1; $percent = 0;
-                                          foreach ($value->stages3 as $key => $value1) {
-                                            if ($value1->date_start != NULL && $value1->date_end != NULL) {
-                                        ?>
-                                       <tbody>
-                                          <tr>
-                                             <td class="text-center"><?=$i?></td>
-                                             <td><?php echo $value1->stage ?></td>
-                                             <td>
-                                                <table class="table table-borderless table-striped dfTable table-right-left">
-                                                   <tbody>
-                                                      <div class="col-md-6" style="padding-top:10px">
-                                                         <div class="col-md-12" style="padding:0px;">
-                                                            <div class="col-md-12" style="padding:0px;">
-                                                               <?php
-                                                                  $percent = ($value1->quantity/$total_detail)*100;
-                                                                  $percent = ($percent >100) ? 100 : $percent;
-                                                                  ?>
-                                                               <div class="col-md-12" style="padding:0px; font-weight: bold;">
-                                                                  Tiến độ:
-                                                               </div>
-                                                               <div class="progress col-md-12" style="padding:0px;">
-                                                                  <div class="progress-bar col-md-12 progress-bar-striped progress-bar-animated active" role="progressbar"  aria-valuenow="<?=$percent?>" aria-valuemin="0" aria-valuemax="100" style="padding:0px; width:<?=$percent?>%;"> <?=number_format($percent, 2)?>%
+
+                                         <?php $i=1; $percent = 0;
+                                            foreach ($row->stages_final as $key => $value1) {
+                                              if ($value1->date_start != NULL && $value1->date_end != NULL) {
+                                          ?>
+                                         <tbody>
+                                            <tr>
+                                               <td class="text-center"><?=$i?></td>
+                                               <td><?php echo $value1->stage ?></td>
+                                               <td>
+                                                  <table class="table table-borderless table-striped dfTable table-right-left">
+                                                     <tbody>
+                                                        <div class="col-md-6" style="padding-top:10px">
+                                                           <div class="col-md-12" style="padding:0px;">
+                                                              <div class="col-md-12" style="padding:0px;">
+                                                                 <?php
+                                                                    $percent = ($value1->quantity/$total_detail)*100;
+                                                                    $percent = ($percent >100) ? 100 : $percent;
+                                                                    ?>
+                                                                 <div class="col-md-12" style="padding:0px; font-weight: bold;">
+                                                                    Tiến độ:
+                                                                 </div>
+                                                                 <div class="progress col-md-12" style="padding:0px;">
+                                                                    <div class="progress-bar col-md-12 progress-bar-striped progress-bar-animated active" role="progressbar"  aria-valuenow="<?=$percent?>" aria-valuemin="0" aria-valuemax="100" style="padding:0px; width:<?=$percent?>%;"> <?=number_format($percent, 2)?>%
+                                                                    </div>
+                                                                 </div>
+                                                              </div>
+                                                           </div>
+                                                           <div class="col-md-12" style="padding:0px;">
+                                                              <div class="col-md-12" style="padding:0px; font-weight: bold;">Thời gian:</div>
+                                                              <div class="col-md-12" style="padding:0px;">
+                                                                 <div class="col-md-6">
+                                                                    <span style="font-weight: bold;">Bắt đầu:</span>
+                                                                     <?=$this->sma->hrsd($value1->date_start)?>
+
                                                                   </div>
-                                                               </div>
-                                                            </div>
-                                                         </div>
-                                                         <div class="col-md-12" style="padding:0px;">
-                                                            <div class="col-md-12" style="padding:0px; font-weight: bold;">Thời gian:</div>
+                                                                 <div class="col-md-6" ><span style="font-weight: bold;">Kết thúc:</span> <?=$this->sma->hrsd($value1->date_end)?></div>
+                                                              </div>
+                                                           </div>
+                                                           <div class="col-md-12" style="padding:0px;">
+                                                              <div class="col-md-12" style="padding:0px;">
+                                                                 <div class="col-md-12" style="padding:0px; font-weight: bold;">
+                                                                  <?php
+                                                                  // echo "<pre>";
+                                                                  // print_r($value1);
+                                                                  // echo "</pre>";
+                                                                   ?>
+                                                                  Trạng thái:
+                                                                    <?php
+                                                                      if($value1->stage_status=='pending')
+                                                                      {
+
+                                                                        $TT='<div class="TT1" style="display:inline-block"><span class="label label-warning" >Đang xử lí</span></div>';
+                                                                      }
+                                                                      else if($value1->stage_status=='completed')
+                                                                      {
+                                                                        $TT='<div class="TT" style="display:inline-block"><span class="label label-success">Hoàn thành</span></div>';
+                                                                      }else if($value1->stage_status=='not_start'){
+                                                                        $TT='<div class="TT" style="display:inline-block"><span class="label label-danger">Chưa bắt đầu</span></div>';
+                                                                      }else{
+                                                                        $TT= "NULL";
+                                                                      }
+                                                                      echo $TT;
+                                                                    ?>
+                                                                 </div>
+                                                              </div>
+                                                              <div class="col-md-12" style="padding:0px;"><span style="padding:0px; font-weight: bold;">Số lượng hoàn thành:</span> <?=($value1->quantity) ? $value1->quantity : 0?></div>
+                                                              <!--  <div class="col-md-12">Số lượng lỗi: <?=$value1->error_quantity?></div> -->
+                                                           </div>
                                                             <div class="col-md-12" style="padding:0px;">
-                                                               <div class="col-md-6">
-                                                                  <span style="font-weight: bold;">Bắt đầu:</span>
-                                                                   <?=$this->sma->hrsd($value1->date_start)?>
+                                                              <div class="col-md-12" style="padding:0px;">
+                                                                 <span style="padding:0px; font-weight: bold;">Nhân viên</span>:
+                                                                 <div class="table-container box_comment col-md-12" style="padding:0px;">
+
+                                                                 <?php
+                                                                    $arr_emp = explode(',', $value1->employee);
+                                                                    $list_emp[] = $arr_emp;
+                                                                    foreach ($arr_emp as $emp) {
+                                                                      $bl = $this->data['biller'] = $this->site->getCompanyByID($emp);
+                                                                      ?>
+
+                                                                      <div class="col-md-12 " data-id="82" style="padding:5px 0px; border-bottom: 1px solid #ccc;">
+                                                                        <div class="media col-md-2" style="padding:0px;">
+                                                                           <a href="javascript:void(0)" class="pull-left">
+                                                                           <img style="width: 32px;height: 32px;" src="<?=base_url() ?>assets/images/male1.png" class="media-photo">
+                                                                           </a>
+                                                                        </div>
+                                                                        <div class="media-body col-md-10" style="padding:0px;">
+                                                                           <div class="summary col-md-4">
+                                                                              <h4 class="title" style="display:inline-block; font-weight: bold">
+                                                                                 <span class="pull-right pagado"><?php echo $bl->name;?></span>
+                                                                              </h4>
+                                                                           </div>
+                                                                        </div>
+                                                                      </div>
+                                                                  <?php } ?>
 
                                                                 </div>
-                                                               <div class="col-md-6" ><span style="font-weight: bold;">Kết thúc:</span> <?=$this->sma->hrsd($value1->date_end)?></div>
-                                                            </div>
-                                                         </div>
-                                                         <div class="col-md-12" style="padding:0px;">
-                                                            <div class="col-md-12" style="padding:0px;">
-                                                               <div class="col-md-12" style="padding:0px; font-weight: bold;">
-                                                                <?php
-                                                                // echo "<pre>";
-                                                                // print_r($value1);
-                                                                // echo "</pre>";
-                                                                 ?>
-                                                                Trạng thái:
-                                                                  <?php
-                                                                    if($value1->stage_status=='pending')
-                                                                    {
 
-                                                                      $TT='<div class="TT1" style="display:inline-block"><span class="label label-warning" >Đang xử lí</span></div>';
-                                                                    }
-                                                                    else if($value1->stage_status=='completed')
-                                                                    {
-                                                                      $TT='<div class="TT" style="display:inline-block"><span class="label label-success">Hoàn thành</span></div>';
-                                                                    }else if($value1->stage_status=='not_start'){
-                                                                      $TT='<div class="TT" style="display:inline-block"><span class="label label-danger">Chưa bắt đầu</span></div>';
-                                                                    }else{
-                                                                      $TT= "NULL";
-                                                                    }
-                                                                    echo $TT;
-                                                                  ?>
-                                                               </div>
-                                                            </div>
-                                                            <div class="col-md-12" style="padding:0px;"><span style="padding:0px; font-weight: bold;">Số lượng hoàn thành:</span> <?=($value1->quantity) ? $value1->quantity : 0?></div>
-                                                            <!--  <div class="col-md-12">Số lượng lỗi: <?=$value1->error_quantity?></div> -->
-                                                         </div>
-                                                          <div class="col-md-12" style="padding:0px;">
-                                                            <div class="col-md-12" style="padding:0px;">
-                                                               <span style="padding:0px; font-weight: bold;">Nhân viên</span>:
-                                                               <div class="table-container box_comment col-md-12" style="padding:0px;">
-
-                                                               <?php
-                                                                  $arr_emp = explode(',', $value1->employee);
-                                                                  $list_emp[] = $arr_emp;
-                                                                  foreach ($arr_emp as $emp) {
-                                                                    $bl = $this->data['biller'] = $this->site->getCompanyByID($emp);
-                                                                    ?>
-
-                                                                    <div class="col-md-12 " data-id="82" style="padding:5px 0px; border-bottom: 1px solid #ccc;">
-                                                                      <div class="media col-md-2" style="padding:0px;">
-                                                                         <a href="javascript:void(0)" class="pull-left">
-                                                                         <img style="width: 32px;height: 32px;" src="http://localhost/02017F/assets/images/male1.png" class="media-photo">
-                                                                         </a>
-                                                                      </div>
-                                                                      <div class="media-body col-md-10" style="padding:0px;">
-                                                                         <div class="summary col-md-4">
-                                                                            <h4 class="title" style="display:inline-block; font-weight: bold">
-                                                                               <span class="pull-right pagado"><?php echo $bl->name;?></span>
-                                                                            </h4>
-                                                                         </div>
-                                                                      </div>
-                                                                    </div>
-                                                                <?php } ?>
 
                                                               </div>
-
-
                                                             </div>
-                                                          </div>
 
 
 
-                                                      </div>
-                                                      <div class="col-md-6" style="padding-top:10px">
-                                                         <div class="col-md-12" style="padding:0px;">
-                                                            <div class="col-md-12" style="padding:0px; font-weight: bold;">
-                                                               Báo cáo:
-                                                            </div>
-                                                            <div class="table-container box_comment col-md-12" style="padding:0px;">
-                                                               <?php foreach ($value1->comments as $value2) {?>
-                                                               <div class="col-md-12 " data-id="<?=$value1->id?>" style="padding:5px 0px;    border-bottom: 1px solid #ccc;">
-                                                                  <div class="media col-md-2" style="padding:0px;">
-                                                                     <a href="javascript:void(0)" class="pull-left">
-                                                                     <img style=" width: 55px;height: 55px;" src="<?=base_url('assets/images/user-placeholder.jpg')?>" class="media-photo">
-                                                                     </a>
-                                                                  </div>
-                                                                  <div class="media-body col-md-10" style="padding:0px;">
-                                                                     <div class="summary col-md-4">
-                                                                        <h4 class="title" style="display:inline-block;">
-                                                                           <span class="pull-right pagado">(<?=$value2->user_name?>)</span>
-                                                                        </h4>
-                                                                     </div>
-                                                                     <div class="summary col-md-4">
-                                                                        <h4><?=str_replace(array("\r", "\n"), "", $this->sma->decode_html($value2->note))?></h4>
-                                                                     </div>
-                                                                     <div class="col-md-4">
-                                                                        <h4 style="font-size: 13px;font-weight: bold; color: #636262" class="media-meta pull-right"><?=$this->sma->hrld($value2->date)?></h4>
-                                                                     </div>
-                                                                  </div>
-                                                               </div>
-                                                               <?php }?>
-                                                            </div>
-                                                         </div>
-                                                      </div>
-                                                      <div class="clear-fix"></div>
-                                                   </tbody>
-                                                </table>
-                                             </td>
-                                          </tr>
-                                       </tbody>
-                                       <?php $i++; }} ?>
-                                    </table>
-                                    <?php  } ?>
+                                                        </div>
+                                                        <div class="col-md-6" style="padding-top:10px">
+                                                           <div class="col-md-12" style="padding:0px;">
+                                                              <div class="col-md-12" style="padding:0px; font-weight: bold;">
+                                                                 Báo cáo:
+                                                              </div>
+                                                              <div class="table-container box_comment col-md-12" style="padding:0px;">
+                                                                 <?php foreach ($value1->comments as $value2) {?>
+                                                                 <div class="col-md-12 " data-id="<?=$value1->id?>" style="padding:5px 0px;    border-bottom: 1px solid #ccc;">
+                                                                    <div class="media col-md-2" style="padding:0px;">
+                                                                       <a href="javascript:void(0)" class="pull-left">
+                                                                       <img style=" width: 55px;height: 55px;" src="<?=base_url('assets/images/user-placeholder.jpg')?>" class="media-photo">
+                                                                       </a>
+                                                                    </div>
+                                                                    <div class="media-body col-md-10" style="padding:0px;">
+                                                                       <div class="summary col-md-4">
+                                                                          <h4 class="title" style="display:inline-block;">
+                                                                             <span class="pull-right pagado">(<?=$value2->user_name?>)</span>
+                                                                          </h4>
+                                                                       </div>
+                                                                       <div class="summary col-md-4">
+                                                                          <h4><?=str_replace(array("\r", "\n"), "", $this->sma->decode_html($value2->note))?></h4>
+                                                                       </div>
+                                                                       <div class="col-md-4">
+                                                                          <h4 style="font-size: 13px;font-weight: bold; color: #636262" class="media-meta pull-right"><?=$this->sma->hrld($value2->date)?></h4>
+                                                                       </div>
+                                                                    </div>
+                                                                 </div>
+                                                                 <?php }?>
+                                                              </div>
+                                                           </div>
+                                                        </div>
+                                                        <div class="clear-fix"></div>
+                                                     </tbody>
+                                                  </table>
+                                               </td>
+                                            </tr>
+                                         </tbody>
+                                         <?php $i++; }} ?>
+                                      </table>
+
+                                    <?php else: ?>
+                                      <div class="alert alert-info" style="margin-bottom: 0px;">
+                                        <strong>Sản phẩm này chưa đưa vào kế hoạch sản xuất</strong>.
+                                      </div>
+                                    <?php endif ?>
+
                                  </div>
                               </td>
                            </tr>
@@ -620,7 +612,7 @@
                         <p style="font-weight:bold;"><?= lang("date"); ?>: <?= $this->sma->hrsd($inv->date); ?></p>
                         <p style="font-weight:bold;"><?= lang("Trạng thái"); ?>: <?= lang($inv->sale_status); ?></p>
                      </div>
-                     <div class="col-xs-3" style="text-align: right;position: absolute;bottom: 10px;right: -10px;"><a class="btn btn-primary" href="http://localhost/02017F/productions/view_update/<?= $inv->id ?>" data-toggle="modal" data-target="#myModal"><i style="padding-right:15px;" class="fa fa-plus-circle"></i> Cập nhật tiến độ</a></div>
+                     <div class="col-xs-3" style="text-align: right;position: absolute;bottom: 10px;right: -10px;"><a class="btn btn-primary" href="<?=base_url() ?>productions/view_update/<?= $inv->id ?>" data-toggle="modal" data-target="#myModal"><i style="padding-right:15px;" class="fa fa-plus-circle"></i> Cập nhật tiến độ</a></div>
                      <div class="clearfix"></div>
                   </div>
 

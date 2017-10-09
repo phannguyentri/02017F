@@ -1570,6 +1570,25 @@ class Productions extends MY_Controller
 
             $value->stages    = $this->productions_model->getAllStages($id, $value->product_id);
             $value->stages2   = $this->productions_model->getAllStagesByProductionID($id);
+            $value->stages_final   = $this->productions_model->getAllStagesByProductionAndProductId($id, $value->product_id);
+
+            foreach ($value->stages_final as $val) {
+
+                $emps          = '';
+                $comments      = $this->productions_model->getStageCommments($val->id);
+                $val->comments = $comments;
+
+
+
+                foreach (explode(',', $val->employee) as $v) {
+
+                    $emp = $this->productions_model->getCompanyByID($v);
+                    $emps .= ' <span class="label label-info">' . $emp->name . '</span>';
+                    // var_dump('<span class="label label-info">'.$emp->name.'</span>');die();
+
+                }
+
+            }
 
             foreach ($value->stages2  as $key4 => $value4) {
 

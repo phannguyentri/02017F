@@ -40,6 +40,12 @@
                             <?= form_input('code', (isset($_POST['code']) ? $_POST['code'] : ($product ? $product->code : '')), 'class="form-control" id="code"  required="required"') ?>
                             <!-- <span class="help-block"><?= lang('you_scan_your_barcode_too') ?></span> -->
                         </div>
+
+                        <div class="form-group all">
+                            <label>Đơn giá nguyên công</label>
+                            <?= form_input('wage', (isset($_POST['wage']) ? $_POST['wage'] : ''), 'class="form-control" id="wage"'); ?>
+                        </div>
+
                         <div class="form-group all">
                             <?= lang("Quy cách", "cf1") ?>
                             <?= form_input('cf1', (isset($_POST['cf1']) ? $_POST['cf1'] : ($product ? $product->name : '')), 'class="form-control" id="cf1

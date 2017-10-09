@@ -2483,4 +2483,12 @@ class Productions_model extends CI_Model
         return FALSE;
     }
 
+
+    public function checkExistStages($production_id, $product_id){
+        $q = $this->db->get_where('production_stages', array('production_id' => $production_id, 'product_id' => $product_id), 1);
+        if ($q->num_rows() > 0) {
+            return true;
+        }
+        return false;
+    }
 }

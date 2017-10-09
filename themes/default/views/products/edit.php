@@ -39,6 +39,10 @@
                             <!-- <span class="help-block"><?= lang('you_scan_your_barcode_too') ?></span> -->
                         </div>
                         <div class="form-group all">
+                            <label>Đơn giá nguyên công</label>
+                            <?= form_input('wage', (isset($_POST['wage']) ? $_POST['wage'] : ($product ? $product->wage : '')), 'class="form-control" id="wage"'); ?>
+                        </div>
+                        <div class="form-group all">
                             <?= lang("Quy cách", "cf1") ?>
                             <?= form_input('cf1', (isset($_POST['cf1']) ? $_POST['cf1'] : ($product ? $product->cf1 : '')), 'class="form-control" id="cf1
                             "'); ?>

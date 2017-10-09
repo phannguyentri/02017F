@@ -493,6 +493,7 @@ class Products extends MY_Controller
         $this->form_validation->set_rules('quantity_config', lang("Số lượng cấu thành"), 'trim|numeric');
         $this->form_validation->set_rules('cf7', 'Độ dài', 'trim|numeric');
         $this->form_validation->set_rules('cf8', 'Độ rộng', 'trim|numeric');
+        $this->form_validation->set_rules('wage', 'Đơn giá nguyên công', 'required|trim|numeric');
         // $this->form_validation->set_rules('attr_item', 'Định mức nguyên vật liệu', 'required');
 
         $warehouses = $this->site->getAllWarehouses();
@@ -527,6 +528,7 @@ class Products extends MY_Controller
             $data = array(
                 'code' => $this->input->post('code'),
                 'barcode_symbology' => $this->input->post('barcode_symbology'),
+                'wage' => $this->input->post('wage'),
                 'name' => $this->input->post('name'),
                 'type' => $this->input->post('type'),
                 'category_id' => $this->input->post('category_id'),
@@ -800,6 +802,8 @@ class Products extends MY_Controller
         $this->form_validation->set_rules('quantity', lang("quantity"), 'trim|numeric');
         $this->form_validation->set_rules('userfile', lang("product_gallery_images"), 'xss_clean');
         $this->form_validation->set_rules('quantity_config', lang("Số lượng cấu thành"), 'trim|numeric');
+        $this->form_validation->set_rules('wage', 'Đơn giá nguyên công', 'required|trim|numeric');
+
         $warehouses = $this->site->getAllWarehouses();
         if ($this->input->post('id')) {
             $id = $this->input->post('id');
@@ -841,6 +845,7 @@ class Products extends MY_Controller
             $data = array('code' => $this->input->post('code'),
                 'barcode_symbology' => $this->input->post('barcode_symbology'),
                 'name' => $this->input->post('name'),
+                'wage' => $this->input->post('wage'),
                 'type' => $this->input->post('type'),
                 'category_id' => $this->input->post('category_id'),
                 'subcategory_id' => $this->input->post('subcategory'),

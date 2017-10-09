@@ -1,110 +1,118 @@
 <div class="modal-dialog">
     <div class="modal-content">
+        <?php
+            $null_flag = false;
+            $cat = array();
+            foreach ($rows as $category) {
+                if ($this->productions_model->checkExistStages($id, $category->product_id)) {
+                    $cat[$category->product_id] = $category->product_name;
+                }
+            }
+            if (empty($cat)) {
+                $null_flag = true;
+            }
+         ?>
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-2x">&times;</i>
             </button>
-            <h4 class="modal-title" id="myModalLabel"><?php echo lang('Cập nhật tiến độ'); ?></h4>
-        </div>
-        <?php $attrib = array('data-toggle' => 'validator', 'role' => 'form');
-        echo form_open("productions/view_update/".$id, $attrib); ?>
-        <div class="modal-body">
-            <p><?= lang('enter_info'); ?></p>
-            <div class="form-group">
-                <?= lang("Sản phẩm", "product_id") ?>
-                <?php
-                $cat[''] = "";
-                foreach ($rows as $category) {
-                    $cat[$category->product_id] = $category->product_name ;
-                }
-                echo form_dropdown('product_id', $cat, (isset($_POST['product_id']) ? $_POST['product_id'] : ($product ? $product->product_id_id : '')), 'class="form-control select" id="product_id" placeholder="' . lang("select") . " " . lang("Thành phẩm") . '"  style="width:100%" required="required"')
-                ?>
-            </div>
-            <div>
-                <?php
-                    // echo "<pre>";
-                    // print_r($inv);
-                    // echo "</pre>";
-                 ?>
-            </div>
-<!--             <div class="form-group">
-                <?= lang("Đợt giao hàng", "delivery_id") ?>
-                <?php
-                $cat=array();
-                $cat[''] = "";
-                $i=1;
-                foreach ($deliveries as $delivery) {
-                    $cat[$delivery->id] ="Đợt ".$i." (".$this->sma->hrsd($delivery->delivery_date_start)."-".$this->sma->hrsd($delivery->delivery_date_end).")" ;
-                    $i++;
-                }
-                echo form_dropdown('delivery_id', $cat, (isset($_POST['product_id']) ? $_POST['product_id'] : ($product ? $product->product_id_id : '')), 'class="form-control select" id="delivery_id" placeholder="' . lang("select") . " " . lang("Thành phẩm") . '"  style="width:100%" required="required"')
-                ?>
-            </div> -->
+            <?php if (!$null_flag): ?>
+              <h4 class="modal-title" id="myModalLabel"><?php echo lang('Cập nhật tiến độ'); ?></h4>
+            <?php endif ?>
 
-            <div class="form-group">
-                <?= lang("Giai đoạn", "stage_id") ?>
-                <div class="controls"> <?php
-                    echo form_input('stage_id', ($product ? $product->subcategory_id : ''), 'class="form-control" id="stage_id"  placeholder="' . lang("Chọn thành phẩm") . '" required="required"');
+        </div>
+        <div class="modal-body">
+        <?php if (!$null_flag): ?>
+
+                <?php
+                    $attrib = array('data-toggle' => 'validator', 'role' => 'form');
+
+                    echo form_open("productions/view_update/".$id, $attrib);
+                ?>
+                <p><?= lang('enter_info'); ?></p>
+                <div class="form-group">
+                    <?= lang("Sản phẩm", "product_id") ?>
+                    <?php
+                        echo form_dropdown('product_id', $cat, 0, 'class="form-control select" id="product_id" placeholder="' . lang("select") . " " . lang("Thành phẩm") . '"  style="width:100%" required="required"')
                     ?>
                 </div>
-            </div>
 
-            <div class="form-group inline">
-                <input type="radio" class="radio" name="stage_status"
-                       id="not_start" value="0" checked="checked">
-               <label for="not_start"  class="padding05"><?= lang('Chưa bắt đầu'); ?></label>
-               <input type="radio" class="radio" name="stage_status"
-                       id="pending" value="1">
-               <label for="pending"  class="padding05"><?= lang('Đang xử lý'); ?></label>
-               <input type="radio" class="radio" name="stage_status"
-                       id="completed" value="2">
-               <label for="stage_status"  class="padding05"><?= lang('Hoàn thành'); ?></label>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                    <?= lang("date", "sldate"); ?>
-                    <?php echo form_input('date', (isset($_POST['date']) ? $_POST['date'] : ""), 'class="form-control input-tip date" id="sldate" required="required"'); ?>
+                <div class="form-group">
+                    <?= lang("Giai đoạn", "stage_id") ?>
+                    <div class="controls"> <?php
+                        echo form_input('stage_id', ($product ? $product->subcategory_id : ''), 'class="form-control" id="stage_id"  placeholder="' . lang("Chọn thành phẩm") . '" required="required"');
+                        ?>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group quantity" style="display: none">
-                            <?= lang("Số lượng hoàn thành", "quantity") ?> <label id="lblquantity"></label>
-                            <div class="controls"> <?php
-                                echo form_input('quantity', ($product ? $product->subcategory_id : ''), 'class="form-control" id="quantity"  placeholder="' . lang("Số lượng") . '"');
 
-                                ?>
-                                <span class="notehidden" style="visibility: hidden;color: red">Không được quá </span>
-                            </div>
-                            <div style="display: none">
-                            <?= lang("Số lượng lỗi", "error_quantity") ?>
-                            <div class="controls"> <?php
-                                echo form_input('error_quantity', ($product ? $product->subcategory_id : ''), 'class="form-control" id="error_quantity" readonly  placeholder="' . lang("Số lượng") . '"');
-                                ?>
-                            </div>
-                            </div>
+                <div class="form-group inline">
+                    <input type="radio" class="radio" name="stage_status"
+                           id="not_start" value="0" checked="checked">
+                   <label for="not_start"  class="padding05"><?= lang('Chưa bắt đầu'); ?></label>
+                   <input type="radio" class="radio" name="stage_status"
+                           id="pending" value="1">
+                   <label for="pending"  class="padding05"><?= lang('Đang xử lý'); ?></label>
+                   <input type="radio" class="radio" name="stage_status"
+                           id="completed" value="2">
+                   <label for="stage_status"  class="padding05"><?= lang('Hoàn thành'); ?></label>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                        <?= lang("date", "sldate"); ?>
+                        <?php echo form_input('date', (isset($_POST['date']) ? $_POST['date'] : ""), 'class="form-control input-tip date" id="sldate" required="required"'); ?>
+                        </div>
                     </div>
-                    <div id="check-completed" class="form-group" style="display: none;">
-                        <label>Số lượng đã hoàn thành</label>
-                        <div class="controls">
-                            <label id="current_completed" class="label label-success" style="font-size: 15px;"></label>
+                    <div class="col-md-6">
+                        <div class="form-group quantity" style="display: none">
+                                <?= lang("Số lượng hoàn thành", "quantity") ?> <label id="lblquantity"></label>
+                                <div class="controls"> <?php
+                                    echo form_input('quantity', ($product ? $product->subcategory_id : ''), 'class="form-control" id="quantity"  placeholder="' . lang("Số lượng") . '"');
+
+                                    ?>
+                                    <span class="notehidden" style="visibility: hidden;color: red">Không được quá </span>
+                                </div>
+                                <div style="display: none">
+                                <?= lang("Số lượng lỗi", "error_quantity") ?>
+                                <div class="controls"> <?php
+                                    echo form_input('error_quantity', ($product ? $product->subcategory_id : ''), 'class="form-control" id="error_quantity" readonly  placeholder="' . lang("Số lượng") . '"');
+                                    ?>
+                                </div>
+                                </div>
+                        </div>
+                        <div id="check-completed" class="form-group" style="display: none;">
+                            <label>Số lượng đã hoàn thành</label>
+                            <div class="controls">
+                                <label id="current_completed" class="label label-success" style="font-size: 15px;"></label>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <?= lang("Báo cáo", "note"); ?>
+                    <?php echo form_textarea('note', (isset($_POST['note']) ? $_POST['note'] : ""), 'class="form-control" id="note" style="margin-top: 10px; height: 100px;" required="required"'); ?>
+                </div>
+
+                <div id="comment"></div>
+                <div class="modal-footer">
+                    <?php echo form_submit('update_production', lang('Lưu'), 'class="btn btn-primary"'); ?>
+                </div>
+
+                <?php else: ?>
+                    <div class="row">
+                        <div class="alert alert-info" style="margin: 0px 10px;">
+                            <strong>Chưa có sản phẩm nào được đưa vào kế hoạch sản xuất</strong>.
+                        </div>
+                    </div>
+                <?php endif ?>
             </div>
-            <div class="form-group">
-                <?= lang("Báo cáo", "note"); ?>
-                <?php echo form_textarea('note', (isset($_POST['note']) ? $_POST['note'] : ""), 'class="form-control" id="note" style="margin-top: 10px; height: 100px;" required="required"'); ?>
-            </div>
-        </div>
 
 
-            <div id="comment"></div>
-        <div class="modal-footer">
-            <?php echo form_submit('update_production', lang('Lưu'), 'class="btn btn-primary"'); ?>
-        </div>
-        </div>
+
 
     </div>
+
+</div>
     <?php echo form_close(); ?>
 </div>
 <script type="text/javascript" src="<?= $assets ?>js/custom.js"></script>
@@ -123,7 +131,12 @@
                 todayHighlight: 1,
                 startView: 2,
                 forceParse: 0
-            }).datetimepicker('update', new Date());
+        }).datetimepicker('update', new Date());
+
+
+        loadStageAtShowModal();
+
+
         $('#product_id').change(function () {
             var v = $('#product_id').val();
             // var delivery_id = $("#delivery_id option:checked").val();
@@ -280,6 +293,65 @@
         $(document).on('ifUnchecked', '#completed', function (e) {
             $('#check-completed').slideUp();
         });
+
+        function loadStageAtShowModal(){
+            var v = $('#product_id').val();
+            // var delivery_id = $("#delivery_id option:checked").val();
+
+            $('#current_completed').text('');
+            $('#check-completed').slideUp();
+
+            if (v) {
+
+                var items=<?=$rowss?>;
+                $.each(items, function( index, value ) {
+                    if(value.product_id==v)
+                    {
+                        quantity=parseFloat(value.quantity);
+                        $('#lblquantity').text('('+parseFloat(value.quantity)+')');
+
+                        // $('#quantity').attr('max',1);
+                    }
+                });
+                $.ajax({
+                    type: "get",
+                    async: false,
+                    url: "<?= site_url('productions/getAllStagesNotNullDate') ?>/"+<?=$id?> + "/" + v,
+                    dataType: "json",
+                    success: function (scdata) {
+                    console.log('v',v);
+                    console.log('scdata', scdata);
+                        if (scdata != null) {
+
+                            $("#stage_id").select2("destroy").empty().attr("placeholder", "<?= lang('Chọn giai đoạn') ?>").select2({
+                                placeholder: "<?= lang('Chọn giai đoạn') ?>",
+                                data: scdata
+                            });
+
+
+
+                        }
+                        else{
+                            $("#stage_id").select2("destroy").empty().attr("placeholder", "<?= lang('Chọn thành phẩm') ?>").select2({
+                                placeholder: "<?= lang('Chọn thành phẩm') ?>",
+                                data: [{id: '', text: '<?= lang('Chọn thành phẩm') ?>'}]
+                            });
+                        }
+                    },
+                    error: function () {
+                        bootbox.alert('<?= lang('ajax_error') ?>');
+                        $('#modal-loading').hide();
+                    }
+
+                });
+            } else {
+                $("#stage_id").select2("destroy").empty().attr("placeholder", "<?= lang('Chọn thành phẩm') ?>").select2({
+                    placeholder: "<?= lang('Chọn thành phẩm') ?>",
+                    data: [{id: '', text: '<?= lang('Chọn thành phẩm') ?>'}]
+                });
+            }
+            $('#modal-loading').hide();
+        }
 
 
     });

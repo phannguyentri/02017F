@@ -377,7 +377,7 @@
                                     </div>
                                 </div>
                             </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" style="display:none;">
                             <div class="form-group">
                                 <input type="checkbox" class="checkbox" name="delivery_mode" value="1" id="delivery_mode" checked="checked" >
                                <label for="attributes"  class="padding05"><?= lang('delivery_mode'); ?></label> <!-- <?= lang('eg_sizes_colors'); ?> -->
