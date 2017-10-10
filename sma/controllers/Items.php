@@ -12,7 +12,15 @@ class Items extends MY_Controller
             redirect('login');
         }
 
-        
+
+        $this->digital_upload_path = 'files/';
+        $this->upload_path = 'assets/uploads/';
+        $this->thumbs_path = 'assets/uploads/thumbs/';
+        $this->image_types = 'gif|jpg|jpeg|png|tif';
+        $this->digital_file_types = 'zip|psd|ai|rar|pdf|doc|docx|xls|xlsx|ppt|pptx|gif|jpg|jpeg|png|tif|txt';
+        $this->allowed_file_size = '1024';
+        $this->popup_attributes = array('width' => '900', 'height' => '600', 'window_name' => 'sma_popup', 'menubar' => 'yes', 'scrollbars' => 'yes', 'status' => 'no', 'resizable' => 'yes', 'screenx' => '0', 'screeny' => '0');
+
         $this->lang->load('settings', $this->Settings->language);
         $this->load->library('form_validation');
         $this->load->model('items_model');
@@ -31,7 +39,7 @@ class Items extends MY_Controller
             $this->data['warehouse'] = $this->session->userdata('warehouse_id') ? $this->site->getWarehouseByID($this->session->userdata('warehouse_id')) : NULL;
         }
 
-        $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');      
+        $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('Nguyên vật liệu')));
         $meta = array('page_title' => lang('Nguyên vật liệu'), 'bc' => $bc);
         $this->page_construct('items/index', $meta, $this->data);
@@ -39,9 +47,9 @@ class Items extends MY_Controller
 
     function getItems($warehouse_id=NULL)
     {
-      
+
         $this->load->library('datatables');
-        if ($warehouse_id) 
+        if ($warehouse_id)
         {
             $this->datatables
             ->select("items.id as id,items.item,items.specification,items.size_long,items.size_wide,items.unit,warehouses_products.quantity,items.note",false)
@@ -58,7 +66,7 @@ class Items extends MY_Controller
             ->from("items")
             ->add_column("Actions", "<center><a href='" . site_url('items/edit/$1') . "'  class='tip' title='Sửa nguyên vật liệu'><i class=\"fa fa-edit\"></i></a> <a href='#' class='tip po' title='<b>Xóa nguyên vật liệu</b>' data-content=\"<p>" . lang('r_u_sure') . "</p><a class='btn btn-danger po-delete' href='" . site_url('items/delete/$1') . "'>" . lang('i_m_sure') . "</a> <button class='btn po-close'>" . lang('no') . "</button>\"  rel='popover'><i class=\"fa fa-trash-o\"></i></a></center>", "id");
         }
-        
+
 
         echo $this->datatables->generate();
     }
@@ -76,11 +84,11 @@ class Items extends MY_Controller
     function add()
     {
         $this->load->helper('security');
-        
+
         $products = $this->items_model->getAllItems();
-            
+
             foreach ($products as $key => $value) {
-                
+
                 if($value->item == $this->input->post('item') && $value->unit_id == $this->input->post('unit_id') &&  $value->specification == $this->input->post('specification')){
                     array(
                             $this->form_validation->set_rules('item','Nguyên vật liệu này', 'trim|is_unique[items.item]'),
@@ -89,7 +97,7 @@ class Items extends MY_Controller
                         );
                 }
             }
-        
+
         $this->form_validation->set_rules('quantity', lang("Số lượng"), 'trim|numeric');
         $this->form_validation->set_rules('cost', lang("Giá"), 'trim|numeric');
         $this->form_validation->set_rules('long', lang("Dài"), 'trim|numeric');
@@ -128,14 +136,14 @@ class Items extends MY_Controller
             $this->session->set_flashdata('message', 'Thêm nguyên vật liệu thành công');
             redirect('items');
         } else {
-        $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');   
-        $this->data['warehouses'] = $warehouses;   
+        $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
+        $this->data['warehouses'] = $warehouses;
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => site_url('items'), 'page' => lang('Nguyên vật liệu')),array('link' => '#', 'page' => lang('Thêm nguyên vật liệu')));
         $this->data['units'] = $this->units_model->getAllUnits();
         $meta = array('page_title' => lang('Nguyên vật liệu'), 'bc' => $bc);
         $this->page_construct('items/add', $meta, $this->data);
-        }        
-        
+        }
+
     }
 
     function edit($id)
@@ -144,7 +152,7 @@ class Items extends MY_Controller
         $item = $this->items_model->getItemByID($id);
         $this->load->helper('security');
         foreach ($item as $key => $value) {
-                
+
             if($value->item === $this->input->post('item') && $value->unit_id === $this->input->post('unit_id') &&  $value->specification === $this->input->post('specification')){
                 array(
                         $this->form_validation->set_rules('item','Nguyên vật liệu này', 'trim|is_unique[items.item]'),
@@ -159,7 +167,7 @@ class Items extends MY_Controller
         $this->form_validation->set_rules('wide', lang("Rộng"), 'trim|numeric');
         $this->form_validation->set_rules('weight', lang("Trọng lượng"), 'trim|numeric');
         $warehouses = $this->site->getAllWarehouses();
-        
+
         if ($this->form_validation->run() == true) {
             $data = array(
                 'item'=>$this->input->post('item'),
@@ -185,8 +193,8 @@ class Items extends MY_Controller
                 }
 
             $data['quantity'] = isset($wh_total_quantity) ? $wh_total_quantity : 0;
-            
-         
+
+
         } elseif ($this->input->post('edit')) {
             $this->session->set_flashdata('error', validation_errors());
             redirect('$_SERVER["HTTP_REFERER"]');
@@ -195,21 +203,21 @@ class Items extends MY_Controller
             $this->session->set_flashdata('message', 'Sửa nguyên vật liệu thành công');
             redirect('items');
         } else {
-        $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');      
+        $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => site_url('items'), 'page' => lang('Nguyên vật liệu')),array('link' => '#', 'page' => lang('Thêm nguyên vật liệu')));
-        $this->data['warehouses'] = $warehouses;  
-     
+        $this->data['warehouses'] = $warehouses;
+
         $this->data['warehouses_products'] = $id ? $this->items_model->getAllWarehousesWithIQ($id) : NULL;
-     
+
 
         $this->data['units'] = $this->units_model->getAllUnits();
         $this->data['item'] = $this->items_model->getItemByID($id);
         $this->data['id'] = $id;
         $this->data['items'] = $item;
-      
+
         $meta = array('page_title' => lang('Nguyên vật liệu'), 'bc' => $bc);
         $this->page_construct('items/edit', $meta, $this->data);
-        } 
+        }
     }
     function delete($id = NULL)
     {
@@ -222,6 +230,134 @@ class Items extends MY_Controller
             echo lang("Xóa nguyên vật liệu thất bại");
         }
     }
+
+
+    public function import_xls(){
+
+        // $this->load->library('excel');
+
+        require_once(APPPATH . "third_party" . DIRECTORY_SEPARATOR . 'PHPExcel' . DIRECTORY_SEPARATOR . 'PHPExcel.php');
+        $this->load->helper('security');
+
+        $this->form_validation->set_rules('userfile', lang("upload_file"), 'xss_clean');
+
+        if ($this->form_validation->run() == true) {
+
+            if (isset($_FILES["userfile"])) {
+
+                $this->load->library('upload');
+
+                $config['upload_path']   = $this->digital_upload_path;
+                $config['allowed_types'] = 'xlsx';
+                $config['max_size']      = $this->allowed_file_size;
+                $config['overwrite']     = TRUE;
+
+                $this->upload->initialize($config);
+
+                if (!$this->upload->do_upload()) {
+
+                    $error = $this->upload->display_errors();
+                    $this->session->set_flashdata('error', $error);
+                    redirect("items/import_csv");
+                }
+
+                $filename      = $this->upload->file_name;
+                $fullfile      = $this->digital_upload_path . $filename;
+                $inputFileType = PHPExcel_IOFactory::identify($fullfile);
+
+                $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+
+                $objReader->setReadDataOnly(true);
+
+
+                /**  Load $inputFileName to a PHPExcel Object  **/
+                $objPHPExcel = $objReader->load("$fullfile");
+
+                $total_sheets = $objPHPExcel->getSheetCount();
+
+                $allSheetName       = $objPHPExcel->getSheetNames();
+                $objWorksheet       = $objPHPExcel->setActiveSheetIndex(0);
+                $highestRow         = $objWorksheet->getHighestRow();
+                $highestColumn      = $objWorksheet->getHighestColumn();
+                $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
+                $arraydata          = array();
+
+
+                for ($row = 2; $row <= $highestRow; ++$row) {
+                    for ($col = 0; $col < $highestColumnIndex; ++$col) {
+                        $value                     = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
+                        if ($col == 0 && empty($value)) {
+                            $this->session->set_flashdata('error', "Tên nguyên vật liệu không được trống, lỗi tại dòng " . $row);
+                            redirect("items/import_xls");
+                        }
+
+                        $arraydata[$row - 2][$col] = $value;
+                    }
+                }
+
+                $keys = array(
+                    'item',
+                    'unit',
+                    'cost',
+                    'specification',
+                    'size_long',
+                    'size_wide',
+                    'weight'
+                );
+
+                $finals = array();
+
+                foreach ($arraydata as $key => $value) {
+                    $finals[] = array_combine($keys, $value);
+                }
+
+                $rw = 2;
+
+                foreach ($finals as $k => $final){
+
+                    if ($this->items_model->getUnitByName($final['unit'])) {
+                        $finals[$k]['unit_id'] = $this->items_model->getUnitByName($final['unit'])->id;
+                    }else{
+                        $this->session->set_flashdata('error', "Đơn vị chưa được khai báo, lỗi tại dòng " . " " . $rw);
+                        redirect("items/import_xls");
+                    }
+                    $rw++;
+                }
+
+
+                if ($this->items_model->addByImportXls($finals)) {
+                    $this->session->set_flashdata('message', 'Nguyên vật liệu đã được thêm thành công!');
+                    redirect('items');
+                }else{
+                    $this->session->set_flashdata('error', 'Thêm nguyên vật liệu thất bại.');
+                    redirect('items/import_xls');
+                }
+            }
+
+        }else {
+            $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
+            $bc                  = array(
+                array(
+                    'link' => base_url(),
+                    'page' => lang('home')
+                ),
+                array(
+                    'link' => site_url('items'),
+                    'page' => 'Nguyên vật liệu'
+                ),
+                array(
+                    'link' => '#',
+                    'page' => 'Import nguyên vật liệu'
+                )
+            );
+            $meta                = array(
+                'page_title' => lang('Import nguyên vật liệu'),
+                'bc' => $bc
+            );
+            $this->page_construct('items/import_xls', $meta, $this->data);
+        }
+    }
+
 
     function item_actions()
     {
@@ -298,5 +434,5 @@ class Items extends MY_Controller
         }
     }
 
-    
+
 }

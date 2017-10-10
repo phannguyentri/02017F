@@ -21,7 +21,7 @@ class Items_model extends CI_Model
 
                         $this->db->insert('warehouses_products', array('item_id' => $item_id, 'warehouse_id' => $wh_qty['warehouse_id'], 'quantity' => $wh_qty['quantity'], 'rack' => $wh_qty['rack']));
 
-                        if (!$product_attributes) {                            
+                        if (!$product_attributes) {
                             $tax_rate_id = $tax_rate ? $tax_rate->id : NULL;
                             $tax = $tax_rate ? (($tax_rate->type == 1) ? $tax_rate->rate . "%" : $tax_rate->rate) : NULL;
                             $unit_cost = $data['cost'];
@@ -64,9 +64,9 @@ class Items_model extends CI_Model
                                 'date' => date('Y-m-d'),
                                 'status' => 'received',
                             );
-                         
+
                             $this->db->insert('purchase_items', $item);
-                           
+
                             $this->site->syncProductQty(NULL, $wh_qty['warehouse_id'],$item_id);
                         }
                     }
@@ -79,7 +79,7 @@ class Items_model extends CI_Model
 
     public function updateItem($id, $data = array(),$warehouse_qty)
     {
-       
+
         unset($data['edit']);
         $this->db->where('id', $id);
         if ($this->db->update("items", $data)) {
@@ -89,7 +89,7 @@ class Items_model extends CI_Model
                     if($this->db->update('warehouses_products', array('rack' => $wh_qty['rack'],'quantity'=>$wh_qty['quantity']), array('item_id' => $id, 'warehouse_id' => $wh_qty['warehouse_id'])))
                     {
 
-                        // $items=$this->site->getPurchasedItems(null,$wh_qty['warehouse_id'],null,$id);                     
+                        // $items=$this->site->getPurchasedItems(null,$wh_qty['warehouse_id'],null,$id);
 
 
                     }
@@ -145,4 +145,22 @@ class Items_model extends CI_Model
         }
         return FALSE;
     }
+
+    public function getUnitByName($name)
+    {
+        $q = $this->db->get_where('units', array('unit' => $name), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+
+        return FALSE;
+    }
+
+    public function addByImportXls($data){
+        if ($this->db->insert_batch('items', $data)) {
+            return true;
+        }
+        return false;
+    }
+
 }

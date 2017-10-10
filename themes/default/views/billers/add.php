@@ -30,12 +30,9 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
+
                     <div class="form-group person">
-                        <?= lang("first_name", "cf1"); ?>
-                        <?php echo form_input('cf1', '', 'class="form-control tip" id="cf1" data-bv-notempty="true"'); ?>
-                    </div>
-                    <div class="form-group person">
-                        <?= lang("last_name", "name"); ?>
+                        <label>Họ và tên *</label>
                         <?php echo form_input('name', '', 'class="form-control tip" id="name" data-bv-notempty="true"'); ?>
                     </div>
 

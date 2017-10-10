@@ -306,11 +306,6 @@
 
 
 
-
-
-
-
-
                             <li class="mm_items">
                                 <a class="dropmenu" href="#"><i class="fa fa-cubes"></i><span
                                         class="text"> <?= lang('Nguyên vật liệu'); ?> </span> <span
@@ -322,6 +317,9 @@
                                     <li id="items_add"><a class="submenu" href="<?= site_url('items/add'); ?>"><i
                                                 class="fa fa-plus-circle"></i><span
                                                 class="text"> <?= lang('Thêm nguyên vật liệu'); ?></span></a></li>
+                                    <li id="items_add"><a class="submenu" href="<?= site_url('items/import_xls'); ?>"><i
+                                                class="fa fa-file-text"></i><span
+                                                class="text"> Import nguyên vật liệu</span></a></li>
                                 </ul>
                             </li>
                             <li class="mm_products">
