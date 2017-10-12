@@ -5,9 +5,6 @@
 
 (function ($) {
 
-    /*
-    * 表格中的单元格类
-    * */
     var CSheetCell = function(opt){
 
         /*
@@ -26,7 +23,6 @@
         },opt);
 
 
-        /*反向切换单元格状态*/
         this.toggle = function(){
             cellPrivate.state = cellPrivate.state>0 ? cellPrivate.state-1 : cellPrivate.state+1;
             if(cellPrivate.toggleCallback){
@@ -35,7 +31,6 @@
         }
 
         /*
-        * 设置单元格状态
         * state : 0 or 1
         * */
         this.set = function(state){
@@ -45,24 +40,18 @@
             }
         }
 
-        /*
-        * 获取单元格状态
-        * */
         this.get = function(){
             return cellPrivate.state;
         }
 
     }
 
-    /*
-    * 表格类
-    * */
     var CSheet = function(opt){
 
         /*
         * opt : {
         *   dimensions : [8,9],  [行数，列数]
-        *   sheetData : [[0,1,1,0,0],[...],[...],...]    sheet数据，二维数组，索引(a,b),a-行下标，b-列下标，每个cell只有0,1两态，与dimensions对应
+        *   sheetData : [[0,1,1,0,0],[...],[...],...]    sheet
         *   toggleCallback : function(){..}
         *   settingCallback : function(){..}
         * }
@@ -101,9 +90,6 @@
             }
         }
 
-        /*
-        * 对给定的表各区域进行 toggle 或 set操作
-        * */
         sheetPrivate.areaOperate = function(area,opt){
 
             /*
@@ -148,7 +134,6 @@
         sheetPrivate.initCells();
 
         /*
-        * 对表格的指定区域进行状态反向切换
         * toggleArea : {
          *   startCell : [2,1],
          *   endCell : [7,6]
@@ -166,7 +151,6 @@
 
 
         /*
-        *  对表格的指定区域进行状态设置
         *  state : 0 or 1
         *  settingArea : {
          *   startCell : [2,1],
@@ -182,7 +166,6 @@
         }
 
         /*
-         *  获取指定单元格的状态
          *  cellIndex ： [2,3]
          *  @return : 0 or 1
          * */
@@ -191,7 +174,6 @@
         }
 
         /*
-         *  获取指定行所有单元格的状态
          *  row ： 2
          *  @return : [1,0,...,1]
          * */
@@ -204,7 +186,6 @@
         }
 
         /*
-         *  获取所有单元格的状态
          *  @return : [[1,0,...,1],[1,0,...,1],...,[1,0,...,1]]
          * */
         this.getSheetStates = function(){
@@ -226,17 +207,6 @@
     $.fn.TimeSheet = function(opt){
 
         /*
-         *   说明 ：
-         *
-         *   TimeSheet 应该被绑定在 TBODY 元素上，其子元素有如下默认class:
-         *
-         *   表头 ---- class: .TimeSheet-head
-         *   列表头 ---- class: .TimeSheet-colHead
-         *   行表头 ---- class: .TimeSheet-rowHead
-         *   单元格 ---- class: .TimeSheet-cell
-         *
-         *   用户可在传入的sheetClass下将元素的默认样式覆盖
-         *   sheetClass将被赋予 TBODY 元素
          *
          *
          * opt :
@@ -246,7 +216,7 @@
          *          colHead : [{name:"name1",title:"",style:"width,background,color,font"},{name:"name2",title:"",style:"width,background,color,font"},...]
          *          rowHead : [{name:"name1",title:"",style:"height,background,color,font"},{name:"name2",title:"",style:"height,background,color,font"},...]
          *          sheetHead : {name:"headName",style:"width,height,background,color,font"}
-         *          sheetData : [[0,1,1,0,0],[...],[...],...]    sheet数据，二维数组，行主序，索引(a,b),a-行下标，b-列下标，每个cell只有0,1两态，与dimensions对应
+         *          sheetData : [[0,1,1,0,0],[...],[...],...]    shee
          *      },
          *
          *      sheetClass : "",
@@ -290,9 +260,6 @@
             sheetData : sheetOption.data.sheetData ? sheetOption.data.sheetData : undefined
         });
 
-        /*
-        * 表格初始化
-        * */
         var initSheet = function(){
             thisSheet.html("");
             thisSheet.addClass("TimeSheet");
@@ -304,16 +271,25 @@
             repaintSheet();
         };
 
-        /*
-        * 初始化每一列的顶部表头
-        * */
+        var myDate = new Date();
+        myDate.setFullYear(sheetOption.data.year);
+        myDate.setMonth(parseInt(sheetOption.data.month)-1);
+
         var initColHeads = function(){
+            console.log('year:'+ sheetOption.data.year + ', month:'+ sheetOption.data.month);
+            
             var colHeadHtml = '<tr>';
             for(var i=0,curColHead=''; i<=sheetOption.data.dimensions[1]; ++i){
                 if(i===0){
                     curColHead = '<td class="TimeSheet-head" style="'+(sheetOption.data.sheetHead.style?sheetOption.data.sheetHead.style:'')+'">'+sheetOption.data.sheetHead.name+'</td>';
                 }else{
-                    curColHead = '<td title="'+(sheetOption.data.colHead[i-1].title ? sheetOption.data.colHead[i-1].title:"")+'" data-col="'+(i-1)+'" class="TimeSheet-colHead '+(i===sheetOption.data.dimensions[1]?'rightMost':'')+'" style="'+(sheetOption.data.colHead[i-1].style ? sheetOption.data.colHead[i-1].style : '')+'">'+sheetOption.data.colHead[i-1].name+'</td>';
+                    myDate.setDate(i);
+                    if (myDate.getDay() == 0) {
+                        curColHead = '<td title="'+(sheetOption.data.colHead[i-1].title ? sheetOption.data.colHead[i-1].title:"")+'" data-col="'+(i-1)+'" class="TimeSheet-colHead '+(i===sheetOption.data.dimensions[1]?'rightMost':'')+'" style="background-color: #9ae89c;">'+sheetOption.data.colHead[i-1].name+'</td>';
+                    }else{
+                        curColHead = '<td title="'+(sheetOption.data.colHead[i-1].title ? sheetOption.data.colHead[i-1].title:"")+'" data-col="'+(i-1)+'" class="TimeSheet-colHead '+(i===sheetOption.data.dimensions[1]?'rightMost':'')+'" style="">'+sheetOption.data.colHead[i-1].name+'</td>';
+                    }
+                    
                 }
                 colHeadHtml += curColHead;
             }
@@ -324,9 +300,6 @@
             thisSheet.append(colHeadHtml);
         };
 
-        /*
-        * 初始化每一行
-        * */
         var initRows = function(){
             for(var row=0,curRowHtml=''; row<sheetOption.data.dimensions[0]; ++row){
                 curRowHtml='<tr class="TimeSheet-row">'
@@ -336,7 +309,14 @@
                         // console.log(sheetOption.data.rowHead[row].title);
                         curCell = '<td title="" class="TimeSheet-rowHead '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'" style="'+(sheetOption.data.rowHead[row].style ? sheetOption.data.rowHead[row].style : '')+'">'+sheetOption.data.rowHead[row].name+'</td>';
                     }else{
-                        curCell = '<td class="TimeSheet-cell '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+(col===sheetOption.data.dimensions[1]?'rightMost':'')+'" data-row="'+row+'" data-col="'+(col-1)+'"></td>';
+                        text = (sheetOption.data.sheetContentData[row][col-1] == 0) ? '' : sheetOption.data.sheetContentData[row][col-1];
+                        myDate.setDate(col);
+                        if (myDate.getDay() == 0) {
+                            curCell = '<td class="TimeSheet-cell '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+(col===sheetOption.data.dimensions[1]?'rightMost':'')+'" data-row="'+row+'" data-col="'+(col-1)+'" style="background-color: #9ae89c;">'+ text +'</td>';
+                        }else{
+                            curCell = '<td class="TimeSheet-cell '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+(col===sheetOption.data.dimensions[1]?'rightMost':'')+'" data-row="'+row+'" data-col="'+(col-1)+'">'+ text +'</td>';
+                        }
+                        
                     }
                     curRowHtml += curCell;
                 }
@@ -349,7 +329,6 @@
         };
 
         /*
-        * 比较两个单元格谁更靠近左上角
         * cell1:[2,3]
         * cell2:[4,5]
         * @return:{
@@ -374,9 +353,6 @@
             };
         };
 
-        /*
-        * 刷新表格
-        * */
         var repaintSheet = function(){
             var sheetStates = sheetModel.getSheetStates();
             thisSheet.find(".TimeSheet-row").each(function(row,rowDom){
@@ -392,16 +368,10 @@
             });
         };
 
-        /*
-        * 移除所有单元格的 TimeSheet-cell-selecting 类
-        * */
         var removeSelecting = function(){
             thisSheet.find(".TimeSheet-cell-selecting").removeClass("TimeSheet-cell-selecting");
         };
 
-        /*
-        * 清空备注栏
-        * */
         var cleanRemark = function(){
             thisSheet.find(".TimeSheet-remark").each(function(idx,ele){
                 var curDom = $(ele);
@@ -411,7 +381,6 @@
         };
 
         /*
-        * 鼠标开始做选择操作
         * startCel ： [1,4]
         * */
         var startSelecting = function(ev,startCel){
@@ -422,9 +391,8 @@
         };
 
         /*
-         * 鼠标在选择操作过程中
-         * topLeftCell ： [1,4]，      鼠标选择区域的左上角
-         * bottomRightCell ： [3,9]      鼠标选择区域的右下角
+         * topLeftCell ： [1,4]，
+         * bottomRightCell ： [3,9]     
          * */
         var duringSelecting = function(ev,topLeftCell,bottomRightCell){
             var curDom = $(ev.currentTarget);
@@ -440,7 +408,6 @@
         };
 
         /*
-         * 选择操作完成后
          * targetArea ： {
          *      topLeft ： [1,2],
          *      bottomRight: [3,8]
@@ -451,19 +418,20 @@
             var key = $(ev.which);
             var targetState = undefined;
 
-            if(key[0]===1){       targetState = 1;}   //鼠标左键,将选定区域置1
-            else if(key[0]===3){ targetState = 0;}   //鼠标右键,将选定区域置0
+            if(key[0]===1){       targetState = 1;}   //1
+            else if(key[0]===3){ targetState = 0;}   //0
 
             if(isSelecting && curDom.hasClass("TimeSheet-cell") || isColSelecting && curDom.hasClass("TimeSheet-colHead")){
-                sheetModel.set(targetState,{
-                    startCell : targetArea.topLeft,
-                    endCell   : targetArea.bottomRight
-                });
-                removeSelecting();
-                repaintSheet();
-                if(sheetOption.end){
-                    sheetOption.end(ev,targetArea);
-                }
+                // console.log(targetArea.topLeft+','+targetArea.bottomRight);
+                // sheetModel.set(targetState,{
+                //     startCell : targetArea.topLeft,
+                //     endCell   : targetArea.bottomRight
+                // });
+                // removeSelecting();
+                // repaintSheet();
+                // if(sheetOption.end){
+                //     sheetOption.end(ev,targetArea);
+                // }
             }else{
                 removeSelecting();
             }
@@ -476,16 +444,14 @@
             }
         };
 
-        var isSelecting = false;  /*鼠标在表格区域做选择*/
+        var isSelecting = false;  
 
-        var isColSelecting = false; /*鼠标在列表头区域做选择*/
+        var isColSelecting = false; 
 
         var eventBinding = function(){
 
-            /*防止重复绑定*/
             thisSheet.undelegate(".umsSheetEvent");
 
-            /*表格开始选择*/
             thisSheet.delegate(".TimeSheet-cell","mousedown.umsSheetEvent",function(ev){
                 var curCell = $(ev.currentTarget);
                 var startCell = [curCell.data("row"),curCell.data("col")];
@@ -493,7 +459,6 @@
                 startSelecting(ev,startCell);
             });
 
-            /*表格选择完成*/
             thisSheet.delegate(".TimeSheet-cell","mouseup.umsSheetEvent",function(ev){
                 if(!operationArea.startCell){
                     return;
@@ -504,7 +469,6 @@
                 afterSelecting(ev,correctedCells);
             });
 
-            /*表格正在选择*/
             thisSheet.delegate(".TimeSheet-cell","mouseover.umsSheetEvent",function(ev){
                 if(!isSelecting){
                     return;
@@ -519,7 +483,6 @@
             });
 
 
-            /*列表头开始选择*/
             thisSheet.delegate(".TimeSheet-colHead","mousedown.umsSheetEvent",function(ev){
                 var curColHead = $(ev.currentTarget);
                 var startCell = [0,curColHead.data("col")];
@@ -527,7 +490,6 @@
                 startSelecting(ev,startCell);
             });
 
-            /*列表头选择完成*/
             thisSheet.delegate(".TimeSheet-colHead","mouseup.umsSheetEvent",function(ev){
                 if(!operationArea.startCell){
                     return;
@@ -538,7 +500,6 @@
                 afterSelecting(ev,correctedCells);
             });
 
-            /*列表头正在选择*/
             thisSheet.delegate(".TimeSheet-colHead","mouseover.umsSheetEvent",function(ev){
                 if(!isColSelecting){
                     return;
@@ -552,7 +513,6 @@
                 duringSelecting(ev,topLeftCell,bottomRightCell);
             });
 
-            /*表格禁止鼠标右键菜单*/
             thisSheet.delegate("td","contextmenu.umsSheetEvent",function(ev){
                 return false;
             });
@@ -566,7 +526,6 @@
         var publicAPI = {
 
             /*
-            * 获取单元格状态
             * cellIndex ：[1,2]
             * @return : 0 or 1
             * */
@@ -575,7 +534,6 @@
             },
 
             /*
-             * 获取某行所有单元格状态
              * row ：2
              * @return : [1,0,0,...,0,1]
              * */
@@ -584,7 +542,6 @@
             },
 
             /*
-             * 获取表格所有单元格状态
              * @return : [[1,0,0,...,0,1],[1,0,0,...,0,1],...,[1,0,0,...,0,1]]
              * */
             getSheetStates : function(){
@@ -592,9 +549,7 @@
             },
 
             /*
-            * 设置某行的说明文字
             * row : 2,
-            * html : 说明
             * */
             setRemark : function(row,html){
                 if($.trim(html)!==''){
@@ -603,7 +558,6 @@
             },
 
             /*
-            * 重置表格
             * */
             clean : function(){
                 sheetModel.set(0,{});
@@ -612,28 +566,25 @@
             },
 
             /*
-            * 获取 default remark
+            * default remark
             * */
             getDefaultRemark : function(){
                 return sheetOption.remarks.default;
             },
 
             /*
-            * 使表格不可操作
             * */
             disable : function(){
                 thisSheet.undelegate(".umsSheetEvent");
             },
 
             /*
-             * 使表格可操作
              * */
             enable : function(){
                 eventBinding();
             },
 
             /*
-            * 判断表格是否所有单元格状态都是1
             * @return ： true or false
             * */
             isFull : function(){

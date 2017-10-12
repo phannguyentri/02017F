@@ -7,9 +7,10 @@
             <div class="col-lg-12">
 
                 <?php
-                $attrib = array('class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form');
-                echo form_open_multipart("timekeepers/import_xls", $attrib)
+                    $attrib = array('class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form');
+                    echo form_open_multipart("timekeepers/import_xls", $attrib)
                 ?>
+
                 <div class="row">
                     <div class="col-md-12">
 
@@ -29,7 +30,7 @@
                             <div class="form-group">
                                 <label>Năm</label>
 
-                                <select name="year" class="form-control select" id="department" style="width: 100%;">
+                                <select name="year" class="form-control select" style="width: 100%;">
                                     <?php
                                         for ($i=date('Y')-1; $i <= date('Y') + 1 ; $i++) {
                                             if ($i == date('Y')) {
@@ -46,7 +47,7 @@
                             <div class="form-group">
                                 <label>Tháng</label>
 
-                                <select name="month" class="form-control select" id="department" style="width: 100%;">
+                                <select name="month" class="form-control select" style="width: 100%;">
                                     <?php
                                         for ($i=1; $i <= 12 ; $i++) {
                                             if ($i == date('m')) {
