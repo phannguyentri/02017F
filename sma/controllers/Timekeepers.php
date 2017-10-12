@@ -59,7 +59,6 @@ class Timekeepers extends MY_Controller
         $month              = $_POST['month'];
         $i = 0;
 
-
         $keys = array(
             'd1',
             'd2',
@@ -97,13 +96,21 @@ class Timekeepers extends MY_Controller
         foreach ($detailIds as $k => $val) {
             $id = $val['detail_id'];
             $totalHour = 0;
+            $ct = 0;
             $overTime = 0;
 
             $detail = array_combine($keys, $sheetContentData[$k]);
 
             foreach ($sheetContentData[$k] as $k2 => $val2) {
                 if ($k % 2 == 0) {
+                  if ($val2 == "CT") {
+                    $ct++;
+                  }elseif ($val2 == "P" || $val2 == "Ro" || $val2 == "R" || $val2 == "Ô" || $val2 == "Đ"
+                   || $val2 == "NB" || $val2 == "V" || $val2 == "L") {
+                    continue;
+                  }else{
                     $totalHour = $totalHour + $val2;
+                  }
                 }else{
                     $day = $k2+1;
                     if (date("w", strtotime($day.'-'.$month.'-'.$year)) != 0) {
@@ -114,7 +121,7 @@ class Timekeepers extends MY_Controller
 
             }
 
-            $total = $totalHour/8;
+            $total = ($totalHour/8) + $ct;
             $detail['total'] = $total;
             $detail['overtime'] = $overTime;
 
@@ -343,9 +350,17 @@ class Timekeepers extends MY_Controller
                         unset($finals_office[$k]['name']);
 
                         $i = 1;
-                        $totalHour      = 0;
+                        $totalHour  = 0;
+                        $ct         = 0;
                         foreach ($finals_office[$k] as $day) {
-                            $totalHour  = $totalHour + $day;
+                            if ($day === "CT") {
+                              $ct++;
+                            }elseif ($day === "P" || $day === "Ro" || $day === "R" || $day === "Ô" || $day === "Đ"
+                             || $day === "NB" || $day === "V" || $day === "L") {
+                              continue;
+                            }else{
+                              $totalHour  = $totalHour + $day;
+                            }
                         }
 
                         $overTime       = 0;
@@ -357,7 +372,7 @@ class Timekeepers extends MY_Controller
                             $i++;
                         }
 
-                        $finals_office[$k]['total']      = $totalHour/8;
+                        $finals_office[$k]['total']      = ($totalHour/8) + $ct;
                         $finals_office[$k]['company_id'] = $company->id;
                         $finals_office[$k]['type']       = 'normal';
                         $finals_production[$k]['overtime']   = $overTime;

@@ -7,96 +7,77 @@
             <div class="col-lg-12">
 
                 <div class="row">
-                    <div class="col-md-12">
-                        <div class="col-md-10">
+                  <div class="col-md-4">
 
-                          <div class="form-group">
-                            <label>Năm</label>
+                    <div class="form-group">
+                      <label>Năm</label>
 
-                            <select name="year" class="form-control select" id="year" style="width: 100%;">
-                              <?php
-                                for ($i=date('Y')-1; $i <= date('Y') + 1 ; $i++) {
-                                  if ($i == date('Y')) {
-                                    echo '<option value="'.$i.'" selected>'.$i.'</option>';
-                                  }else{
-                                    echo '<option value="'.$i.'">'.$i.'</option>';
-                                  }
+                      <select name="year" class="form-control select" id="year" style="width: 100%;">
+                        <?php
+                          for ($i=date('Y')-1; $i <= date('Y') + 1 ; $i++) {
+                            if ($i == date('Y')) {
+                              echo '<option value="'.$i.'" selected>'.$i.'</option>';
+                            }else{
+                              echo '<option value="'.$i.'">'.$i.'</option>';
+                            }
 
-                                }
-                               ?>
-                            </select>
-                          </div>
-
-
-                          <div class="form-group">
-                            <label>Tháng</label>
-
-                            <select name="month" class="form-control select" id="month" style="width: 100%;">
-                              <?php
-                                for ($i=1; $i <= 12 ; $i++) {
-                                  if ($i == date('m')) {
-                                    echo '<option value="'.$i.'" selected>Tháng '.$i.'</option>';
-                                  }else{
-                                    echo '<option value="'.$i.'">Tháng '.$i.'</option>';
-                                  }
-
-                                }
-                               ?>
-                            </select>
-                          </div>
-
-                          <div class="form-group">
-                              <label>Phòng ban</label>
-                              <select name="department" class="form-control select" id="department" style="width: 100%;">
-                                <?php
-                                  foreach ($departments as $department) {
-                                    echo '<option value="'.$department->id.'">'.$department->name.'</option>';
-                                  }
-                                ?>
-                              </select>
-                          </div>
-
-                          <!-- <h1><?php echo $this->security->get_csrf_hash(); ?></h1> -->
-
-                          <div class="form-group">
-                              <div class="controls">
-<!--                                   <div style="padding:15px 0 10px;">
-                                    <button class="J_sheetControl" id="J_timingDisable">Disable</button>
-                                      <button class="J_sheetControl" id="J_timingEnable">Enable</button>
-                                      <button class="J_sheetControl" id="J_timingClean">Clean</button>
-                                      <button class="J_sheetControl" id="J_timingSubmit">Submit</button>
-                                      <button class="J_sheetControl" id="J_timingIsFull">IsFull</button>
-                                      <div style="padding:15px 0 5px;">
-                                          <input type="text" placeholder="0,0" id="J_cellIndex" value="0,0"/> <button class="J_sheetControl" id="J_timingGetCell">GetCell</button>
-                                      </div>
-                                      <div style="padding:10px 0;">
-                                          <input type="number" placeholder="0" id="J_rowIndex" value="0"/>  <button class="J_sheetControl" id="J_timingGetRow">GetRow</button>
-                                      </div>
-                                  </div> -->
-                                  <div id="J_calenderWrapper">
-                                      <table class="table table-bordered">
-                                          <thead></thead>
-                                          <tbody id="J_timedSheet">
-
-                                          </tbody>
-                                      </table>
-                                  </div>
-                              </div>
-                          </div>
-
-
-                            <!-- <p id="J_dataDisplay" style="color:#aaaaaa;font-family: 'Arial';"></p> -->
-
-                            <div class="form-group">
-                              <div class="controls">
-                                <input type="submit" name="add_user" value="Lưu" id="btn-save" class="btn btn-primary" disabled>
-                              </div>
-                            </div>
-
-                        </div>
-
-
+                          }
+                         ?>
+                      </select>
                     </div>
+
+
+                    <div class="form-group">
+                      <label>Tháng</label>
+
+                      <select name="month" class="form-control select" id="month" style="width: 100%;">
+                        <?php
+                          for ($i=1; $i <= 12 ; $i++) {
+                            if ($i == date('m')) {
+                              echo '<option value="'.$i.'" selected>Tháng '.$i.'</option>';
+                            }else{
+                              echo '<option value="'.$i.'">Tháng '.$i.'</option>';
+                            }
+
+                          }
+                         ?>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phòng ban</label>
+                        <select name="department" class="form-control select" id="department" style="width: 100%;">
+                          <?php
+                            foreach ($departments as $department) {
+                              echo '<option value="'.$department->id.'">'.$department->name.'</option>';
+                            }
+                          ?>
+                        </select>
+                    </div>
+
+                    <!-- <h1><?php echo $this->security->get_csrf_hash(); ?></h1> -->
+
+
+                    <div class="controls">
+                        <div id="J_calenderWrapper">
+                            <table class="table table-bordered">
+                                <thead></thead>
+                                <tbody id="J_timedSheet">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                      <!-- <p id="J_dataDisplay" style="color:#aaaaaa;font-family: 'Arial';"></p> -->
+
+                    <div class="form-group">
+                      <div class="controls">
+                        <input type="submit" name="add_user" value="Lưu" id="btn-save" class="btn btn-primary" disabled>
+                      </div>
+                    </div>
+
+                  </div>
                 </div>
             </div>
 
@@ -145,7 +126,7 @@
       $(document).on('click', '.TimeSheet-cell', function() {
         const input = prompt('Nhập thay đổi: ');
         if(input != null) {
-          if ((input > 0 && input <= 24) || (input == "P" || input == "Ro" || input == "R" || input == "Ô" || input == "Đ"
+          if ((input > 0 && input <= 24) || (input == "CT" || input == "P" || input == "Ro" || input == "R" || input == "Ô" || input == "Đ"
            || input == "NB" || input == "V" || input == "L")) {
             $(this).text(input);
             sheetContentData[$(this).attr('data-row')][$(this).attr('data-col')] = input;
