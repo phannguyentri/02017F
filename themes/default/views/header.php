@@ -490,9 +490,17 @@
                                         class="text"> <?= lang('Chấm Công'); ?> </span> <span
                                         class="chevron closed"></span></a>
                                 <ul>
-                                        <li id="auth_users"><a class="submenu" href="<?= site_url('users'); ?>"><i
-                                                    class="fa fa-list"></i><span
-                                                    class="text"> <?= lang('Danh sách chấm công'); ?></span></a></li>
+                                    <li >
+                                        <a class="submenu" href="<?= site_url('timekeepers/view'); ?>">
+                                            <i class="fa fa-list"></i> <span class="text"> Xem danh sách chấm công</span>
+                                        </a>
+                                    </li>
+                                    <li >
+                                        <a class="submenu" href="<?= site_url('timekeepers/import_xls'); ?>">
+                                            <i class="fa fa-list"></i> <span class="text"> Import chấm công</span>
+                                        </a>
+                                    </li>
+
 
                                 </ul>
                             </li>

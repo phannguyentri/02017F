@@ -295,6 +295,17 @@
             }
             if(sheetOption.remarks){
                 colHeadHtml += '<td class="TimeSheet-remarkHead">'+sheetOption.remarks.title+'</td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead">Chủ nhật</td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead">Tăng ca</td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead">Lễ</td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead">P</td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead">Ro</td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead">R</td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead">Ô</td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead">Đ</td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead">NB</td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead">V</td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead">L</td>';
             }
             colHeadHtml += '</tr>';
             thisSheet.append(colHeadHtml);
@@ -302,15 +313,51 @@
 
         var initRows = function(){
             for(var row=0,curRowHtml=''; row<sheetOption.data.dimensions[0]; ++row){
-                curRowHtml='<tr class="TimeSheet-row">'
+                curRowHtml= '<tr class="TimeSheet-row">'
+                totalHours = 0;
+                totalOvertime = 0;
+                sundayHours = 0;
+                p   = 0;
+                ro  = 0;
+                r   = 0;
+                d   = 0;
+                v   = 0;
+                l   = 0;
+
                 for(var col= 0, curCell=''; col<=sheetOption.data.dimensions[1]; ++col){
                     if(col===0){
-                        // console.log(sheetOption.data.rowHead[row]);
-                        // console.log(sheetOption.data.rowHead[row].title);
                         curCell = '<td title="" class="TimeSheet-rowHead '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'" style="'+(sheetOption.data.rowHead[row].style ? sheetOption.data.rowHead[row].style : '')+'">'+sheetOption.data.rowHead[row].name+'</td>';
                     }else{
                         text = (sheetOption.data.sheetContentData[row][col-1] == 0) ? '' : sheetOption.data.sheetContentData[row][col-1];
+                        hours = (sheetOption.data.sheetContentData[row][col-1] == 0) ? 0 : sheetOption.data.sheetContentData[row][col-1];
+                        
+                        if (hours == "P") {
+                            p++;
+                        }else if(hours == "Ro"){
+                            ro++;
+                        }else if(hours == "R"){
+                            r++;
+                        }else if(hours == "Đ"){
+                            d++;
+                        }else if(hours == "V"){
+                            v++;
+                        }else if(hours == "L"){
+                            l++;
+                        }else{
+                            totalHours = totalHours + parseInt(hours);
+                        }
+
+
                         myDate.setDate(col);
+
+                        if (row % 2 != 0) {
+                            if (myDate.getDay() != 0) {
+                                totalOvertime = totalOvertime + parseInt(hours);  
+                            }else{
+                                sundayHours = sundayHours + parseInt(hours);
+                            }
+                        }
+
                         if (myDate.getDay() == 0) {
                             curCell = '<td class="TimeSheet-cell '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+(col===sheetOption.data.dimensions[1]?'rightMost':'')+'" data-row="'+row+'" data-col="'+(col-1)+'" style="background-color: #9ae89c;">'+ text +'</td>';
                         }else{
@@ -320,11 +367,46 @@
                     }
                     curRowHtml += curCell;
                 }
+
+                finalTotal = totalHours/8;
+
                 if(sheetOption.remarks){
-                    curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+sheetOption.remarks.default+'</td>';
+                    // console.log(finalTotal);
+                    
+                    if (row % 2 == 0) {
+                        curRowHtml += '<td class="TimeSheet-remark total'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+finalTotal+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark p'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+p+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark ro'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+ro+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark r'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+r+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark d'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+d+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark v'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+v+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark l'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+l+'</td>';
+                    }else{
+                        curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark sunday-hours'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+sundayHours+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark over-time'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+totalOvertime+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
+                    }
+
+                    // curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+finalTotal+'</td>';
                 }
                 curRowHtml += '</tr>';
                 thisSheet.append(curRowHtml);
+
+                // console.log(finalTotal);
             }
         };
 
@@ -422,16 +504,7 @@
             else if(key[0]===3){ targetState = 0;}   //0
 
             if(isSelecting && curDom.hasClass("TimeSheet-cell") || isColSelecting && curDom.hasClass("TimeSheet-colHead")){
-                // console.log(targetArea.topLeft+','+targetArea.bottomRight);
-                // sheetModel.set(targetState,{
-                //     startCell : targetArea.topLeft,
-                //     endCell   : targetArea.bottomRight
-                // });
-                // removeSelecting();
-                // repaintSheet();
-                // if(sheetOption.end){
-                //     sheetOption.end(ev,targetArea);
-                // }
+
             }else{
                 removeSelecting();
             }

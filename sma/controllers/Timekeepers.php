@@ -57,7 +57,14 @@ class Timekeepers extends MY_Controller
         $detailIds          = $_POST['timekeeperDetailIds'];
         $year               = $_POST['year'];
         $month              = $_POST['month'];
-        $i = 0;
+        $i                  = 0;
+        $error              = false;
+
+        // $keys = array();
+
+        // for ($i=1; $i <= cal_days_in_month(CAL_GREGORIAN, $month, $year); $i++) {
+        //     $keys[] = 'd'.$i;
+        // }
 
         $keys = array(
             'd1',
@@ -125,16 +132,17 @@ class Timekeepers extends MY_Controller
             $detail['total'] = $total;
             $detail['overtime'] = $overTime;
 
-
-            if ($this->timekeepers_model->updateTimekeeperDetail($id, $detail)) {
-                echo json_encode(array('status' => 'success'));
-            }else{
-                echo json_encode(array('status' => 'error'));
+            if (!$this->timekeepers_model->updateTimekeeperDetail($id, $detail)) {
+                $error = true;
             }
-
         }
 
-        die();
+        if ($error) {
+            echo json_encode(array('status' => 'error'));
+        }else{
+            echo json_encode(array('status' => 'success'));
+        }
+
 
     }
 
@@ -200,15 +208,12 @@ class Timekeepers extends MY_Controller
                 $highestColumn      = $objWorksheet->getHighestColumn();
                 $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
                 $arraydata          = array();
-                $arrayDataProd      = array();
-                // echo "<pre>";
-                // var_dump($allSheetName);
-                // var_dump($highestRow);
-                // var_dump($highestColumn);
-                // var_dump($highestColumnIndex);
-                // echo "</pre>";
-                // die();
+                $arrayDataNormal    = array();
 
+
+                $department_id  = $this->input->post('department');
+                $month          = $this->input->post('month');
+                $year           = $this->input->post('year');
                 $i = 0;
                 $v = 0;
 
@@ -218,7 +223,7 @@ class Timekeepers extends MY_Controller
                     $k = 0;
                     if ($row % 2 != 0) {
 
-                        for ($col = 1; $col < 34; ++$col) {
+                        for ($col = 1; $col < (cal_days_in_month(CAL_GREGORIAN, $month, $year)+3); ++$col) {
                             if($col == 2)
                                 continue;
 
@@ -236,18 +241,18 @@ class Timekeepers extends MY_Controller
                             }
                         }
 
-                        if ($row_end > 31) {
+                        if ($row_end > cal_days_in_month(CAL_GREGORIAN, $month, $year)) {
                             unset($arraydata[$i]);
                             break;
                         }
                         $i++;
                     }else{
-                        for ($col = 1; $col < 34; ++$col) {
+                        for ($col = 1; $col < (cal_days_in_month(CAL_GREGORIAN, $month, $year)+3); ++$col) {
                             if($col == 1 || $col == 2)
                                 continue;
                             $value  = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
                             $value  = ($value) ? $value : 0;
-                            $arrayDataProd[$v][$k]   = $value;
+                            $arrayDataNormal[$v][$k]   = $value;
                             $k++;
                         }
 
@@ -256,103 +261,44 @@ class Timekeepers extends MY_Controller
 
                 }
 
-                $keys = array(
-                    'name',
-                    'd1',
-                    'd2',
-                    'd3',
-                    'd4',
-                    'd5',
-                    'd6',
-                    'd7',
-                    'd8',
-                    'd9',
-                    'd10',
-                    'd11',
-                    'd12',
-                    'd13',
-                    'd14',
-                    'd15',
-                    'd16',
-                    'd17',
-                    'd18',
-                    'd19',
-                    'd20',
-                    'd21',
-                    'd22',
-                    'd23',
-                    'd24',
-                    'd25',
-                    'd26',
-                    'd27',
-                    'd28',
-                    'd29',
-                    'd30',
-                    'd31'
-                );
 
-                $keysProd = array(
-                    'd1',
-                    'd2',
-                    'd3',
-                    'd4',
-                    'd5',
-                    'd6',
-                    'd7',
-                    'd8',
-                    'd9',
-                    'd10',
-                    'd11',
-                    'd12',
-                    'd13',
-                    'd14',
-                    'd15',
-                    'd16',
-                    'd17',
-                    'd18',
-                    'd19',
-                    'd20',
-                    'd21',
-                    'd22',
-                    'd23',
-                    'd24',
-                    'd25',
-                    'd26',
-                    'd27',
-                    'd28',
-                    'd29',
-                    'd30',
-                    'd31'
-                );
+                $keys_day = array();
 
-                $finals_office = array();
-                $finals_production = array();
-
-                foreach ($arraydata as $key => $value) {
-                    $finals_office[] = array_combine($keys, $value);
+                for ($i=1; $i <= cal_days_in_month(CAL_GREGORIAN, $month, $year); $i++) {
+                    $keys_day[] = 'd'.$i;
                 }
 
-                foreach ($arrayDataProd as $key => $value) {
-                    $finals_production[] = array_combine($keysProd, $value);
+
+                $keysOverTime   = $keys_day;
+                array_unshift($keys_day, 'name');
+                $keys           = $keys_day;
+
+                $finalsNormal   = array();
+                $finalsOverTime = array();
+
+                foreach ($arraydata as $key => $value) {
+                    $finalsNormal[] = array_combine($keys, $value);
+                }
+
+                foreach ($arrayDataNormal as $key => $value) {
+                    $finalsOverTime[] = array_combine($keysOverTime, $value);
                 }
 
                 $rw = 7;
 
-                $department_id  = $this->input->post('department');
-                $month          = $this->input->post('month');
-                $year           = $this->input->post('year');
                 $totalHour      = 0;
 
-                foreach ($finals_office as $k => $final) {
+
+                foreach ($finalsNormal as $k => $final) {
 
                     $company = $this->timekeepers_model->getCompanyByNameAndDepartmentId($final['name'], $department_id);
                     if ($company) {
-                        unset($finals_office[$k]['name']);
+                        unset($finalsNormal[$k]['name']);
 
                         $i = 1;
                         $totalHour  = 0;
                         $ct         = 0;
-                        foreach ($finals_office[$k] as $day) {
+                        foreach ($finalsNormal[$k] as $day) {
                             if ($day === "CT") {
                               $ct++;
                             }elseif ($day === "P" || $day === "Ro" || $day === "R" || $day === "Ô" || $day === "Đ"
@@ -364,7 +310,7 @@ class Timekeepers extends MY_Controller
                         }
 
                         $overTime       = 0;
-                        foreach ($finals_production[$k] as $day) {
+                        foreach ($finalsOverTime[$k] as $day) {
                             if (date("w", strtotime($i.'-'.$month.'-'.$year)) != 0) {
                                 $overTime  = $overTime + $day;
                             }
@@ -372,12 +318,12 @@ class Timekeepers extends MY_Controller
                             $i++;
                         }
 
-                        $finals_office[$k]['total']      = ($totalHour/8) + $ct;
-                        $finals_office[$k]['company_id'] = $company->id;
-                        $finals_office[$k]['type']       = 'normal';
-                        $finals_production[$k]['overtime']   = $overTime;
-                        $finals_production[$k]['company_id'] = $company->id;
-                        $finals_production[$k]['type']   = 'overtime';
+                        $finalsNormal[$k]['total']      = ($totalHour/8) + $ct;
+                        $finalsNormal[$k]['company_id'] = $company->id;
+                        $finalsNormal[$k]['type']       = 'normal';
+                        $finalsOverTime[$k]['overtime']   = $overTime;
+                        $finalsOverTime[$k]['company_id'] = $company->id;
+                        $finalsOverTime[$k]['type']   = 'overtime';
 
                     }else{
                         $this->session->set_flashdata('error', "Tên nhân viên không nằm trong danh sách nhân viên, lỗi tại dòng " . " " . $rw);
@@ -394,24 +340,14 @@ class Timekeepers extends MY_Controller
                     'year'  => $year
                 );
 
-                // echo "<pre>";
-                // print_r($finals_office);
-                // echo "</pre>";
-                // echo "<h1>--------------------------------------------------</h1>";
-                // echo "<pre>";
-                // print_r($finals_production);
-                // echo "</pre>";die();
 
-                if ($this->timekeepers_model->addTimekeeper($dataTimekeeper, $finals_office, $finals_production)) {
+                if ($this->timekeepers_model->addTimekeeper($dataTimekeeper, $finalsNormal, $finalsOverTime)) {
                     $this->session->set_flashdata('message', 'Bảng chấm công đã được import thành công!');
                     redirect("timekeepers/import_xls");
                 }else{
                     $this->session->set_flashdata('error', 'Import bảng chấm công thất bại.');
                     redirect("timekeepers/import_xls");
                 }
-
-
-
 
             }
 
@@ -423,16 +359,16 @@ class Timekeepers extends MY_Controller
                     'page' => lang('home')
                 ),
                 array(
-                    'link' => site_url('products'),
-                    'page' => lang('products')
+                    'link' => '#',
+                    'page' => 'Chấm công'
                 ),
                 array(
                     'link' => '#',
-                    'page' => lang('import_products_by_exe')
+                    'page' => lang('Import bảng chấm công')
                 )
             );
-            $meta                = array(
-                'page_title' => lang('import_products_by_exe'),
+            $meta = array(
+                'page_title' => 'Import chấm công',
                 'bc' => $bc
             );
 

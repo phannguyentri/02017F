@@ -16,17 +16,17 @@ class Timekeepers_model extends CI_Model
     return FALSE;
   }
 
-  public function addTimekeeper($dataTimekeeper, $dataOffice, $dataProduction){
+  public function addTimekeeper($dataTimekeeper, $dataNormal, $dataOverTime){
 
     if ($this->db->insert('timekeepers', $dataTimekeeper)) {
       $timekeeper_id = $this->db->insert_id();
 
-      foreach ($dataOffice as $key => $value) {
-        $dataOffice[$key]['timekeeper_id'] = $timekeeper_id;
-        $dataProduction[$key]['timekeeper_id'] = $timekeeper_id;
+      foreach ($dataNormal as $key => $value) {
+        $dataNormal[$key]['timekeeper_id'] = $timekeeper_id;
+        $dataOverTime[$key]['timekeeper_id'] = $timekeeper_id;
 
-        $this->addTimekeeperDetail($dataOffice[$key]);
-        $this->addTimekeeperDetail($dataProduction[$key]);
+        $this->addTimekeeperDetail($dataNormal[$key]);
+        $this->addTimekeeperDetail($dataOverTime[$key]);
 
       }
       return true;

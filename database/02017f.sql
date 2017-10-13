@@ -2,10 +2,10 @@
 -- version 4.7.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Oct 12, 2017 at 06:28 PM
--- Server version: 10.1.25-MariaDB
--- PHP Version: 7.0.21
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th10 13, 2017 lúc 12:31 PM
+-- Phiên bản máy phục vụ: 10.1.25-MariaDB
+-- Phiên bản PHP: 5.6.31
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,13 +19,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `02017f`
+-- Cơ sở dữ liệu: `02017f`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_adjustments`
+-- Cấu trúc bảng cho bảng `sma_adjustments`
 --
 
 CREATE TABLE `sma_adjustments` (
@@ -44,7 +44,7 @@ CREATE TABLE `sma_adjustments` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_calendar`
+-- Cấu trúc bảng cho bảng `sma_calendar`
 --
 
 CREATE TABLE `sma_calendar` (
@@ -56,7 +56,7 @@ CREATE TABLE `sma_calendar` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_captcha`
+-- Cấu trúc bảng cho bảng `sma_captcha`
 --
 
 CREATE TABLE `sma_captcha` (
@@ -67,7 +67,7 @@ CREATE TABLE `sma_captcha` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_captcha`
+-- Đang đổ dữ liệu cho bảng `sma_captcha`
 --
 
 INSERT INTO `sma_captcha` (`captcha_id`, `captcha_time`, `ip_address`, `word`) VALUES
@@ -79,7 +79,7 @@ INSERT INTO `sma_captcha` (`captcha_id`, `captcha_time`, `ip_address`, `word`) V
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_categories`
+-- Cấu trúc bảng cho bảng `sma_categories`
 --
 
 CREATE TABLE `sma_categories` (
@@ -90,7 +90,7 @@ CREATE TABLE `sma_categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_categories`
+-- Đang đổ dữ liệu cho bảng `sma_categories`
 --
 
 INSERT INTO `sma_categories` (`id`, `code`, `name`, `image`) VALUES
@@ -102,7 +102,7 @@ INSERT INTO `sma_categories` (`id`, `code`, `name`, `image`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_combo_items`
+-- Cấu trúc bảng cho bảng `sma_combo_items`
 --
 
 CREATE TABLE `sma_combo_items` (
@@ -116,7 +116,7 @@ CREATE TABLE `sma_combo_items` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_companies`
+-- Cấu trúc bảng cho bảng `sma_companies`
 --
 
 CREATE TABLE `sma_companies` (
@@ -149,7 +149,7 @@ CREATE TABLE `sma_companies` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_companies`
+-- Đang đổ dữ liệu cho bảng `sma_companies`
 --
 
 INSERT INTO `sma_companies` (`id`, `department_id`, `group_id`, `group_name`, `customer_group_id`, `customer_group_name`, `name`, `company`, `vat_no`, `address`, `city`, `state`, `postal_code`, `country`, `phone`, `email`, `cf1`, `cf2`, `cf3`, `cf4`, `cf5`, `cf6`, `invoice_footer`, `payment_term`, `logo`, `award_points`) VALUES
@@ -168,7 +168,7 @@ INSERT INTO `sma_companies` (`id`, `department_id`, `group_id`, `group_name`, `c
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_completed_products`
+-- Cấu trúc bảng cho bảng `sma_completed_products`
 --
 
 CREATE TABLE `sma_completed_products` (
@@ -179,7 +179,7 @@ CREATE TABLE `sma_completed_products` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_completed_products`
+-- Đang đổ dữ liệu cho bảng `sma_completed_products`
 --
 
 INSERT INTO `sma_completed_products` (`id`, `production_id`, `product_id`, `completed_quantity`) VALUES
@@ -188,7 +188,7 @@ INSERT INTO `sma_completed_products` (`id`, `production_id`, `product_id`, `comp
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_costing`
+-- Cấu trúc bảng cho bảng `sma_costing`
 --
 
 CREATE TABLE `sma_costing` (
@@ -210,7 +210,7 @@ CREATE TABLE `sma_costing` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_costing`
+-- Đang đổ dữ liệu cho bảng `sma_costing`
 --
 
 INSERT INTO `sma_costing` (`id`, `date`, `product_id`, `sale_item_id`, `sale_id`, `purchase_item_id`, `quantity`, `purchase_net_unit_cost`, `purchase_unit_cost`, `sale_net_unit_price`, `sale_unit_price`, `quantity_balance`, `inventory`, `overselling`, `option_id`) VALUES
@@ -230,7 +230,7 @@ INSERT INTO `sma_costing` (`id`, `date`, `product_id`, `sale_item_id`, `sale_id`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_currencies`
+-- Cấu trúc bảng cho bảng `sma_currencies`
 --
 
 CREATE TABLE `sma_currencies` (
@@ -242,7 +242,7 @@ CREATE TABLE `sma_currencies` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_currencies`
+-- Đang đổ dữ liệu cho bảng `sma_currencies`
 --
 
 INSERT INTO `sma_currencies` (`id`, `code`, `name`, `rate`, `auto_update`) VALUES
@@ -253,7 +253,7 @@ INSERT INTO `sma_currencies` (`id`, `code`, `name`, `rate`, `auto_update`) VALUE
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_customer_groups`
+-- Cấu trúc bảng cho bảng `sma_customer_groups`
 --
 
 CREATE TABLE `sma_customer_groups` (
@@ -263,7 +263,7 @@ CREATE TABLE `sma_customer_groups` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_customer_groups`
+-- Đang đổ dữ liệu cho bảng `sma_customer_groups`
 --
 
 INSERT INTO `sma_customer_groups` (`id`, `name`, `percent`) VALUES
@@ -275,7 +275,7 @@ INSERT INTO `sma_customer_groups` (`id`, `name`, `percent`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_date_format`
+-- Cấu trúc bảng cho bảng `sma_date_format`
 --
 
 CREATE TABLE `sma_date_format` (
@@ -286,7 +286,7 @@ CREATE TABLE `sma_date_format` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_date_format`
+-- Đang đổ dữ liệu cho bảng `sma_date_format`
 --
 
 INSERT INTO `sma_date_format` (`id`, `js`, `php`, `sql`) VALUES
@@ -300,7 +300,7 @@ INSERT INTO `sma_date_format` (`id`, `js`, `php`, `sql`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_deliveries`
+-- Cấu trúc bảng cho bảng `sma_deliveries`
 --
 
 CREATE TABLE `sma_deliveries` (
@@ -320,7 +320,7 @@ CREATE TABLE `sma_deliveries` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_departments`
+-- Cấu trúc bảng cho bảng `sma_departments`
 --
 
 CREATE TABLE `sma_departments` (
@@ -329,7 +329,7 @@ CREATE TABLE `sma_departments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_departments`
+-- Đang đổ dữ liệu cho bảng `sma_departments`
 --
 
 INSERT INTO `sma_departments` (`id`, `name`) VALUES
@@ -340,7 +340,7 @@ INSERT INTO `sma_departments` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_expenses`
+-- Cấu trúc bảng cho bảng `sma_expenses`
 --
 
 CREATE TABLE `sma_expenses` (
@@ -356,7 +356,7 @@ CREATE TABLE `sma_expenses` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_gift_cards`
+-- Cấu trúc bảng cho bảng `sma_gift_cards`
 --
 
 CREATE TABLE `sma_gift_cards` (
@@ -374,7 +374,7 @@ CREATE TABLE `sma_gift_cards` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_groups`
+-- Cấu trúc bảng cho bảng `sma_groups`
 --
 
 CREATE TABLE `sma_groups` (
@@ -384,7 +384,7 @@ CREATE TABLE `sma_groups` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_groups`
+-- Đang đổ dữ liệu cho bảng `sma_groups`
 --
 
 INSERT INTO `sma_groups` (`id`, `name`, `description`) VALUES
@@ -397,7 +397,7 @@ INSERT INTO `sma_groups` (`id`, `name`, `description`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_items`
+-- Cấu trúc bảng cho bảng `sma_items`
 --
 
 CREATE TABLE `sma_items` (
@@ -417,7 +417,7 @@ CREATE TABLE `sma_items` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `sma_items`
+-- Đang đổ dữ liệu cho bảng `sma_items`
 --
 
 INSERT INTO `sma_items` (`id`, `item`, `specification`, `size_long`, `size_wide`, `weight`, `unit_id`, `unit`, `cost`, `quantity`, `warehouse_id`, `warehouse`, `note`) VALUES
@@ -431,7 +431,7 @@ INSERT INTO `sma_items` (`id`, `item`, `specification`, `size_long`, `size_wide`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_labor_norms`
+-- Cấu trúc bảng cho bảng `sma_labor_norms`
 --
 
 CREATE TABLE `sma_labor_norms` (
@@ -444,7 +444,7 @@ CREATE TABLE `sma_labor_norms` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `sma_labor_norms`
+-- Đang đổ dữ liệu cho bảng `sma_labor_norms`
 --
 
 INSERT INTO `sma_labor_norms` (`id`, `production_id`, `product_id`, `employee_id`, `employee`, `note`) VALUES
@@ -473,7 +473,7 @@ INSERT INTO `sma_labor_norms` (`id`, `production_id`, `product_id`, `employee_id
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_login_attempts`
+-- Cấu trúc bảng cho bảng `sma_login_attempts`
 --
 
 CREATE TABLE `sma_login_attempts` (
@@ -486,7 +486,7 @@ CREATE TABLE `sma_login_attempts` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_log_productions`
+-- Cấu trúc bảng cho bảng `sma_log_productions`
 --
 
 CREATE TABLE `sma_log_productions` (
@@ -496,7 +496,7 @@ CREATE TABLE `sma_log_productions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `sma_log_productions`
+-- Đang đổ dữ liệu cho bảng `sma_log_productions`
 --
 
 INSERT INTO `sma_log_productions` (`id`, `production_id`, `product_id`) VALUES
@@ -505,7 +505,7 @@ INSERT INTO `sma_log_productions` (`id`, `production_id`, `product_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_machine`
+-- Cấu trúc bảng cho bảng `sma_machine`
 --
 
 CREATE TABLE `sma_machine` (
@@ -520,7 +520,7 @@ CREATE TABLE `sma_machine` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `sma_machine`
+-- Đang đổ dữ liệu cho bảng `sma_machine`
 --
 
 INSERT INTO `sma_machine` (`id`, `active`, `id_machine_categories`, `machine_code`, `machine_capacity`, `machine_name`, `machine_details`, `machine_note`) VALUES
@@ -538,7 +538,7 @@ INSERT INTO `sma_machine` (`id`, `active`, `id_machine_categories`, `machine_cod
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_machinery_norms`
+-- Cấu trúc bảng cho bảng `sma_machinery_norms`
 --
 
 CREATE TABLE `sma_machinery_norms` (
@@ -552,7 +552,7 @@ CREATE TABLE `sma_machinery_norms` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `sma_machinery_norms`
+-- Đang đổ dữ liệu cho bảng `sma_machinery_norms`
 --
 
 INSERT INTO `sma_machinery_norms` (`id`, `production_id`, `product_id`, `working_place_id`, `working_place`, `machine_id`, `machine`) VALUES
@@ -607,7 +607,7 @@ INSERT INTO `sma_machinery_norms` (`id`, `production_id`, `product_id`, `working
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_machine_categories`
+-- Cấu trúc bảng cho bảng `sma_machine_categories`
 --
 
 CREATE TABLE `sma_machine_categories` (
@@ -618,7 +618,7 @@ CREATE TABLE `sma_machine_categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `sma_machine_categories`
+-- Đang đổ dữ liệu cho bảng `sma_machine_categories`
 --
 
 INSERT INTO `sma_machine_categories` (`id`, `categories_name`, `categories_details`, `categories_note`) VALUES
@@ -630,7 +630,7 @@ INSERT INTO `sma_machine_categories` (`id`, `categories_name`, `categories_detai
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_material_norms`
+-- Cấu trúc bảng cho bảng `sma_material_norms`
 --
 
 CREATE TABLE `sma_material_norms` (
@@ -646,7 +646,7 @@ CREATE TABLE `sma_material_norms` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `sma_material_norms`
+-- Đang đổ dữ liệu cho bảng `sma_material_norms`
 --
 
 INSERT INTO `sma_material_norms` (`id`, `production_id`, `product_id`, `item_id`, `item`, `ord_quantity`, `quantity`, `total_quantity`, `note`) VALUES
@@ -737,7 +737,7 @@ INSERT INTO `sma_material_norms` (`id`, `production_id`, `product_id`, `item_id`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_migrations`
+-- Cấu trúc bảng cho bảng `sma_migrations`
 --
 
 CREATE TABLE `sma_migrations` (
@@ -745,7 +745,7 @@ CREATE TABLE `sma_migrations` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_migrations`
+-- Đang đổ dữ liệu cho bảng `sma_migrations`
 --
 
 INSERT INTO `sma_migrations` (`version`) VALUES
@@ -754,7 +754,7 @@ INSERT INTO `sma_migrations` (`version`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_notifications`
+-- Cấu trúc bảng cho bảng `sma_notifications`
 --
 
 CREATE TABLE `sma_notifications` (
@@ -767,7 +767,7 @@ CREATE TABLE `sma_notifications` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_notifications`
+-- Đang đổ dữ liệu cho bảng `sma_notifications`
 --
 
 INSERT INTO `sma_notifications` (`id`, `comment`, `date`, `from_date`, `till_date`, `scope`) VALUES
@@ -776,7 +776,7 @@ INSERT INTO `sma_notifications` (`id`, `comment`, `date`, `from_date`, `till_dat
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_order_ref`
+-- Cấu trúc bảng cho bảng `sma_order_ref`
 --
 
 CREATE TABLE `sma_order_ref` (
@@ -795,7 +795,7 @@ CREATE TABLE `sma_order_ref` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_order_ref`
+-- Đang đổ dữ liệu cho bảng `sma_order_ref`
 --
 
 INSERT INTO `sma_order_ref` (`ref_id`, `date`, `so`, `qu`, `po`, `to`, `pos`, `do`, `pay`, `re`, `ex`, `prod`) VALUES
@@ -804,7 +804,7 @@ INSERT INTO `sma_order_ref` (`ref_id`, `date`, `so`, `qu`, `po`, `to`, `pos`, `d
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_payments`
+-- Cấu trúc bảng cho bảng `sma_payments`
 --
 
 CREATE TABLE `sma_payments` (
@@ -833,7 +833,7 @@ CREATE TABLE `sma_payments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_payments`
+-- Đang đổ dữ liệu cho bảng `sma_payments`
 --
 
 INSERT INTO `sma_payments` (`id`, `date`, `sale_id`, `return_id`, `purchase_id`, `reference_no`, `transaction_id`, `paid_by`, `cheque_no`, `cc_no`, `cc_holder`, `cc_month`, `cc_year`, `cc_type`, `amount`, `currency`, `created_by`, `attachment`, `type`, `note`, `pos_paid`, `pos_balance`) VALUES
@@ -848,7 +848,7 @@ INSERT INTO `sma_payments` (`id`, `date`, `sale_id`, `return_id`, `purchase_id`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_payments_new`
+-- Cấu trúc bảng cho bảng `sma_payments_new`
 --
 
 CREATE TABLE `sma_payments_new` (
@@ -861,7 +861,7 @@ CREATE TABLE `sma_payments_new` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `sma_payments_new`
+-- Đang đổ dữ liệu cho bảng `sma_payments_new`
 --
 
 INSERT INTO `sma_payments_new` (`id`, `production_id`, `amount`, `date`, `paid_by`, `note`) VALUES
@@ -888,7 +888,7 @@ INSERT INTO `sma_payments_new` (`id`, `production_id`, `amount`, `date`, `paid_b
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_paypal`
+-- Cấu trúc bảng cho bảng `sma_paypal`
 --
 
 CREATE TABLE `sma_paypal` (
@@ -902,7 +902,7 @@ CREATE TABLE `sma_paypal` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_paypal`
+-- Đang đổ dữ liệu cho bảng `sma_paypal`
 --
 
 INSERT INTO `sma_paypal` (`id`, `active`, `account_email`, `paypal_currency`, `fixed_charges`, `extra_charges_my`, `extra_charges_other`) VALUES
@@ -911,7 +911,7 @@ INSERT INTO `sma_paypal` (`id`, `active`, `account_email`, `paypal_currency`, `f
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_permissions`
+-- Cấu trúc bảng cho bảng `sma_permissions`
 --
 
 CREATE TABLE `sma_permissions` (
@@ -988,7 +988,7 @@ CREATE TABLE `sma_permissions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_permissions`
+-- Đang đổ dữ liệu cho bảng `sma_permissions`
 --
 
 INSERT INTO `sma_permissions` (`id`, `group_id`, `products-index`, `products-add`, `products-edit`, `products-delete`, `products-cost`, `products-price`, `quotes-index`, `quotes-add`, `quotes-edit`, `quotes-pdf`, `quotes-email`, `quotes-delete`, `sales-index`, `sales-add`, `sales-edit`, `sales-pdf`, `sales-email`, `sales-delete`, `purchases-index`, `purchases-add`, `purchases-edit`, `purchases-pdf`, `purchases-email`, `purchases-delete`, `transfers-index`, `transfers-add`, `transfers-edit`, `transfers-pdf`, `transfers-email`, `transfers-delete`, `customers-index`, `customers-add`, `customers-edit`, `customers-delete`, `suppliers-index`, `suppliers-add`, `suppliers-edit`, `suppliers-delete`, `sales-deliveries`, `sales-add_delivery`, `sales-edit_delivery`, `sales-delete_delivery`, `sales-email_delivery`, `sales-pdf_delivery`, `sales-gift_cards`, `sales-add_gift_card`, `sales-edit_gift_card`, `sales-delete_gift_card`, `pos-index`, `sales-return_sales`, `reports-index`, `reports-warehouse_stock`, `reports-quantity_alerts`, `reports-expiry_alerts`, `reports-products`, `reports-daily_sales`, `reports-monthly_sales`, `reports-sales`, `reports-payments`, `reports-purchases`, `reports-profit_loss`, `reports-customers`, `reports-suppliers`, `reports-staff`, `reports-register`, `sales-payments`, `purchases-payments`, `purchases-expenses`) VALUES
@@ -997,7 +997,7 @@ INSERT INTO `sma_permissions` (`id`, `group_id`, `products-index`, `products-add
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_pos_register`
+-- Cấu trúc bảng cho bảng `sma_pos_register`
 --
 
 CREATE TABLE `sma_pos_register` (
@@ -1019,7 +1019,7 @@ CREATE TABLE `sma_pos_register` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_pos_register`
+-- Đang đổ dữ liệu cho bảng `sma_pos_register`
 --
 
 INSERT INTO `sma_pos_register` (`id`, `date`, `user_id`, `cash_in_hand`, `status`, `total_cash`, `total_cheques`, `total_cc_slips`, `total_cash_submitted`, `total_cheques_submitted`, `total_cc_slips_submitted`, `note`, `closed_at`, `transfer_opened_bills`, `closed_by`) VALUES
@@ -1028,7 +1028,7 @@ INSERT INTO `sma_pos_register` (`id`, `date`, `user_id`, `cash_in_hand`, `status
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_pos_settings`
+-- Cấu trúc bảng cho bảng `sma_pos_settings`
 --
 
 CREATE TABLE `sma_pos_settings` (
@@ -1074,7 +1074,7 @@ CREATE TABLE `sma_pos_settings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_pos_settings`
+-- Đang đổ dữ liệu cho bảng `sma_pos_settings`
 --
 
 INSERT INTO `sma_pos_settings` (`pos_id`, `cat_limit`, `pro_limit`, `default_category`, `default_customer`, `default_biller`, `display_time`, `cf_title1`, `cf_title2`, `cf_value1`, `cf_value2`, `receipt_printer`, `cash_drawer_codes`, `focus_add_item`, `add_manual_product`, `customer_selection`, `add_customer`, `toggle_category_slider`, `toggle_subcategory_slider`, `cancel_sale`, `suspend_sale`, `print_items_list`, `finalize_sale`, `today_sale`, `open_hold_bills`, `close_register`, `keyboard`, `pos_printers`, `java_applet`, `product_button_color`, `tooltips`, `paypal_pro`, `stripe`, `rounding`, `char_per_line`, `pin_code`, `purchase_code`, `envato_username`, `version`) VALUES
@@ -1083,7 +1083,7 @@ INSERT INTO `sma_pos_settings` (`pos_id`, `cat_limit`, `pro_limit`, `default_cat
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_productions`
+-- Cấu trúc bảng cho bảng `sma_productions`
 --
 
 CREATE TABLE `sma_productions` (
@@ -1127,7 +1127,7 @@ CREATE TABLE `sma_productions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_productions`
+-- Đang đổ dữ liệu cho bảng `sma_productions`
 --
 
 INSERT INTO `sma_productions` (`id`, `date`, `reference_no`, `customer_id`, `customer`, `biller_id`, `biller`, `warehouse_id`, `note`, `staff_note`, `total`, `product_discount`, `order_discount_id`, `total_discount`, `order_discount`, `product_tax`, `order_tax_id`, `order_tax`, `total_tax`, `shipping`, `grand_total`, `sale_status`, `payment_status`, `payment_term`, `due_date`, `created_by`, `updated_by`, `updated_at`, `total_items`, `pos`, `paid`, `return_id`, `surcharge`, `attachment`, `working`, `delivery_mode`, `created_at`) VALUES
@@ -1148,7 +1148,7 @@ INSERT INTO `sma_productions` (`id`, `date`, `reference_no`, `customer_id`, `cus
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_production_deliveries`
+-- Cấu trúc bảng cho bảng `sma_production_deliveries`
 --
 
 CREATE TABLE `sma_production_deliveries` (
@@ -1165,7 +1165,7 @@ CREATE TABLE `sma_production_deliveries` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `sma_production_deliveries`
+-- Đang đổ dữ liệu cho bảng `sma_production_deliveries`
 --
 
 INSERT INTO `sma_production_deliveries` (`id`, `production_id`, `product_id`, `delivery_quantity`, `delivery_time`, `delivery_date_start`, `delivery_date_end`, `delivery_percent`, `note`, `delivery_status`) VALUES
@@ -1213,7 +1213,7 @@ INSERT INTO `sma_production_deliveries` (`id`, `production_id`, `product_id`, `d
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_production_deliveries_new`
+-- Cấu trúc bảng cho bảng `sma_production_deliveries_new`
 --
 
 CREATE TABLE `sma_production_deliveries_new` (
@@ -1225,7 +1225,7 @@ CREATE TABLE `sma_production_deliveries_new` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_production_deliveries_new`
+-- Đang đổ dữ liệu cho bảng `sma_production_deliveries_new`
 --
 
 INSERT INTO `sma_production_deliveries_new` (`id`, `production_id`, `product_id`, `delivery_quantity`, `delivery_time`) VALUES
@@ -1242,7 +1242,7 @@ INSERT INTO `sma_production_deliveries_new` (`id`, `production_id`, `product_id`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_production_items`
+-- Cấu trúc bảng cho bảng `sma_production_items`
 --
 
 CREATE TABLE `sma_production_items` (
@@ -1271,7 +1271,7 @@ CREATE TABLE `sma_production_items` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_production_items`
+-- Đang đổ dữ liệu cho bảng `sma_production_items`
 --
 
 INSERT INTO `sma_production_items` (`id`, `sale_id`, `product_id`, `employees`, `product_code`, `product_name`, `product_type`, `option_id`, `net_unit_price`, `unit_price`, `quantity`, `balance_quantity`, `status`, `warehouse_id`, `item_tax`, `tax_rate_id`, `tax`, `discount`, `item_discount`, `subtotal`, `serial_no`, `real_unit_price`) VALUES
@@ -1423,7 +1423,7 @@ INSERT INTO `sma_production_items` (`id`, `sale_id`, `product_id`, `employees`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_production_stages`
+-- Cấu trúc bảng cho bảng `sma_production_stages`
 --
 
 CREATE TABLE `sma_production_stages` (
@@ -1445,7 +1445,7 @@ CREATE TABLE `sma_production_stages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `sma_production_stages`
+-- Đang đổ dữ liệu cho bảng `sma_production_stages`
 --
 
 INSERT INTO `sma_production_stages` (`id`, `product_id`, `production_id`, `stage_id`, `delivery_time`, `stage`, `date_start`, `date_end`, `employee_id`, `employee`, `stage_status`, `error_quantity`, `quantity`, `note`, `stage_percent`) VALUES
@@ -1719,7 +1719,7 @@ INSERT INTO `sma_production_stages` (`id`, `product_id`, `production_id`, `stage
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_production_stage_details`
+-- Cấu trúc bảng cho bảng `sma_production_stage_details`
 --
 
 CREATE TABLE `sma_production_stage_details` (
@@ -1735,7 +1735,7 @@ CREATE TABLE `sma_production_stage_details` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `sma_production_stage_details`
+-- Đang đổ dữ liệu cho bảng `sma_production_stage_details`
 --
 
 INSERT INTO `sma_production_stage_details` (`id`, `production_id`, `product_id`, `stage_id`, `complete_quantity`, `user_id`, `note`, `date`, `user_name`) VALUES
@@ -1860,7 +1860,7 @@ INSERT INTO `sma_production_stage_details` (`id`, `production_id`, `product_id`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_products`
+-- Cấu trúc bảng cho bảng `sma_products`
 --
 
 CREATE TABLE `sma_products` (
@@ -1908,7 +1908,7 @@ CREATE TABLE `sma_products` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_products`
+-- Đang đổ dữ liệu cho bảng `sma_products`
 --
 
 INSERT INTO `sma_products` (`id`, `code`, `name`, `unit`, `wage`, `cost`, `price`, `alert_quantity`, `image`, `category_id`, `subcategory_id`, `cf1`, `cf2`, `cf3`, `cf4`, `cf5`, `cf6`, `cf7`, `cf8`, `quantity`, `tax_rate`, `track_quantity`, `details`, `warehouse`, `barcode_symbology`, `file`, `product_details`, `tax_method`, `type`, `supplier1`, `supplier1price`, `supplier2`, `supplier2price`, `supplier3`, `supplier3price`, `supplier4`, `supplier4price`, `supplier5`, `supplier5price`, `quantity_config`, `product_quantity`) VALUES
@@ -1926,7 +1926,7 @@ INSERT INTO `sma_products` (`id`, `code`, `name`, `unit`, `wage`, `cost`, `price
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_product_photos`
+-- Cấu trúc bảng cho bảng `sma_product_photos`
 --
 
 CREATE TABLE `sma_product_photos` (
@@ -1938,7 +1938,7 @@ CREATE TABLE `sma_product_photos` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_product_variants`
+-- Cấu trúc bảng cho bảng `sma_product_variants`
 --
 
 CREATE TABLE `sma_product_variants` (
@@ -1951,7 +1951,7 @@ CREATE TABLE `sma_product_variants` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_product_variants`
+-- Đang đổ dữ liệu cho bảng `sma_product_variants`
 --
 
 INSERT INTO `sma_product_variants` (`id`, `product_id`, `name`, `cost`, `price`, `quantity`) VALUES
@@ -1999,7 +1999,7 @@ INSERT INTO `sma_product_variants` (`id`, `product_id`, `name`, `cost`, `price`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_purchases`
+-- Cấu trúc bảng cho bảng `sma_purchases`
 --
 
 CREATE TABLE `sma_purchases` (
@@ -2033,7 +2033,7 @@ CREATE TABLE `sma_purchases` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_purchases`
+-- Đang đổ dữ liệu cho bảng `sma_purchases`
 --
 
 INSERT INTO `sma_purchases` (`id`, `production_id`, `parent_id`, `reference_no`, `date`, `supplier_id`, `supplier`, `warehouse_id`, `note`, `total`, `product_discount`, `order_discount_id`, `order_discount`, `total_discount`, `product_tax`, `order_tax_id`, `order_tax`, `total_tax`, `shipping`, `grand_total`, `paid`, `status`, `payment_status`, `created_by`, `updated_by`, `updated_at`, `attachment`) VALUES
@@ -2057,7 +2057,7 @@ INSERT INTO `sma_purchases` (`id`, `production_id`, `parent_id`, `reference_no`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_purchase_items`
+-- Cấu trúc bảng cho bảng `sma_purchase_items`
 --
 
 CREATE TABLE `sma_purchase_items` (
@@ -2087,7 +2087,7 @@ CREATE TABLE `sma_purchase_items` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_purchase_items`
+-- Đang đổ dữ liệu cho bảng `sma_purchase_items`
 --
 
 INSERT INTO `sma_purchase_items` (`id`, `purchase_id`, `transfer_id`, `product_id`, `item_id`, `product_code`, `product_name`, `option_id`, `net_unit_cost`, `quantity`, `warehouse_id`, `item_tax`, `tax_rate_id`, `tax`, `discount`, `item_discount`, `expiry`, `subtotal`, `quantity_balance`, `date`, `status`, `unit_cost`, `real_unit_cost`) VALUES
@@ -2121,7 +2121,7 @@ INSERT INTO `sma_purchase_items` (`id`, `purchase_id`, `transfer_id`, `product_i
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_quotes`
+-- Cấu trúc bảng cho bảng `sma_quotes`
 --
 
 CREATE TABLE `sma_quotes` (
@@ -2156,7 +2156,7 @@ CREATE TABLE `sma_quotes` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_quote_items`
+-- Cấu trúc bảng cho bảng `sma_quote_items`
 --
 
 CREATE TABLE `sma_quote_items` (
@@ -2184,7 +2184,7 @@ CREATE TABLE `sma_quote_items` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_return_items`
+-- Cấu trúc bảng cho bảng `sma_return_items`
 --
 
 CREATE TABLE `sma_return_items` (
@@ -2213,7 +2213,7 @@ CREATE TABLE `sma_return_items` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_return_sales`
+-- Cấu trúc bảng cho bảng `sma_return_sales`
 --
 
 CREATE TABLE `sma_return_sales` (
@@ -2247,7 +2247,7 @@ CREATE TABLE `sma_return_sales` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_sales`
+-- Cấu trúc bảng cho bảng `sma_sales`
 --
 
 CREATE TABLE `sma_sales` (
@@ -2289,7 +2289,7 @@ CREATE TABLE `sma_sales` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_sales`
+-- Đang đổ dữ liệu cho bảng `sma_sales`
 --
 
 INSERT INTO `sma_sales` (`id`, `date`, `reference_no`, `customer_id`, `customer`, `implementation_unit`, `biller_id`, `biller`, `warehouse_id`, `note`, `staff_note`, `total`, `product_discount`, `order_discount_id`, `total_discount`, `order_discount`, `product_tax`, `order_tax_id`, `order_tax`, `total_tax`, `shipping`, `grand_total`, `sale_status`, `payment_status`, `payment_term`, `due_date`, `created_by`, `updated_by`, `updated_at`, `total_items`, `pos`, `paid`, `return_id`, `surcharge`, `attachment`) VALUES
@@ -2307,7 +2307,7 @@ INSERT INTO `sma_sales` (`id`, `date`, `reference_no`, `customer_id`, `customer`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_sale_items`
+-- Cấu trúc bảng cho bảng `sma_sale_items`
 --
 
 CREATE TABLE `sma_sale_items` (
@@ -2333,7 +2333,7 @@ CREATE TABLE `sma_sale_items` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_sale_items`
+-- Đang đổ dữ liệu cho bảng `sma_sale_items`
 --
 
 INSERT INTO `sma_sale_items` (`id`, `sale_id`, `product_id`, `product_code`, `product_name`, `product_type`, `option_id`, `net_unit_price`, `unit_price`, `quantity`, `warehouse_id`, `item_tax`, `tax_rate_id`, `tax`, `discount`, `item_discount`, `subtotal`, `serial_no`, `real_unit_price`) VALUES
@@ -2367,7 +2367,7 @@ INSERT INTO `sma_sale_items` (`id`, `sale_id`, `product_id`, `product_code`, `pr
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_sessions`
+-- Cấu trúc bảng cho bảng `sma_sessions`
 --
 
 CREATE TABLE `sma_sessions` (
@@ -2378,35 +2378,48 @@ CREATE TABLE `sma_sessions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_sessions`
+-- Đang đổ dữ liệu cho bảng `sma_sessions`
 --
 
 INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES
-('0f0c0372a9a7ced7b5a4e0e2a2cdabf90af950e9', '::1', 1507794782, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373739343736343b7265717565737465645f706167657c733a31313a2270726f64756374696f6e73223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373034353631223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
-('191d362b190fe8486cea63167754094ba59c9bdb', '::1', 1507803482, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373830333138323b7265717565737465645f706167657c733a31313a2270726f64756374696f6e73223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373034353631223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
-('249dc8687271a4ad178e114a777b0f53315d7218', '::1', 1507800723, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373830303036363b7265717565737465645f706167657c733a31313a2270726f64756374696f6e73223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373034353631223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
-('2b38ffbc05869f1ccd729f1f2a5c8a974a09dcdf', '::1', 1507796074, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373739363035363b7265717565737465645f706167657c733a31313a2270726f64756374696f6e73223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373034353631223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
-('3486c5629a5ff27980ba111d761b39683d3777ce', '::1', 1507793997, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373739333735303b7265717565737465645f706167657c733a31313a2270726f64756374696f6e73223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373034353631223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
-('3ca3fc5c00e2d7b640086df9d2c8fdeaf862488f', '::1', 1507819030, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373831393033303b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
-('3cd3fa0e3570e04c63857cb9b0bf7bb617f4ed57', '::1', 1507802420, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373830323233353b7265717565737465645f706167657c733a31313a2270726f64756374696f6e73223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373034353631223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
-('53be063d5085052e9620a12650559bfa56385ef5', '::1', 1507824227, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373832343232373b7265717565737465645f706167657c733a32323a2274696d656b6565706572732f696d706f72745f786c73223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037383233353135223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b6d6573736167657c733a34353a223c703e42e1baa16e20c491c3a320c491c4836e67206e68e1baad70207468c3a06e682063c3b46e672e3c2f703e223b5f5f63695f766172737c613a313a7b733a373a226d657373616765223b733a333a226f6c64223b7d),
-('713170b3b86e2e4a98ac553f1a441a6ffcc841d8', '::1', 1507795765, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373739353734383b7265717565737465645f706167657c733a31313a2270726f64756374696f6e73223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373034353631223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
-('7a16cdc7e66b50200752f94166a4b0489b1f1226', '::1', 1507797540, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373739373238373b7265717565737465645f706167657c733a31313a2270726f64756374696f6e73223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373034353631223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
-('7cfa8b36a29de0c48807a3d3ec5fcb20ef0b58c9', '::1', 1507797749, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373739373539333b7265717565737465645f706167657c733a31313a2270726f64756374696f6e73223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373034353631223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
-('9e55ee553cd5a8cf22368f6db53bbac7251cf53f', '::1', 1507824485, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373832343234363b7265717565737465645f706167657c733a32323a2274696d656b6565706572732f696d706f72745f786c73223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037383234323437223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b6d6573736167657c733a35343a2242e1baa36e67206368e1baa56d2063c3b46e6720c491c3a320c491c6b0e1bba36320696d706f7274207468c3a06e682063c3b46e6721223b5f5f63695f766172737c613a313a7b733a373a226d657373616765223b733a333a226f6c64223b7d),
-('a34c512247f30bb1173bde8d85ad43356d4d6503', '::1', 1507798991, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373739383937383b7265717565737465645f706167657c733a31313a2270726f64756374696f6e73223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373034353631223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
-('a62c708c929c0a43cd95c752ca24d859e5fae9dd', '::1', 1507794690, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373739343431393b7265717565737465645f706167657c733a31313a2270726f64756374696f6e73223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373034353631223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
-('a8716253f75e599f1514ce97774db7d8438f7fa6', '::1', 1507800880, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373830303837373b7265717565737465645f706167657c733a31313a2270726f64756374696f6e73223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373034353631223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
-('a9f51273f73d5dacc2917ac09faa6aa8aeb6a5bd', '::1', 1507796549, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373739363533373b7265717565737465645f706167657c733a31313a2270726f64756374696f6e73223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373034353631223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
-('b3308ede5bcd7493e9abfc7736fbd4c295226f3e', '::1', 1507819397, 0x7265717565737465645f706167657c733a32343a2274696d656b6565706572732f676574416c6c42696c6c6572223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037383136363832223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f6c6173745f726567656e65726174657c693a313530373831393339373b),
-('bb500f8e3cec447b9401881a33e9521e3bfb69f6', '::1', 1507795482, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373739353339373b7265717565737465645f706167657c733a31313a2270726f64756374696f6e73223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373034353631223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
-('df685cbf70e00c5798ebc7d790b0c369549baa5f', '::1', 1507823514, 0x7265717565737465645f706167657c733a32343a2274696d656b6565706572732f676574416c6c42696c6c6572223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037383139343032223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f6c6173745f726567656e65726174657c693a313530373832333531343b6d6573736167657c733a35343a2242e1baa36e67206368e1baa56d2063c3b46e6720c491c3a320c491c6b0e1bba36320696d706f7274207468c3a06e682063c3b46e6721223b5f5f63695f766172737c613a313a7b733a373a226d657373616765223b733a333a226f6c64223b7d),
-('f1a82ccf30c367ca147cc1829109498dd443acee', '::1', 1507823165, 0x7265717565737465645f706167657c733a32343a2274696d656b6565706572732f676574416c6c42696c6c6572223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037383139303532223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f6c6173745f726567656e65726174657c693a313530373832333136353b);
+('103d03228e08c4b0431e8c5560389eb48cedf2c4', '::1', 1507885986, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838353730393b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('21768339c1559016d8741da9b19c1db8c52ee24c', '::1', 1507886769, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838363433303b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('31b9647eef38a9e14aac541c920bcdb9b6e34e23', '::1', 1507871216, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373837313136333b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('3ad3fdc720448b4a82cc438cfea669a58be1bda5', '::1', 1507889377, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838393133313b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('3cba5a240d08d2d5c8f9e92085ff11b9604bc195', '::1', 1507883800, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838333433323b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('4434cc21e39f900767a1c709fec43f33fa71ff04', '::1', 1507885443, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838353331313b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('4a45bbdb4cb6619233e7a50d767ccb0a08f5c620', '::1', 1507888717, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838383631303b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('4b14c3562625c9e35cabcb492fed0b72be5d8978', '::1', 1507887696, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838373337353b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('4b9f7318a62ef8463c3b4f2cbccb90c860b2ee41', '::1', 1507884902, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838343630333b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('5f0136e1248a8679864d2d5c17d301ce90490253', '::1', 1507882900, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838323537323b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('6c45b1bc1dcb670217bf61b51531a4a4a9bc3e07', '::1', 1507877331, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373837373231333b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('6e46ec8dc2d7e19d4bbba15baf6303755bfc8996', '::1', 1507880221, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838303231373b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('6e5b99a81c3deaf1219d5c3af335ceaa86246400', '::1', 1507887990, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838373836323b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('6ea96c54a8235356ab735db1f1b7d81e6a578bc7', '::1', 1507886365, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838363032353b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('78b21d0c7e68a25071d53f12fbaff14ca531bf18', '::1', 1507880835, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838303534353b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('7a266a1bf31814f7bac859f7d65bd794e5456517', '::1', 1507877887, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373837373631303b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('832f3cab841b763da9414694693ee8091fefec68', '::1', 1507883376, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838333130393b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('8799fa30d511faeac16fbb8de0927ab5c9f0d3f0', '::1', 1507884167, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838333836303b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('8a02a276dc32b706699f1547d193543f11e90520', '::1', 1507882509, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838323038303b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('8cc8d3745c9472e61a9379d9e71fadd24cc22f3a', '::1', 1507881159, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838303836303b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('9436f57e2c25a85af3ff06016f6e596ff3a0a25d', '::1', 1507879109, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373837383838383b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('a68f785b2bf9c3ca6f200cedf022d8de50e17efa', '::1', 1507887273, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838373034363b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('addd9bb0a633d1b45d8bcb484e79b36ef2f07feb', '::1', 1507888533, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838383235333b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('b9234bd4a65db1eac247e77be58c7439b616b7e8', '::1', 1507881803, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838313731313b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('b9fe17e0abcd92c2bcbe5e70416b0b61c83c3242', '::1', 1507879406, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373837393335333b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('c040140ae4ad11f94d16e84004e2ce743bbfcbeb', '::1', 1507877168, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373837363838323b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('ca64c625bfe3b74ef4f838044ef684fe190988c1', '::1', 1507876535, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373837363533323b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('ccea7e71a39b7d6d89da59e10979da0abb00f582', '::1', 1507878474, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373837383235343b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('e599d18ae447b84a23b2a30c4555dfb39d1ecb3e', '::1', 1507878241, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373837373932373b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('e9b8ed91c81b71c64f18dc558d62005e7d42c14c', '::1', 1507876425, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373837363134383b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('efc294f65566c51f8fe7f491e8c3f270ee95fabe', '::1', 1507889554, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838393535343b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('fe80fcbdbf853978571a504d545fb998f5a68579', '::1', 1507871041, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373837303736373b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('ff8a9c6a3df8006ec390c5642805b1fa3fdaa10a', '::1', 1507881688, 0x5f5f63695f6c6173745f726567656e65726174657c693a313530373838313430323b7265717565737465645f706167657c733a303a22223b6964656e746974797c733a31363a226f776e657240676f6f676c652e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31363a226f776e657240676f6f676c652e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231353037373730383933223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_settings`
+-- Cấu trúc bảng cho bảng `sma_settings`
 --
 
 CREATE TABLE `sma_settings` (
@@ -2487,7 +2500,7 @@ CREATE TABLE `sma_settings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_settings`
+-- Đang đổ dữ liệu cho bảng `sma_settings`
 --
 
 INSERT INTO `sma_settings` (`setting_id`, `logo`, `logo2`, `site_name`, `language`, `default_warehouse`, `accounting_method`, `default_currency`, `default_tax_rate`, `rows_per_page`, `version`, `default_tax_rate2`, `dateformat`, `sales_prefix`, `quote_prefix`, `purchase_prefix`, `transfer_prefix`, `delivery_prefix`, `payment_prefix`, `return_prefix`, `expense_prefix`, `item_addition`, `theme`, `product_serial`, `default_discount`, `product_discount`, `discount_method`, `tax1`, `tax2`, `overselling`, `restrict_user`, `restrict_calendar`, `timezone`, `iwidth`, `iheight`, `twidth`, `theight`, `watermark`, `reg_ver`, `allow_reg`, `reg_notification`, `auto_reg`, `protocol`, `mailpath`, `smtp_host`, `smtp_user`, `smtp_pass`, `smtp_port`, `smtp_crypto`, `corn`, `customer_group`, `default_email`, `mmode`, `bc_fix`, `auto_detect_barcode`, `captcha`, `reference_format`, `racks`, `attributes`, `product_expiry`, `decimals`, `decimals_sep`, `thousands_sep`, `invoice_view`, `default_biller`, `envato_username`, `purchase_code`, `rtl`, `each_spent`, `ca_point`, `each_sale`, `sa_point`, `update`, `sac`) VALUES
@@ -2496,7 +2509,7 @@ INSERT INTO `sma_settings` (`setting_id`, `logo`, `logo2`, `site_name`, `languag
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_skrill`
+-- Cấu trúc bảng cho bảng `sma_skrill`
 --
 
 CREATE TABLE `sma_skrill` (
@@ -2511,7 +2524,7 @@ CREATE TABLE `sma_skrill` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_skrill`
+-- Đang đổ dữ liệu cho bảng `sma_skrill`
 --
 
 INSERT INTO `sma_skrill` (`id`, `active`, `account_email`, `secret_word`, `skrill_currency`, `fixed_charges`, `extra_charges_my`, `extra_charges_other`) VALUES
@@ -2520,7 +2533,7 @@ INSERT INTO `sma_skrill` (`id`, `active`, `account_email`, `secret_word`, `skril
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_subcategories`
+-- Cấu trúc bảng cho bảng `sma_subcategories`
 --
 
 CREATE TABLE `sma_subcategories` (
@@ -2534,7 +2547,7 @@ CREATE TABLE `sma_subcategories` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_suspended_bills`
+-- Cấu trúc bảng cho bảng `sma_suspended_bills`
 --
 
 CREATE TABLE `sma_suspended_bills` (
@@ -2555,7 +2568,7 @@ CREATE TABLE `sma_suspended_bills` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_suspended_items`
+-- Cấu trúc bảng cho bảng `sma_suspended_items`
 --
 
 CREATE TABLE `sma_suspended_items` (
@@ -2583,7 +2596,7 @@ CREATE TABLE `sma_suspended_items` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_tax_rates`
+-- Cấu trúc bảng cho bảng `sma_tax_rates`
 --
 
 CREATE TABLE `sma_tax_rates` (
@@ -2595,7 +2608,7 @@ CREATE TABLE `sma_tax_rates` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_tax_rates`
+-- Đang đổ dữ liệu cho bảng `sma_tax_rates`
 --
 
 INSERT INTO `sma_tax_rates` (`id`, `name`, `code`, `rate`, `type`) VALUES
@@ -2607,7 +2620,7 @@ INSERT INTO `sma_tax_rates` (`id`, `name`, `code`, `rate`, `type`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_timekeepers`
+-- Cấu trúc bảng cho bảng `sma_timekeepers`
 --
 
 CREATE TABLE `sma_timekeepers` (
@@ -2618,16 +2631,17 @@ CREATE TABLE `sma_timekeepers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_timekeepers`
+-- Đang đổ dữ liệu cho bảng `sma_timekeepers`
 --
 
 INSERT INTO `sma_timekeepers` (`id`, `department_id`, `month`, `year`) VALUES
-(21, 1, 10, 2017);
+(24, 1, 2, 2017),
+(25, 1, 7, 2017);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_timekeeper_details`
+-- Cấu trúc bảng cho bảng `sma_timekeeper_details`
 --
 
 CREATE TABLE `sma_timekeeper_details` (
@@ -2671,21 +2685,27 @@ CREATE TABLE `sma_timekeeper_details` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_timekeeper_details`
+-- Đang đổ dữ liệu cho bảng `sma_timekeeper_details`
 --
 
 INSERT INTO `sma_timekeeper_details` (`id`, `timekeeper_id`, `company_id`, `type`, `d1`, `d2`, `d3`, `d4`, `d5`, `d6`, `d7`, `d8`, `d9`, `d10`, `d11`, `d12`, `d13`, `d14`, `d15`, `d16`, `d17`, `d18`, `d19`, `d20`, `d21`, `d22`, `d23`, `d24`, `d25`, `d26`, `d27`, `d28`, `d29`, `d30`, `d31`, `total`, `overtime`) VALUES
-(56, 21, 11, 'normal', '4', '0', 'Ro', '8', 'CT', '8', 'Ro', 'CT', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', 23.5, 0),
-(57, 21, 11, 'overtime', '0', '8', '0', '0', '0', '2', '0', '0', '8', '2', '0', '3', '2', '0', '0', '0', '0', '2', '2', '0', '2', '2', '0', '0', '0', '0', '4', '0', '0', '8', '0', 0, 43),
-(58, 21, 12, 'normal', '4', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', 25.5, 0),
-(59, 21, 12, 'overtime', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 0, 0),
-(60, 21, 9, 'normal', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', 26, 0),
-(61, 21, 9, 'overtime', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 0, 0);
+(74, 24, 11, 'normal', 'Ro', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '', '', '', 23, 0),
+(75, 24, 11, 'overtime', '0', '8', '0', '0', '0', '2', '0', '0', '8', '2', '0', '3', '2', '0', '0', '0', '0', '2', '2', '0', '2', '2', '0', '0', '0', '0', '4', '0', '', '', '', 0, 32),
+(76, 24, 12, 'normal', '4', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '', '', '', 23.5, 0),
+(77, 24, 12, 'overtime', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '', '', 0, 0),
+(78, 24, 9, 'normal', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '', '', '', 24, 0),
+(79, 24, 9, 'overtime', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '', '', 0, 0),
+(80, 25, 11, 'normal', '4', '0', 'P', 'Ro', 'R', 'Đ', 'V', 'L', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', 19.5, 0),
+(81, 25, 11, 'overtime', '0', '8', '0', '0', '0', '2', '0', '0', '8', '2', '0', '3', '2', '0', '0', '0', '0', '2', '2', '0', '2', '2', '0', '0', '0', '0', '4', '0', '0', '0', '0', 0, 21),
+(82, 25, 12, 'normal', '4', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', 25.5, 0),
+(83, 25, 12, 'overtime', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 0, 0),
+(84, 25, 9, 'normal', 'P', '0', 'Ro', 'R', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', '8', '8', '8', '8', '8', '0', '8', 23, 0),
+(85, 25, 9, 'overtime', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_transfers`
+-- Cấu trúc bảng cho bảng `sma_transfers`
 --
 
 CREATE TABLE `sma_transfers` (
@@ -2711,7 +2731,7 @@ CREATE TABLE `sma_transfers` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_transfer_items`
+-- Cấu trúc bảng cho bảng `sma_transfer_items`
 --
 
 CREATE TABLE `sma_transfer_items` (
@@ -2737,7 +2757,7 @@ CREATE TABLE `sma_transfer_items` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_units`
+-- Cấu trúc bảng cho bảng `sma_units`
 --
 
 CREATE TABLE `sma_units` (
@@ -2747,7 +2767,7 @@ CREATE TABLE `sma_units` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `sma_units`
+-- Đang đổ dữ liệu cho bảng `sma_units`
 --
 
 INSERT INTO `sma_units` (`id`, `unit`, `note`) VALUES
@@ -2758,7 +2778,7 @@ INSERT INTO `sma_units` (`id`, `unit`, `note`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_users`
+-- Cấu trúc bảng cho bảng `sma_users`
 --
 
 CREATE TABLE `sma_users` (
@@ -2792,11 +2812,11 @@ CREATE TABLE `sma_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_users`
+-- Đang đổ dữ liệu cho bảng `sma_users`
 --
 
 INSERT INTO `sma_users` (`id`, `last_ip_address`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`, `avatar`, `gender`, `group_id`, `warehouse_id`, `biller_id`, `company_id`, `show_cost`, `show_price`, `award_points`) VALUES
-(1, 0x3a3a31, 0x0000, 'owner', '2c8ab736b2ccab4f50e72d5fd7d21020cbb77ae7', NULL, 'owner@google.com', NULL, NULL, NULL, '6e5e2f4c47ba10736e92891840965955f42f6f45', 1351661704, 1507824248, 1, 'Owner', 'Owner', 'Stock Manager', '012345678', NULL, 'male', 1, NULL, NULL, NULL, 0, 0, 0),
+(1, 0x3a3a31, 0x0000, 'owner', '2c8ab736b2ccab4f50e72d5fd7d21020cbb77ae7', NULL, 'owner@google.com', NULL, NULL, NULL, '6e5e2f4c47ba10736e92891840965955f42f6f45', 1351661704, 1507857084, 1, 'Owner', 'Owner', 'Stock Manager', '012345678', NULL, 'male', 1, NULL, NULL, NULL, 0, 0, 0),
 (2, 0x3a3a31, 0x3a3a31, 'tvtan06@gmail.com', 'cbe0b4851e0807748576e22fa8dc689134c78e07', NULL, 'tvtan06@gmail.com', NULL, NULL, NULL, NULL, 1497862980, 1497921746, 1, 'Tran', 'Tan', 'Foso', '097449157', NULL, 'male', 5, 1, 3, NULL, 0, 0, 0),
 (3, NULL, 0x3a3a31, 'trantan', 'b9ce6ed6f53be863a43bf1cc04ae0451b394ed2a', NULL, 'trantan@gmail.com', NULL, NULL, NULL, NULL, 1498007958, 1498007958, 1, 'Tran', 'Tan', 'Walk-in Customer', '0939701693', NULL, 'male', 3, NULL, NULL, 1, 0, 0, 0),
 (4, 0x3a3a31, 0x3a3a31, 'hva', '5c3341c973e77a19ee084a2c3496350eb94e03e3', NULL, 'hva@gmail.com', NULL, NULL, NULL, 'a4c9b2616656b62a26ab1f31d851600ceef11fe5', 1498009590, 1498093480, 1, 'fdgdf', 'dfgbf', 'Yanstore', '6786', NULL, 'male', 3, NULL, NULL, 2, 0, 0, 0),
@@ -2806,7 +2826,7 @@ INSERT INTO `sma_users` (`id`, `last_ip_address`, `ip_address`, `username`, `pas
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_user_logins`
+-- Cấu trúc bảng cho bảng `sma_user_logins`
 --
 
 CREATE TABLE `sma_user_logins` (
@@ -2819,7 +2839,7 @@ CREATE TABLE `sma_user_logins` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_user_logins`
+-- Đang đổ dữ liệu cho bảng `sma_user_logins`
 --
 
 INSERT INTO `sma_user_logins` (`id`, `user_id`, `company_id`, `ip_address`, `login`, `time`) VALUES
@@ -2996,14 +3016,12 @@ INSERT INTO `sma_user_logins` (`id`, `user_id`, `company_id`, `ip_address`, `log
 (171, 1, NULL, 0x3a3a31, 'owner@google.com', '2017-10-11 01:07:34'),
 (172, 1, NULL, 0x3a3a31, 'owner@google.com', '2017-10-11 06:49:21'),
 (173, 1, NULL, 0x3a3a31, 'owner@google.com', '2017-10-12 01:14:53'),
-(174, 1, NULL, 0x3a3a31, 'owner@google.com', '2017-10-12 13:58:02'),
-(175, 1, NULL, 0x3a3a31, 'owner@google.com', '2017-10-12 15:51:58'),
-(176, 1, NULL, 0x3a3a31, 'owner@google.com', '2017-10-12 16:04:08');
+(174, 1, NULL, 0x3a3a31, 'owner@google.com', '2017-10-13 01:11:25');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_variants`
+-- Cấu trúc bảng cho bảng `sma_variants`
 --
 
 CREATE TABLE `sma_variants` (
@@ -3013,7 +3031,7 @@ CREATE TABLE `sma_variants` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_variants`
+-- Đang đổ dữ liệu cho bảng `sma_variants`
 --
 
 INSERT INTO `sma_variants` (`id`, `name`, `percent`) VALUES
@@ -3029,7 +3047,7 @@ INSERT INTO `sma_variants` (`id`, `name`, `percent`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_warehouses`
+-- Cấu trúc bảng cho bảng `sma_warehouses`
 --
 
 CREATE TABLE `sma_warehouses` (
@@ -3043,7 +3061,7 @@ CREATE TABLE `sma_warehouses` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_warehouses`
+-- Đang đổ dữ liệu cho bảng `sma_warehouses`
 --
 
 INSERT INTO `sma_warehouses` (`id`, `code`, `name`, `address`, `map`, `phone`, `email`) VALUES
@@ -3053,7 +3071,7 @@ INSERT INTO `sma_warehouses` (`id`, `code`, `name`, `address`, `map`, `phone`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_warehouses_products`
+-- Cấu trúc bảng cho bảng `sma_warehouses_products`
 --
 
 CREATE TABLE `sma_warehouses_products` (
@@ -3066,7 +3084,7 @@ CREATE TABLE `sma_warehouses_products` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `sma_warehouses_products`
+-- Đang đổ dữ liệu cho bảng `sma_warehouses_products`
 --
 
 INSERT INTO `sma_warehouses_products` (`id`, `product_id`, `item_id`, `warehouse_id`, `quantity`, `rack`) VALUES
@@ -3091,7 +3109,7 @@ INSERT INTO `sma_warehouses_products` (`id`, `product_id`, `item_id`, `warehouse
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_warehouses_products_variants`
+-- Cấu trúc bảng cho bảng `sma_warehouses_products_variants`
 --
 
 CREATE TABLE `sma_warehouses_products_variants` (
@@ -3106,7 +3124,7 @@ CREATE TABLE `sma_warehouses_products_variants` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_working_places`
+-- Cấu trúc bảng cho bảng `sma_working_places`
 --
 
 CREATE TABLE `sma_working_places` (
@@ -3118,7 +3136,7 @@ CREATE TABLE `sma_working_places` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `sma_working_places`
+-- Đang đổ dữ liệu cho bảng `sma_working_places`
 --
 
 INSERT INTO `sma_working_places` (`id`, `working_place`, `phone`, `address`, `note`) VALUES
@@ -3130,7 +3148,7 @@ INSERT INTO `sma_working_places` (`id`, `working_place`, `phone`, `address`, `no
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sma_working_place_items`
+-- Cấu trúc bảng cho bảng `sma_working_place_items`
 --
 
 CREATE TABLE `sma_working_place_items` (
@@ -3140,7 +3158,7 @@ CREATE TABLE `sma_working_place_items` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `sma_working_place_items`
+-- Đang đổ dữ liệu cho bảng `sma_working_place_items`
 --
 
 INSERT INTO `sma_working_place_items` (`id`, `working_place_id`, `machine_id`) VALUES
@@ -3156,43 +3174,43 @@ INSERT INTO `sma_working_place_items` (`id`, `working_place_id`, `machine_id`) V
 (133, 31, 8);
 
 --
--- Indexes for dumped tables
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `sma_adjustments`
+-- Chỉ mục cho bảng `sma_adjustments`
 --
 ALTER TABLE `sma_adjustments`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_calendar`
+-- Chỉ mục cho bảng `sma_calendar`
 --
 ALTER TABLE `sma_calendar`
   ADD PRIMARY KEY (`date`);
 
 --
--- Indexes for table `sma_captcha`
+-- Chỉ mục cho bảng `sma_captcha`
 --
 ALTER TABLE `sma_captcha`
   ADD PRIMARY KEY (`captcha_id`),
   ADD KEY `word` (`word`);
 
 --
--- Indexes for table `sma_categories`
+-- Chỉ mục cho bảng `sma_categories`
 --
 ALTER TABLE `sma_categories`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
 
 --
--- Indexes for table `sma_combo_items`
+-- Chỉ mục cho bảng `sma_combo_items`
 --
 ALTER TABLE `sma_combo_items`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_companies`
+-- Chỉ mục cho bảng `sma_companies`
 --
 ALTER TABLE `sma_companies`
   ADD PRIMARY KEY (`id`),
@@ -3200,183 +3218,183 @@ ALTER TABLE `sma_companies`
   ADD KEY `group_id_2` (`group_id`);
 
 --
--- Indexes for table `sma_completed_products`
+-- Chỉ mục cho bảng `sma_completed_products`
 --
 ALTER TABLE `sma_completed_products`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_costing`
+-- Chỉ mục cho bảng `sma_costing`
 --
 ALTER TABLE `sma_costing`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_currencies`
+-- Chỉ mục cho bảng `sma_currencies`
 --
 ALTER TABLE `sma_currencies`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_customer_groups`
+-- Chỉ mục cho bảng `sma_customer_groups`
 --
 ALTER TABLE `sma_customer_groups`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_date_format`
+-- Chỉ mục cho bảng `sma_date_format`
 --
 ALTER TABLE `sma_date_format`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_deliveries`
+-- Chỉ mục cho bảng `sma_deliveries`
 --
 ALTER TABLE `sma_deliveries`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_departments`
+-- Chỉ mục cho bảng `sma_departments`
 --
 ALTER TABLE `sma_departments`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_expenses`
+-- Chỉ mục cho bảng `sma_expenses`
 --
 ALTER TABLE `sma_expenses`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_gift_cards`
+-- Chỉ mục cho bảng `sma_gift_cards`
 --
 ALTER TABLE `sma_gift_cards`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `card_no` (`card_no`);
 
 --
--- Indexes for table `sma_groups`
+-- Chỉ mục cho bảng `sma_groups`
 --
 ALTER TABLE `sma_groups`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_items`
+-- Chỉ mục cho bảng `sma_items`
 --
 ALTER TABLE `sma_items`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_labor_norms`
+-- Chỉ mục cho bảng `sma_labor_norms`
 --
 ALTER TABLE `sma_labor_norms`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_login_attempts`
+-- Chỉ mục cho bảng `sma_login_attempts`
 --
 ALTER TABLE `sma_login_attempts`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_log_productions`
+-- Chỉ mục cho bảng `sma_log_productions`
 --
 ALTER TABLE `sma_log_productions`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_machine`
+-- Chỉ mục cho bảng `sma_machine`
 --
 ALTER TABLE `sma_machine`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_machinery_norms`
+-- Chỉ mục cho bảng `sma_machinery_norms`
 --
 ALTER TABLE `sma_machinery_norms`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_machine_categories`
+-- Chỉ mục cho bảng `sma_machine_categories`
 --
 ALTER TABLE `sma_machine_categories`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_material_norms`
+-- Chỉ mục cho bảng `sma_material_norms`
 --
 ALTER TABLE `sma_material_norms`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_notifications`
+-- Chỉ mục cho bảng `sma_notifications`
 --
 ALTER TABLE `sma_notifications`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_order_ref`
+-- Chỉ mục cho bảng `sma_order_ref`
 --
 ALTER TABLE `sma_order_ref`
   ADD PRIMARY KEY (`ref_id`);
 
 --
--- Indexes for table `sma_payments`
+-- Chỉ mục cho bảng `sma_payments`
 --
 ALTER TABLE `sma_payments`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_payments_new`
+-- Chỉ mục cho bảng `sma_payments_new`
 --
 ALTER TABLE `sma_payments_new`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_paypal`
+-- Chỉ mục cho bảng `sma_paypal`
 --
 ALTER TABLE `sma_paypal`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_permissions`
+-- Chỉ mục cho bảng `sma_permissions`
 --
 ALTER TABLE `sma_permissions`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_pos_register`
+-- Chỉ mục cho bảng `sma_pos_register`
 --
 ALTER TABLE `sma_pos_register`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_pos_settings`
+-- Chỉ mục cho bảng `sma_pos_settings`
 --
 ALTER TABLE `sma_pos_settings`
   ADD PRIMARY KEY (`pos_id`);
 
 --
--- Indexes for table `sma_productions`
+-- Chỉ mục cho bảng `sma_productions`
 --
 ALTER TABLE `sma_productions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
 
 --
--- Indexes for table `sma_production_deliveries`
+-- Chỉ mục cho bảng `sma_production_deliveries`
 --
 ALTER TABLE `sma_production_deliveries`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_production_deliveries_new`
+-- Chỉ mục cho bảng `sma_production_deliveries_new`
 --
 ALTER TABLE `sma_production_deliveries_new`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_production_items`
+-- Chỉ mục cho bảng `sma_production_items`
 --
 ALTER TABLE `sma_production_items`
   ADD PRIMARY KEY (`id`),
@@ -3386,19 +3404,19 @@ ALTER TABLE `sma_production_items`
   ADD KEY `sale_id_2` (`sale_id`,`product_id`);
 
 --
--- Indexes for table `sma_production_stages`
+-- Chỉ mục cho bảng `sma_production_stages`
 --
 ALTER TABLE `sma_production_stages`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_production_stage_details`
+-- Chỉ mục cho bảng `sma_production_stage_details`
 --
 ALTER TABLE `sma_production_stage_details`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_products`
+-- Chỉ mục cho bảng `sma_products`
 --
 ALTER TABLE `sma_products`
   ADD PRIMARY KEY (`id`),
@@ -3409,26 +3427,26 @@ ALTER TABLE `sma_products`
   ADD KEY `category_id_2` (`category_id`);
 
 --
--- Indexes for table `sma_product_photos`
+-- Chỉ mục cho bảng `sma_product_photos`
 --
 ALTER TABLE `sma_product_photos`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_product_variants`
+-- Chỉ mục cho bảng `sma_product_variants`
 --
 ALTER TABLE `sma_product_variants`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_purchases`
+-- Chỉ mục cho bảng `sma_purchases`
 --
 ALTER TABLE `sma_purchases`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
 
 --
--- Indexes for table `sma_purchase_items`
+-- Chỉ mục cho bảng `sma_purchase_items`
 --
 ALTER TABLE `sma_purchase_items`
   ADD PRIMARY KEY (`id`),
@@ -3436,14 +3454,14 @@ ALTER TABLE `sma_purchase_items`
   ADD KEY `product_id` (`product_id`);
 
 --
--- Indexes for table `sma_quotes`
+-- Chỉ mục cho bảng `sma_quotes`
 --
 ALTER TABLE `sma_quotes`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
 
 --
--- Indexes for table `sma_quote_items`
+-- Chỉ mục cho bảng `sma_quote_items`
 --
 ALTER TABLE `sma_quote_items`
   ADD PRIMARY KEY (`id`),
@@ -3451,7 +3469,7 @@ ALTER TABLE `sma_quote_items`
   ADD KEY `product_id` (`product_id`);
 
 --
--- Indexes for table `sma_return_items`
+-- Chỉ mục cho bảng `sma_return_items`
 --
 ALTER TABLE `sma_return_items`
   ADD PRIMARY KEY (`id`),
@@ -3461,21 +3479,21 @@ ALTER TABLE `sma_return_items`
   ADD KEY `sale_id_2` (`sale_id`,`product_id`);
 
 --
--- Indexes for table `sma_return_sales`
+-- Chỉ mục cho bảng `sma_return_sales`
 --
 ALTER TABLE `sma_return_sales`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
 
 --
--- Indexes for table `sma_sales`
+-- Chỉ mục cho bảng `sma_sales`
 --
 ALTER TABLE `sma_sales`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
 
 --
--- Indexes for table `sma_sale_items`
+-- Chỉ mục cho bảng `sma_sale_items`
 --
 ALTER TABLE `sma_sale_items`
   ADD PRIMARY KEY (`id`),
@@ -3485,69 +3503,69 @@ ALTER TABLE `sma_sale_items`
   ADD KEY `sale_id_2` (`sale_id`,`product_id`);
 
 --
--- Indexes for table `sma_sessions`
+-- Chỉ mục cho bảng `sma_sessions`
 --
 ALTER TABLE `sma_sessions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `ci_sessions_timestamp` (`timestamp`);
 
 --
--- Indexes for table `sma_settings`
+-- Chỉ mục cho bảng `sma_settings`
 --
 ALTER TABLE `sma_settings`
   ADD PRIMARY KEY (`setting_id`);
 
 --
--- Indexes for table `sma_skrill`
+-- Chỉ mục cho bảng `sma_skrill`
 --
 ALTER TABLE `sma_skrill`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_subcategories`
+-- Chỉ mục cho bảng `sma_subcategories`
 --
 ALTER TABLE `sma_subcategories`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_suspended_bills`
+-- Chỉ mục cho bảng `sma_suspended_bills`
 --
 ALTER TABLE `sma_suspended_bills`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_suspended_items`
+-- Chỉ mục cho bảng `sma_suspended_items`
 --
 ALTER TABLE `sma_suspended_items`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_tax_rates`
+-- Chỉ mục cho bảng `sma_tax_rates`
 --
 ALTER TABLE `sma_tax_rates`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_timekeepers`
+-- Chỉ mục cho bảng `sma_timekeepers`
 --
 ALTER TABLE `sma_timekeepers`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_timekeeper_details`
+-- Chỉ mục cho bảng `sma_timekeeper_details`
 --
 ALTER TABLE `sma_timekeeper_details`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_transfers`
+-- Chỉ mục cho bảng `sma_transfers`
 --
 ALTER TABLE `sma_transfers`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
 
 --
--- Indexes for table `sma_transfer_items`
+-- Chỉ mục cho bảng `sma_transfer_items`
 --
 ALTER TABLE `sma_transfer_items`
   ADD PRIMARY KEY (`id`),
@@ -3555,13 +3573,13 @@ ALTER TABLE `sma_transfer_items`
   ADD KEY `product_id` (`product_id`);
 
 --
--- Indexes for table `sma_units`
+-- Chỉ mục cho bảng `sma_units`
 --
 ALTER TABLE `sma_units`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_users`
+-- Chỉ mục cho bảng `sma_users`
 --
 ALTER TABLE `sma_users`
   ADD PRIMARY KEY (`id`),
@@ -3569,26 +3587,26 @@ ALTER TABLE `sma_users`
   ADD KEY `group_id_2` (`group_id`,`company_id`);
 
 --
--- Indexes for table `sma_user_logins`
+-- Chỉ mục cho bảng `sma_user_logins`
 --
 ALTER TABLE `sma_user_logins`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_variants`
+-- Chỉ mục cho bảng `sma_variants`
 --
 ALTER TABLE `sma_variants`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_warehouses`
+-- Chỉ mục cho bảng `sma_warehouses`
 --
 ALTER TABLE `sma_warehouses`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
 
 --
--- Indexes for table `sma_warehouses_products`
+-- Chỉ mục cho bảng `sma_warehouses_products`
 --
 ALTER TABLE `sma_warehouses_products`
   ADD PRIMARY KEY (`id`),
@@ -3596,7 +3614,7 @@ ALTER TABLE `sma_warehouses_products`
   ADD KEY `warehouse_id` (`warehouse_id`);
 
 --
--- Indexes for table `sma_warehouses_products_variants`
+-- Chỉ mục cho bảng `sma_warehouses_products_variants`
 --
 ALTER TABLE `sma_warehouses_products_variants`
   ADD PRIMARY KEY (`id`),
@@ -3605,333 +3623,333 @@ ALTER TABLE `sma_warehouses_products_variants`
   ADD KEY `warehouse_id` (`warehouse_id`);
 
 --
--- Indexes for table `sma_working_places`
+-- Chỉ mục cho bảng `sma_working_places`
 --
 ALTER TABLE `sma_working_places`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sma_working_place_items`
+-- Chỉ mục cho bảng `sma_working_place_items`
 --
 ALTER TABLE `sma_working_place_items`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT cho các bảng đã đổ
 --
 
 --
--- AUTO_INCREMENT for table `sma_adjustments`
+-- AUTO_INCREMENT cho bảng `sma_adjustments`
 --
 ALTER TABLE `sma_adjustments`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `sma_captcha`
+-- AUTO_INCREMENT cho bảng `sma_captcha`
 --
 ALTER TABLE `sma_captcha`
   MODIFY `captcha_id` bigint(13) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
--- AUTO_INCREMENT for table `sma_categories`
+-- AUTO_INCREMENT cho bảng `sma_categories`
 --
 ALTER TABLE `sma_categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
--- AUTO_INCREMENT for table `sma_combo_items`
+-- AUTO_INCREMENT cho bảng `sma_combo_items`
 --
 ALTER TABLE `sma_combo_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `sma_companies`
+-- AUTO_INCREMENT cho bảng `sma_companies`
 --
 ALTER TABLE `sma_companies`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
--- AUTO_INCREMENT for table `sma_completed_products`
+-- AUTO_INCREMENT cho bảng `sma_completed_products`
 --
 ALTER TABLE `sma_completed_products`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
--- AUTO_INCREMENT for table `sma_costing`
+-- AUTO_INCREMENT cho bảng `sma_costing`
 --
 ALTER TABLE `sma_costing`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
--- AUTO_INCREMENT for table `sma_currencies`
+-- AUTO_INCREMENT cho bảng `sma_currencies`
 --
 ALTER TABLE `sma_currencies`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
--- AUTO_INCREMENT for table `sma_customer_groups`
+-- AUTO_INCREMENT cho bảng `sma_customer_groups`
 --
 ALTER TABLE `sma_customer_groups`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
--- AUTO_INCREMENT for table `sma_date_format`
+-- AUTO_INCREMENT cho bảng `sma_date_format`
 --
 ALTER TABLE `sma_date_format`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
--- AUTO_INCREMENT for table `sma_deliveries`
+-- AUTO_INCREMENT cho bảng `sma_deliveries`
 --
 ALTER TABLE `sma_deliveries`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `sma_departments`
+-- AUTO_INCREMENT cho bảng `sma_departments`
 --
 ALTER TABLE `sma_departments`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
--- AUTO_INCREMENT for table `sma_expenses`
+-- AUTO_INCREMENT cho bảng `sma_expenses`
 --
 ALTER TABLE `sma_expenses`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `sma_gift_cards`
+-- AUTO_INCREMENT cho bảng `sma_gift_cards`
 --
 ALTER TABLE `sma_gift_cards`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `sma_groups`
+-- AUTO_INCREMENT cho bảng `sma_groups`
 --
 ALTER TABLE `sma_groups`
   MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
--- AUTO_INCREMENT for table `sma_items`
+-- AUTO_INCREMENT cho bảng `sma_items`
 --
 ALTER TABLE `sma_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
--- AUTO_INCREMENT for table `sma_labor_norms`
+-- AUTO_INCREMENT cho bảng `sma_labor_norms`
 --
 ALTER TABLE `sma_labor_norms`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 --
--- AUTO_INCREMENT for table `sma_login_attempts`
+-- AUTO_INCREMENT cho bảng `sma_login_attempts`
 --
 ALTER TABLE `sma_login_attempts`
   MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `sma_log_productions`
+-- AUTO_INCREMENT cho bảng `sma_log_productions`
 --
 ALTER TABLE `sma_log_productions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
--- AUTO_INCREMENT for table `sma_machine`
+-- AUTO_INCREMENT cho bảng `sma_machine`
 --
 ALTER TABLE `sma_machine`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
--- AUTO_INCREMENT for table `sma_machinery_norms`
+-- AUTO_INCREMENT cho bảng `sma_machinery_norms`
 --
 ALTER TABLE `sma_machinery_norms`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 --
--- AUTO_INCREMENT for table `sma_machine_categories`
+-- AUTO_INCREMENT cho bảng `sma_machine_categories`
 --
 ALTER TABLE `sma_machine_categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
--- AUTO_INCREMENT for table `sma_material_norms`
+-- AUTO_INCREMENT cho bảng `sma_material_norms`
 --
 ALTER TABLE `sma_material_norms`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=190;
 --
--- AUTO_INCREMENT for table `sma_notifications`
+-- AUTO_INCREMENT cho bảng `sma_notifications`
 --
 ALTER TABLE `sma_notifications`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
--- AUTO_INCREMENT for table `sma_order_ref`
+-- AUTO_INCREMENT cho bảng `sma_order_ref`
 --
 ALTER TABLE `sma_order_ref`
   MODIFY `ref_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
--- AUTO_INCREMENT for table `sma_payments`
+-- AUTO_INCREMENT cho bảng `sma_payments`
 --
 ALTER TABLE `sma_payments`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
--- AUTO_INCREMENT for table `sma_payments_new`
+-- AUTO_INCREMENT cho bảng `sma_payments_new`
 --
 ALTER TABLE `sma_payments_new`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 --
--- AUTO_INCREMENT for table `sma_permissions`
+-- AUTO_INCREMENT cho bảng `sma_permissions`
 --
 ALTER TABLE `sma_permissions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
--- AUTO_INCREMENT for table `sma_pos_register`
+-- AUTO_INCREMENT cho bảng `sma_pos_register`
 --
 ALTER TABLE `sma_pos_register`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
--- AUTO_INCREMENT for table `sma_productions`
+-- AUTO_INCREMENT cho bảng `sma_productions`
 --
 ALTER TABLE `sma_productions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
 --
--- AUTO_INCREMENT for table `sma_production_deliveries`
+-- AUTO_INCREMENT cho bảng `sma_production_deliveries`
 --
 ALTER TABLE `sma_production_deliveries`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=183;
 --
--- AUTO_INCREMENT for table `sma_production_deliveries_new`
+-- AUTO_INCREMENT cho bảng `sma_production_deliveries_new`
 --
 ALTER TABLE `sma_production_deliveries_new`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 --
--- AUTO_INCREMENT for table `sma_production_items`
+-- AUTO_INCREMENT cho bảng `sma_production_items`
 --
 ALTER TABLE `sma_production_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=409;
 --
--- AUTO_INCREMENT for table `sma_production_stages`
+-- AUTO_INCREMENT cho bảng `sma_production_stages`
 --
 ALTER TABLE `sma_production_stages`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=496;
 --
--- AUTO_INCREMENT for table `sma_production_stage_details`
+-- AUTO_INCREMENT cho bảng `sma_production_stage_details`
 --
 ALTER TABLE `sma_production_stage_details`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=203;
 --
--- AUTO_INCREMENT for table `sma_products`
+-- AUTO_INCREMENT cho bảng `sma_products`
 --
 ALTER TABLE `sma_products`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 --
--- AUTO_INCREMENT for table `sma_product_photos`
+-- AUTO_INCREMENT cho bảng `sma_product_photos`
 --
 ALTER TABLE `sma_product_photos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `sma_product_variants`
+-- AUTO_INCREMENT cho bảng `sma_product_variants`
 --
 ALTER TABLE `sma_product_variants`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 --
--- AUTO_INCREMENT for table `sma_purchases`
+-- AUTO_INCREMENT cho bảng `sma_purchases`
 --
 ALTER TABLE `sma_purchases`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=241;
 --
--- AUTO_INCREMENT for table `sma_purchase_items`
+-- AUTO_INCREMENT cho bảng `sma_purchase_items`
 --
 ALTER TABLE `sma_purchase_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=675;
 --
--- AUTO_INCREMENT for table `sma_quotes`
+-- AUTO_INCREMENT cho bảng `sma_quotes`
 --
 ALTER TABLE `sma_quotes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `sma_quote_items`
+-- AUTO_INCREMENT cho bảng `sma_quote_items`
 --
 ALTER TABLE `sma_quote_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `sma_return_items`
+-- AUTO_INCREMENT cho bảng `sma_return_items`
 --
 ALTER TABLE `sma_return_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `sma_return_sales`
+-- AUTO_INCREMENT cho bảng `sma_return_sales`
 --
 ALTER TABLE `sma_return_sales`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `sma_sales`
+-- AUTO_INCREMENT cho bảng `sma_sales`
 --
 ALTER TABLE `sma_sales`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
--- AUTO_INCREMENT for table `sma_sale_items`
+-- AUTO_INCREMENT cho bảng `sma_sale_items`
 --
 ALTER TABLE `sma_sale_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 --
--- AUTO_INCREMENT for table `sma_subcategories`
+-- AUTO_INCREMENT cho bảng `sma_subcategories`
 --
 ALTER TABLE `sma_subcategories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `sma_suspended_bills`
+-- AUTO_INCREMENT cho bảng `sma_suspended_bills`
 --
 ALTER TABLE `sma_suspended_bills`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `sma_suspended_items`
+-- AUTO_INCREMENT cho bảng `sma_suspended_items`
 --
 ALTER TABLE `sma_suspended_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `sma_tax_rates`
+-- AUTO_INCREMENT cho bảng `sma_tax_rates`
 --
 ALTER TABLE `sma_tax_rates`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
--- AUTO_INCREMENT for table `sma_timekeepers`
+-- AUTO_INCREMENT cho bảng `sma_timekeepers`
 --
 ALTER TABLE `sma_timekeepers`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 --
--- AUTO_INCREMENT for table `sma_timekeeper_details`
+-- AUTO_INCREMENT cho bảng `sma_timekeeper_details`
 --
 ALTER TABLE `sma_timekeeper_details`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 --
--- AUTO_INCREMENT for table `sma_transfers`
+-- AUTO_INCREMENT cho bảng `sma_transfers`
 --
 ALTER TABLE `sma_transfers`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `sma_transfer_items`
+-- AUTO_INCREMENT cho bảng `sma_transfer_items`
 --
 ALTER TABLE `sma_transfer_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `sma_units`
+-- AUTO_INCREMENT cho bảng `sma_units`
 --
 ALTER TABLE `sma_units`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
--- AUTO_INCREMENT for table `sma_users`
+-- AUTO_INCREMENT cho bảng `sma_users`
 --
 ALTER TABLE `sma_users`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
--- AUTO_INCREMENT for table `sma_user_logins`
+-- AUTO_INCREMENT cho bảng `sma_user_logins`
 --
 ALTER TABLE `sma_user_logins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=177;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=175;
 --
--- AUTO_INCREMENT for table `sma_variants`
+-- AUTO_INCREMENT cho bảng `sma_variants`
 --
 ALTER TABLE `sma_variants`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
--- AUTO_INCREMENT for table `sma_warehouses`
+-- AUTO_INCREMENT cho bảng `sma_warehouses`
 --
 ALTER TABLE `sma_warehouses`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
--- AUTO_INCREMENT for table `sma_warehouses_products`
+-- AUTO_INCREMENT cho bảng `sma_warehouses_products`
 --
 ALTER TABLE `sma_warehouses_products`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 --
--- AUTO_INCREMENT for table `sma_warehouses_products_variants`
+-- AUTO_INCREMENT cho bảng `sma_warehouses_products_variants`
 --
 ALTER TABLE `sma_warehouses_products_variants`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `sma_working_places`
+-- AUTO_INCREMENT cho bảng `sma_working_places`
 --
 ALTER TABLE `sma_working_places`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 --
--- AUTO_INCREMENT for table `sma_working_place_items`
+-- AUTO_INCREMENT cho bảng `sma_working_place_items`
 --
 ALTER TABLE `sma_working_place_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;COMMIT;

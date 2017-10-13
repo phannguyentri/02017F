@@ -6,8 +6,15 @@
         <div class="row">
             <div class="col-lg-12">
 
-                <div class="row">
-                  <div class="col-md-4">
+                  <div class="well well-small">
+                    <a href="<?php echo base_url(); ?>assets/xls/timekeepers_import.xlsx" class="btn btn-primary pull-right"><i class="fa fa-download"></i> Tải file mẫu</a>
+                      <span class="text-info"><b>0 đến 24</b></span> là những số hợp lệ bạn có thể điền vào bảng chấm công.
+                      </br>
+                      <span class="text-info"><b>P, Ro, R, Đ, V, L</b></span> là những từ hợp lệ bạn có thể điền vào bảng chấm công.</br>
+                      <span class="text-warning">Vui lòng nhập theo quy định này</span>
+                  </div>
+
+                  <div class="col-md-3">
 
                     <div class="form-group">
                       <label>Năm</label>
@@ -25,8 +32,9 @@
                          ?>
                       </select>
                     </div>
+                  </div>
 
-
+                  <div class="col-md-3">
                     <div class="form-group">
                       <label>Tháng</label>
 
@@ -43,7 +51,9 @@
                          ?>
                       </select>
                     </div>
+                  </div>
 
+                  <div class="col-md-3">
                     <div class="form-group">
                         <label>Phòng ban</label>
                         <select name="department" class="form-control select" id="department" style="width: 100%;">
@@ -55,41 +65,49 @@
                         </select>
                     </div>
 
-                    <!-- <h1><?php echo $this->security->get_csrf_hash(); ?></h1> -->
+                  </div>
 
+                  <div class="col-md-3" style="margin-top: 15px;">
+                    <div class="form-group">
+                      <input type="submit" value="Chấm công" id="btn-show" class="btn btn-success"
+                       style="margin-top: 15px;">
+                    </div>
+                  </div>
 
-                    <div class="controls">
-                        <div id="J_calenderWrapper">
-                            <table class="table table-bordered">
+                  <div class="col-md-12">
+                    <div style="overflow-x:scroll;">
+                      <div class="table-responsive">
+                          <div id="J_calenderWrapper">
+                            <table class="table" style="width:1000px; max-width:1000px; ">
                                 <thead></thead>
                                 <tbody id="J_timedSheet">
-
                                 </tbody>
                             </table>
-                        </div>
-                    </div>
-
-                      <!-- <p id="J_dataDisplay" style="color:#aaaaaa;font-family: 'Arial';"></p> -->
-
-                    <div class="form-group">
-                      <div class="controls">
-                        <input type="submit" name="add_user" value="Lưu" id="btn-save" class="btn btn-primary" disabled>
+                          </div>
                       </div>
                     </div>
-
                   </div>
-                </div>
+
+
+
+                  <div class="col-md-3" style="margin-top: 15px;">
+                    <div class="form-group">
+                      <div class="controls">
+                        <input type="submit" name="add_user" value="Lưu bảng chấm công" id="btn-save" class="btn btn-primary" disabled>
+                      </div>
+                    </div>
+                  </div>
+
             </div>
 
-                <p></p>
-
-                <?php echo form_close(); ?>
             </div>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
+    var year = null;
+    var month = null;
   /**
    * count all date in month and get current year
    * @param  integer month
@@ -98,56 +116,111 @@
    */
   function daysInMonth(month, year) {
     time = new Date(year, month, 0);
-    // return data = {
-    //   'countDays' : time.getDate(),
-    //   'year' : time.getFullYear()
-    // }
     return time.getDate();
-  }
-    /**
-     * @param {int} The month number, 0 based
-     * @param {int} The year, not zero based, required to account for leap years
-     * @return {Date[]} List with date objects for each day of the month
-     */
-  function getDaysInMonth(month, year) {
-       // Since no month has fewer than 28 days
-       var date = new Date(year, month, 1);
-       var days = [];
-       console.log('month', month, 'date.getMonth()', date.getMonth())
-       while (date.getMonth() === month) {
-          days.push(new Date(date));
-          date.setDate(date.getDate() + 1);
-       }
-       return days;
   }
 
   var sheetContentData = [];
+  var timekeeperDetailIds = null;
   $(function() {
       $(document).on('click', '.TimeSheet-cell', function() {
         const input = prompt('Nhập thay đổi: ');
         if(input != null) {
-          if ((input > 0 && input <= 24) || (input == "CT" || input == "P" || input == "Ro" || input == "R" || input == "Ô" || input == "Đ"
-           || input == "NB" || input == "V" || input == "L")) {
-            $(this).text(input);
+          if ((input >= 0 && input <= 24) || (input == "CT" || input == "P" || input == "Ro" || input == "R" || input == "Ô" || input == "Đ" || input == "NB" || input == "V" || input == "L")) {
+            if (input == 0) {
+              $(this).text('');
+            }else{
+              $(this).text(input);
+            }
+
             sheetContentData[$(this).attr('data-row')][$(this).attr('data-col')] = input;
+
+            totalHours = 0;
+            totalOvertime = 0;
+            sundayHours = 0;
+            p   = 0;
+            ro  = 0;
+            r   = 0;
+            d   = 0;
+            v   = 0;
+            l   = 0;
+            isOverTime = ($(this).attr('data-row') % 2 != 0) ? true : false;
+
+
+            var myDate = new Date();
+            myDate.setFullYear(year);
+            myDate.setMonth(parseInt(month)-1);
+
+            for (var i = 0; i < sheetContentData[$(this).attr('data-row')].length; i++) {
+              hours = (sheetContentData[$(this).attr('data-row')][i] === 0) ? 0 : sheetContentData[$(this).attr('data-row')][i];
+
+              if (hours === "P") {
+                  p++;
+              }else if(hours === "Ro"){
+                  ro++;
+              }else if(hours === "R"){
+                  r++;
+              }else if(hours === "Đ"){
+                  d++;
+              }else if(hours === "V"){
+                  v++;
+              }else if(hours === "L"){
+                  l++;
+              }else{
+                if (!isNaN(parseInt(hours))) {
+                  totalHours = totalHours + parseInt(hours);
+                }
+              }
+
+              myDate.setDate(i+1);
+
+              if (isOverTime) {
+                  if (myDate.getDay() != 0) {
+                    if (!isNaN(parseInt(hours))) {
+                      totalOvertime = totalOvertime + parseInt(hours);
+                    }
+
+                  }else{
+                    if (!isNaN(parseInt(hours))) {
+                      sundayHours = sundayHours + parseInt(hours);
+                    }
+                  }
+              }
+
+            }
+
+            if (isOverTime) {
+              $(this).parent().find('.sunday-hours').text(sundayHours);
+              $(this).parent().find('.over-time').text(totalOvertime);
+            }else{
+              total = totalHours/8;
+              $(this).parent().find('.total').text(total);
+              $(this).parent().find('.p').text(p);
+              $(this).parent().find('.ro').text(ro);
+              $(this).parent().find('.r').text(r);
+              $(this).parent().find('.d').text(d);
+              $(this).parent().find('.v').text(v);
+              $(this).parent().find('.l').text(l);
+            }
+
+
+
           }else{
-            bootbox.alert('Không hợp lệ');
+            bootbox.alert('Ký tự không hợp lệ!');
           }
         }
-
-        console.log(sheetContentData);
 
       });
   });
 
   $(document).ready(function () {
 
-    $('#year, #month, #department').change(function(e) {
+    $('#btn-show').click(function(e) {
+      sheetContentData = [];
 
       e.preventDefault();
       var department_id = $("#department" ).val();
-      var month         = $("#month").val();
-      var year          = $("#year").val();
+      month         = $("#month").val();
+      year          = $("#year").val();
 
       $.ajax({
           url: '<?= site_url('timekeepers/getAllBiller'); ?>',
@@ -164,6 +237,7 @@
                 console.log(response);
                 $('#btn-save').removeAttr('disabled');
 
+                timekeeperDetailIds = response.timekeeperDetailIds;
                 var nameList = []; // new Array
                 var dayList = [];
 
@@ -185,8 +259,6 @@
                   sheetContentData.push(row_keeper);
                 }
 
-                // console.log('sheetContentData', sheetContentData);
-
                 numRow = Object.keys(nameList).length;
 
                 var dimensions = [numRow, daysInMonth(month, year)];
@@ -198,37 +270,8 @@
                   dayList.push({name: pre+i, title: "Ngày "+i});
                   pre = '';
                 }
-                // console.log('dayList',dayList);
 
                 var sheetData = sheetContentData;
-
-                var updateRemark = function(sheet){
-
-                    var sheetStates = sheet.getSheetStates();
-
-                    var rowsCount = dimensions[0];
-                    var colsCount = dimensions[1];
-                    var rowRemark = [];
-                    var rowRemarkLen = 0;
-                    var remarkHTML = '';
-
-                    for(var row= 0, rowStates=[]; row<rowsCount; ++row){
-                        rowRemark = [];
-                        rowStates = sheetStates[row];
-                        for(var col=0; col<colsCount; ++col){
-                            if(rowStates[col]===0 && rowStates[col-1]===1){
-                                rowRemark[rowRemarkLen-1] += (col<=10?'0':'')+col+':00';
-                            }else if(rowStates[col]===1 && (rowStates[col-1]===0 || rowStates[col-1]===undefined)){
-                                rowRemarkLen = rowRemark.push((col<=10?'0':'')+col+':00-');
-                            }
-                            if(rowStates[col]===1 && col===colsCount-1){
-                                rowRemark[rowRemarkLen-1] += '00:00';
-                            }
-                        }
-                        remarkHTML = rowRemark.join("，");
-                        sheet.setRemark(row,remarkHTML==='' ? sheet.getDefaultRemark() : remarkHTML);
-                    }
-                };
 
                 var sheet = $("#J_timedSheet").TimeSheet({
                     data: {
@@ -242,38 +285,16 @@
                         year: year
                     },
                     remarks : {
-                        title : "Description",
+                        title : "Tổng cộng",
                         default : "N/A"
                     },
                     end : function(ev,selectedArea){
-                        updateRemark(sheet);
+                        // updateRemark(sheet);
                     }
                 });
 
 
-                updateRemark(sheet);
-
-                $("#btn-save").click(function(e){
-                    e.preventDefault();
-                    $.ajax({
-                      url: '<?= site_url('timekeepers/editView'); ?>',
-                      type: 'POST',
-                      dataType: 'json',
-                      data: {
-                        sheetContentData,
-                        timekeeperDetailIds: response.timekeeperDetailIds,
-                        year: year,
-                        month: month,
-                        <?php echo $this->security->get_csrf_token_name() ?> : '<?php echo $this->security->get_csrf_hash() ?>',
-
-                      },
-                      success: function (response_edit) {
-                        console.log(response_edit);
-                      }
-                    });
-
-                });
-
+                // updateRemark(sheet);
 
                 $("#J_timingDisable").click(function(ev){
                     sheet.disable();
@@ -329,6 +350,33 @@
 
           }
       })
+
+    });
+
+    $("#btn-save").click(function(e){
+        e.preventDefault();
+        $.ajax({
+          url: '<?= site_url('timekeepers/editView'); ?>',
+          type: 'POST',
+          dataType: 'json',
+          data: {
+            sheetContentData,
+            timekeeperDetailIds: timekeeperDetailIds,
+            year: year,
+            month: month,
+            <?php echo $this->security->get_csrf_token_name() ?> : '<?php echo $this->security->get_csrf_hash() ?>',
+
+          },
+          success: function (response_edit) {
+            // console.log(response_edit);
+            if (response_edit.status === "success") {
+              bootbox.alert('Lưu bảng chấm công thành công!');
+            }else{
+              bootbox.alert('Lưu bảng chấm công thất bại');
+            }
+            $('#btn-save').attr('disabled', 'disabled');
+          }
+        });
 
     });
 
