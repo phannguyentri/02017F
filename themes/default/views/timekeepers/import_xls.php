@@ -15,7 +15,7 @@
                     <div class="col-md-12">
 
                         <div class="well well-small">
-                            <a href="<?php echo base_url(); ?>assets/csv/sample_products.xlsx"
+                            <a href="<?php echo base_url(); ?>assets/xls/timekeepers_import.xlsx"
                                class="btn btn-primary pull-right"><i
                                     class="fa fa-download"></i> <?= lang("download_sample_file") ?></a>
                             <span class="text-warning"><?= lang("csv1"); ?></span><br/><?= lang("csv2"); ?> <span
@@ -55,7 +55,6 @@
                                             }else{
                                                 echo '<option value="'.$i.'">Tháng '.$i.'</option>';
                                             }
-
                                         }
                                      ?>
                                 </select>
@@ -73,13 +72,13 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="csv_file"><?= lang("upload_file"); ?></label>
+                                <label for="csv_file">Tải file lên</label>
                                 <input type="file" name="userfile" class="form-control file" data-show-upload="false"
                                        data-show-preview="false" id="xlsx_file" required="required"/>
                             </div>
 
                             <div class="form-group">
-                                <?php echo form_submit('import', $this->lang->line("import"), 'class="btn btn-primary"'); ?>
+                                <?php echo form_submit('import', 'Nhập chấm công', 'class="btn btn-primary"'); ?>
                             </div>
                         </div>
                     </div>

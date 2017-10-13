@@ -1,6 +1,6 @@
 <div class="box">
     <div class="box-header">
-        <h2 class="blue"><i class="fa-fw fa fa-users"></i>Thêm chấm công</h2>
+        <h2 class="blue"><i class="fa-fw fa fa-users"></i>Chấm công</h2>
     </div>
     <div class="box-content">
         <div class="row">
@@ -223,7 +223,7 @@
       year          = $("#year").val();
 
       $.ajax({
-          url: '<?= site_url('timekeepers/getAllBiller'); ?>',
+          url: '<?= site_url('timekeepers/getAllTimekeeperDetails'); ?>',
           async : false,
           type: 'GET',
           dataType: 'json',
