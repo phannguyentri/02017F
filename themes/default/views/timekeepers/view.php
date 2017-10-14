@@ -352,7 +352,7 @@
                     $dataDisplay.html("<b>Row Data At "+rowIndex+" : </b>[ "+rowData+" ]");
                 });
               }else{
-                bootbox.alert('Không tồn tại bảng chấm công tháng '+month+' năm '+year+' của phòng ban '+$("#department option:selected" ).text());
+                bootbox.alert('Không tồn tại bảng chấm công tháng '+month+' năm '+year+' của phòng ban '+$("#department option:selected" ).text().toLowerCase());
               }
 
           }

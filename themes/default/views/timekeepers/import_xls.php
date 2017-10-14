@@ -7,7 +7,7 @@
             <div class="col-lg-12">
 
                 <?php
-                    $attrib = array('class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form');
+                    $attrib = array('id' => 'timekeeper_form', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form');
                     echo form_open_multipart("timekeepers/import_xls", $attrib)
                 ?>
 
@@ -91,31 +91,35 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    $('#btn-save').click(function(e) {
+    $('#btn-save').click(function(){
 
       department_id = $('#department').val();
       month         = $('#month').val();
       year          = $('#year').val();
+      checkTimekeeper         = false;
 
       $.ajax({
         url: '<?= site_url('timekeepers/checkTimekeeper'); ?>',
+        async: false,
         type: 'post',
+        context: this,
         dataType: 'json',
         data: {
           department_id : department_id,
           month         : month,
           year          : year,
           <?php echo $this->security->get_csrf_token_name() ?> : '<?php echo $this->security->get_csrf_hash() ?>'
-        },
+        }
       })
       .done(function(responses) {
         if (responses.status === "exist") {
-          if (confirm('Đã tồn tại bảng chấm công tháng '+$('#month').val()+' năm '+$('#year').val()+' phòng ban '+$('#department option:selected').text().toLowerCase()+'.\nBạn có muốn cập nhật lại dữ liệu không?')) {
-            return true;
-          }
-          return false;
+          checkTimekeeper   = true;
         }
       });
+
+      if (checkTimekeeper) {
+        return confirm('Đã tồn tại bảng chấm công tháng '+$('#month').val()+' năm '+$('#year').val()+' phòng ban '+$('#department option:selected').text().toLowerCase()+'.\nBạn có muốn cập nhật lại dữ liệu không?');
+      }
 
     });
   })

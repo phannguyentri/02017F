@@ -206,31 +206,6 @@
 
     $.fn.TimeSheet = function(opt){
 
-        /*
-         *
-         *
-         * opt :
-         * {
-         *      data : {
-         *          dimensions : [7,8],
-         *          colHead : [{name:"name1",title:"",style:"width,background,color,font"},{name:"name2",title:"",style:"width,background,color,font"},...]
-         *          rowHead : [{name:"name1",title:"",style:"height,background,color,font"},{name:"name2",title:"",style:"height,background,color,font"},...]
-         *          sheetHead : {name:"headName",style:"width,height,background,color,font"}
-         *          sheetData : [[0,1,1,0,0],[...],[...],...]    shee
-         *      },
-         *
-         *      sheetClass : "",
-         *      start : function(ev){...}
-<<<<<<< HEAD
-         *      end : function(ev, selectedArea){...}
-=======
-         *      end : function(ev,selectedArea){...}
->>>>>>> b2f70472ecb97bbf9ecdc7f205ea10c8e5e7b929
-         *      remarks : false
-         * }
-         *
-         */
-
         var thisSheet = $(this);
 
         if(!thisSheet.is("TBODY")){
@@ -281,31 +256,31 @@
             var colHeadHtml = '<tr>';
             for(var i=0,curColHead=''; i<=sheetOption.data.dimensions[1]; ++i){
                 if(i===0){
-                    curColHead = '<td class="TimeSheet-head" style="'+(sheetOption.data.sheetHead.style?sheetOption.data.sheetHead.style:'')+'">'+sheetOption.data.sheetHead.name+'</td>';
+                    curColHead = '<td class="TimeSheet-head" style="'+(sheetOption.data.sheetHead.style?sheetOption.data.sheetHead.style:'')+'"><b>'+sheetOption.data.sheetHead.name+'</b></td>';
                 }else{
                     myDate.setDate(i);
                     if (myDate.getDay() == 0) {
-                        curColHead = '<td title="'+(sheetOption.data.colHead[i-1].title ? sheetOption.data.colHead[i-1].title:"")+'" data-col="'+(i-1)+'" class="TimeSheet-colHead '+(i===sheetOption.data.dimensions[1]?'rightMost':'')+'" style="background-color: #9ae89c;">'+sheetOption.data.colHead[i-1].name+'</td>';
+                        curColHead = '<td title="'+(sheetOption.data.colHead[i-1].title ? sheetOption.data.colHead[i-1].title:"")+'" data-col="'+(i-1)+'" class="TimeSheet-colHead '+(i===sheetOption.data.dimensions[1]?'rightMost':'')+'" style="background-color: #9ae89c;"><b>'+sheetOption.data.colHead[i-1].name+'</b></td>';
                     }else{
-                        curColHead = '<td title="'+(sheetOption.data.colHead[i-1].title ? sheetOption.data.colHead[i-1].title:"")+'" data-col="'+(i-1)+'" class="TimeSheet-colHead '+(i===sheetOption.data.dimensions[1]?'rightMost':'')+'" style="">'+sheetOption.data.colHead[i-1].name+'</td>';
+                        curColHead = '<td title="'+(sheetOption.data.colHead[i-1].title ? sheetOption.data.colHead[i-1].title:"")+'" data-col="'+(i-1)+'" class="TimeSheet-colHead '+(i===sheetOption.data.dimensions[1]?'rightMost':'')+'" style=""><b>'+sheetOption.data.colHead[i-1].name+'</b></td>';
                     }
                     
                 }
                 colHeadHtml += curColHead;
             }
             if(sheetOption.remarks){
-                colHeadHtml += '<td class="TimeSheet-remarkHead">'+sheetOption.remarks.title+'</td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead">Chủ nhật</td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead">Tăng ca</td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead">Lễ</td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead">P</td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead">Ro</td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead">R</td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead">Ô</td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead">Đ</td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead">NB</td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead">V</td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead">L</td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>'+sheetOption.remarks.title+'</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>Chủ nhật</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>Tăng ca</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>Lễ</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>P</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>Ro</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>R</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>Ô</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>Đ</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>NB</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>V</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>L</b></td>';
             }
             colHeadHtml += '</tr>';
             thisSheet.append(colHeadHtml);
@@ -326,7 +301,7 @@
 
                 for(var col= 0, curCell=''; col<=sheetOption.data.dimensions[1]; ++col){
                     if(col===0){
-                        curCell = '<td title="" class="TimeSheet-rowHead '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'" style="'+(sheetOption.data.rowHead[row].style ? sheetOption.data.rowHead[row].style : '')+'">'+sheetOption.data.rowHead[row].name+'</td>';
+                        curCell = '<td title="" class="TimeSheet-rowHead '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'" style="color:#428bca;">'+sheetOption.data.rowHead[row].name+'</td>';
                     }else{
                         text = (sheetOption.data.sheetContentData[row][col-1] == 0) ? '' : sheetOption.data.sheetContentData[row][col-1];
                         hours = (sheetOption.data.sheetContentData[row][col-1] == 0) ? 0 : sheetOption.data.sheetContentData[row][col-1];

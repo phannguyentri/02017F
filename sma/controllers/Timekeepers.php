@@ -151,14 +151,10 @@ class Timekeepers extends MY_Controller
         $year           = $this->input->get('year');
         $month          = $this->input->get('month');
 
-        $this->load->model('companies_model');
-        // $billers = $this->companies_model->getAllBillerByDepartmentId($department_id);
-
         $data['timekeeperDetailsName']    = $this->timekeepers_model->getTimekeeperDetailsName($department_id, $year, $month);
         $data['timekeeperDetails']        = $this->timekeepers_model->getTimekeeperDetails($department_id, $year, $month);
         $data['timekeeperDetailIds']      = $this->timekeepers_model->getTimekeeperDetailsId($department_id, $year, $month);
         echo json_encode($data);
-        // echo json_encode($billers);
     }
 
     public function checkTimekeeper(){
@@ -181,193 +177,192 @@ class Timekeepers extends MY_Controller
         $this->form_validation->set_rules('userfile', lang("upload_file"), 'xss_clean');
 
         if ($this->form_validation->run() == true) {
-            $department_id  = $this->input->post('department');
-            $month          = $this->input->post('month');
-            $year           = $this->input->post('year');
+          $department_id  = $this->input->post('department');
+          $month          = $this->input->post('month');
+          $year           = $this->input->post('year');
 
-            $existTimekeeper = $this->timekeepers_model->getTimekepperByDepartmentIdYearMonth($department_id, $year, $month);
+          $existTimekeeper = $this->timekeepers_model->getTimekepperByDepartmentIdYearMonth($department_id, $year, $month);
 
-            if (!$existTimekeeper) {
-              if (isset($_FILES["userfile"])) {
+          if ($existTimekeeper) {
+            $this->timekeepers_model->deleteAllTimekeeperAndDetails($existTimekeeper->id);
+          }
 
-                $this->load->library('upload');
+          if (isset($_FILES["userfile"])) {
 
-                $config['upload_path']   = $this->digital_upload_path;
-                $config['allowed_types'] = 'xlsx';
-                $config['max_size']      = $this->allowed_file_size;
-                $config['overwrite']     = TRUE;
+              $this->load->library('upload');
 
-                $this->upload->initialize($config);
+              $config['upload_path']   = $this->digital_upload_path;
+              $config['allowed_types'] = 'xlsx';
+              $config['max_size']      = $this->allowed_file_size;
+              $config['overwrite']     = TRUE;
 
-                if (!$this->upload->do_upload()) {
+              $this->upload->initialize($config);
 
-                  $error = $this->upload->display_errors();
-                  $this->session->set_flashdata('error', $error);
-                  redirect("products/import_csv");
-                }
+              if (!$this->upload->do_upload()) {
 
-                $filename      = $this->upload->file_name;
-                $fullfile      = $this->digital_upload_path . $filename;
-                $inputFileType = PHPExcel_IOFactory::identify($fullfile);
+                $error = $this->upload->display_errors();
+                $this->session->set_flashdata('error', $error);
+                redirect("products/import_csv");
+              }
 
-                $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+              $filename      = $this->upload->file_name;
+              $fullfile      = $this->digital_upload_path . $filename;
+              $inputFileType = PHPExcel_IOFactory::identify($fullfile);
 
-                $objReader->setReadDataOnly(true);
+              $objReader = PHPExcel_IOFactory::createReader($inputFileType);
 
-
-                /**  Load $inputFileName to a PHPExcel Object  **/
-                $objPHPExcel = $objReader->load("$fullfile");
-
-                $total_sheets = $objPHPExcel->getSheetCount();
-
-                $allSheetName       = $objPHPExcel->getSheetNames();
-                $objWorksheet       = $objPHPExcel->setActiveSheetIndex(0);
-                $highestRow         = $objWorksheet->getHighestRow();
-                $highestColumn      = $objWorksheet->getHighestColumn();
-                $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
-                $arraydata          = array();
-                $arrayDataNormal    = array();
-
-                $i = 0;
-                $v = 0;
-
-                for ($row = 7; $row <= $highestRow; ++$row) {
-                  $row_end = 0;
-                  $j = 0;
-                  $k = 0;
-                  if ($row % 2 != 0) {
-
-                    for ($col = 1; $col < (cal_days_in_month(CAL_GREGORIAN, $month, $year)+3); ++$col) {
-                        if($col == 2)
-                            continue;
-
-                        $value = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
-                        if ($col > 2) {
-                            $value  = ($value) ? $value : 0;
-                        }else{
-                            $value  = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
-                        }
-
-                        $arraydata[$i][$j] = $value;
-                        $j++;
-                        if (!$value) {
-                            $row_end++;
-                        }
-                    }
-
-                    if ($row_end > cal_days_in_month(CAL_GREGORIAN, $month, $year)) {
-                        unset($arraydata[$i]);
-                        break;
-                    }
-                    $i++;
-                  }else{
-                    for ($col = 1; $col < (cal_days_in_month(CAL_GREGORIAN, $month, $year)+3); ++$col) {
-                        if($col == 1 || $col == 2)
-                            continue;
-                        $value  = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
-                        $value  = ($value) ? $value : 0;
-                        $arrayDataNormal[$v][$k]   = $value;
-                        $k++;
-                    }
-
-                    $v++;
-                  }
-
-                }
+              $objReader->setReadDataOnly(true);
 
 
-                $keys_day = array();
+              /**  Load $inputFileName to a PHPExcel Object  **/
+              $objPHPExcel = $objReader->load("$fullfile");
 
-                for ($i=1; $i <= cal_days_in_month(CAL_GREGORIAN, $month, $year); $i++) {
-                  $keys_day[] = 'd'.$i;
-                }
+              $total_sheets = $objPHPExcel->getSheetCount();
 
+              $allSheetName       = $objPHPExcel->getSheetNames();
+              $objWorksheet       = $objPHPExcel->setActiveSheetIndex(0);
+              $highestRow         = $objWorksheet->getHighestRow();
+              $highestColumn      = $objWorksheet->getHighestColumn();
+              $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
+              $arraydata          = array();
+              $arrayDataNormal    = array();
 
-                $keysOverTime   = $keys_day;
-                array_unshift($keys_day, 'name');
-                $keys           = $keys_day;
+              $i = 0;
+              $v = 0;
 
-                $finalsNormal   = array();
-                $finalsOverTime = array();
+              for ($row = 7; $row <= $highestRow; ++$row) {
+                $row_end = 0;
+                $j = 0;
+                $k = 0;
+                if ($row % 2 != 0) {
 
-                foreach ($arraydata as $key => $value) {
-                  $finalsNormal[] = array_combine($keys, $value);
-                }
+                  for ($col = 1; $col < (cal_days_in_month(CAL_GREGORIAN, $month, $year)+3); ++$col) {
+                      if($col == 2)
+                          continue;
 
-                foreach ($arrayDataNormal as $key => $value) {
-                  $finalsOverTime[] = array_combine($keysOverTime, $value);
-                }
-
-                $rw = 7;
-                $totalHour      = 0;
-
-
-                foreach ($finalsNormal as $k => $final) {
-
-                  $company = $this->timekeepers_model->getCompanyByNameAndDepartmentId($final['name'], $department_id);
-                  if ($company) {
-                    unset($finalsNormal[$k]['name']);
-
-                    $i = 1;
-                    $totalHour  = 0;
-                    $ct         = 0;
-                    foreach ($finalsNormal[$k] as $day) {
-                      if ($day === "CT") {
-                        $ct++;
-                      }elseif ($day === "P" || $day === "Ro" || $day === "R" || $day === "Ô" || $day === "Đ"
-                       || $day === "NB" || $day === "V" || $day === "L") {
-                        continue;
+                      $value = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
+                      if ($col > 2) {
+                          $value  = ($value) ? $value : 0;
                       }else{
-                        $totalHour  = $totalHour + $day;
-                      }
-                    }
-
-                    $overTime       = 0;
-                    foreach ($finalsOverTime[$k] as $day) {
-                      if (date("w", strtotime($i.'-'.$month.'-'.$year)) != 0) {
-                        $overTime  = $overTime + $day;
+                          $value  = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
                       }
 
-                      $i++;
-                    }
-
-                    $finalsNormal[$k]['total']      = ($totalHour/8) + $ct;
-                    $finalsNormal[$k]['company_id'] = $company->id;
-                    $finalsNormal[$k]['type']       = 'normal';
-                    $finalsOverTime[$k]['overtime']   = $overTime;
-                    $finalsOverTime[$k]['company_id'] = $company->id;
-                    $finalsOverTime[$k]['type']   = 'overtime';
-
-                  }else{
-                    $this->session->set_flashdata('error', "Tên nhân viên không nằm trong danh sách nhân viên, lỗi tại dòng " . " " . $rw);
-                    redirect("timekeepers/import_xls");
+                      $arraydata[$i][$j] = $value;
+                      $j++;
+                      if (!$value) {
+                          $row_end++;
+                      }
                   }
 
-                  $rw += 2;
-
-                }
-
-                $dataTimekeeper = array(
-                  'department_id' => $this->input->post('department'),
-                  'month' => $month,
-                  'year'  => $year
-                );
-
-
-                if ($this->timekeepers_model->addTimekeeper($dataTimekeeper, $finalsNormal, $finalsOverTime)) {
-                  $this->session->set_flashdata('message', 'Bảng chấm công đã được import thành công!');
-                  redirect("timekeepers/import_xls");
+                  if ($row_end > cal_days_in_month(CAL_GREGORIAN, $month, $year)) {
+                      unset($arraydata[$i]);
+                      break;
+                  }
+                  $i++;
                 }else{
-                  $this->session->set_flashdata('error', 'Import bảng chấm công thất bại.');
-                  redirect("timekeepers/import_xls");
+                  for ($col = 1; $col < (cal_days_in_month(CAL_GREGORIAN, $month, $year)+3); ++$col) {
+                      if($col == 1 || $col == 2)
+                          continue;
+                      $value  = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
+                      $value  = ($value) ? $value : 0;
+                      $arrayDataNormal[$v][$k]   = $value;
+                      $k++;
+                  }
+
+                  $v++;
                 }
 
               }
-            }else{
-              $this->session->set_flashdata('error', 'Đã tồn tại bảng chấm công tháng '.$month.' năm '.$year.' của phòng
-               ban '.mb_strtolower($existTimekeeper->name));
-              redirect("timekeepers/import_xls");
+
+
+              $keys_day = array();
+
+              for ($i=1; $i <= cal_days_in_month(CAL_GREGORIAN, $month, $year); $i++) {
+                $keys_day[] = 'd'.$i;
+              }
+
+
+              $keysOverTime   = $keys_day;
+              array_unshift($keys_day, 'name');
+              $keys           = $keys_day;
+
+              $finalsNormal   = array();
+              $finalsOverTime = array();
+
+              foreach ($arraydata as $key => $value) {
+                $finalsNormal[] = array_combine($keys, $value);
+              }
+
+              foreach ($arrayDataNormal as $key => $value) {
+                $finalsOverTime[] = array_combine($keysOverTime, $value);
+              }
+
+              $rw = 7;
+              $totalHour      = 0;
+
+
+              foreach ($finalsNormal as $k => $final) {
+
+                $company = $this->timekeepers_model->getCompanyByNameAndDepartmentId($final['name'], $department_id);
+                if ($company) {
+                  unset($finalsNormal[$k]['name']);
+
+                  $i = 1;
+                  $totalHour  = 0;
+                  $ct         = 0;
+                  foreach ($finalsNormal[$k] as $day) {
+                    if ($day === "CT") {
+                      $ct++;
+                    }elseif ($day === "P" || $day === "Ro" || $day === "R" || $day === "Ô" || $day === "Đ"
+                     || $day === "NB" || $day === "V" || $day === "L") {
+                      continue;
+                    }else{
+                      $totalHour  = $totalHour + $day;
+                    }
+                  }
+
+                  $overTime       = 0;
+                  foreach ($finalsOverTime[$k] as $day) {
+                    if (date("w", strtotime($i.'-'.$month.'-'.$year)) != 0) {
+                      $overTime  = $overTime + $day;
+                    }
+
+                    $i++;
+                  }
+
+                  $finalsNormal[$k]['total']      = ($totalHour/8) + $ct;
+                  $finalsNormal[$k]['company_id'] = $company->id;
+                  $finalsNormal[$k]['type']       = 'normal';
+                  $finalsOverTime[$k]['overtime']   = $overTime;
+                  $finalsOverTime[$k]['company_id'] = $company->id;
+                  $finalsOverTime[$k]['type']   = 'overtime';
+
+                }else{
+                  $this->session->set_flashdata('error', "Tên nhân viên không nằm trong danh sách nhân viên, lỗi tại dòng " . " " . $rw);
+                  redirect("timekeepers/import_xls");
+                }
+
+                $rw += 2;
+
+              }
+
+              $dataTimekeeper = array(
+                'department_id' => $this->input->post('department'),
+                'month' => $month,
+                'year'  => $year
+              );
+
+
+              if ($this->timekeepers_model->addTimekeeper($dataTimekeeper, $finalsNormal, $finalsOverTime)) {
+                $this->session->set_flashdata('message', 'Bảng chấm công đã được import thành công!');
+                redirect("timekeepers/import_xls");
+              }else{
+                $this->session->set_flashdata('error', 'Import bảng chấm công thất bại.');
+                redirect("timekeepers/import_xls");
+              }
+
             }
+
 
 
         }else{

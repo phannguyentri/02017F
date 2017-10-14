@@ -96,7 +96,6 @@ class Timekeepers_model extends CI_Model
   }
 
   public function getTimekepperByDepartmentIdYearMonth($department_id, $year, $month){
-    $this->db->join('departments', 'departments.id = timekeepers.department_id');
     $q = $this->db->get_where('timekeepers', array('department_id' => $department_id
      , 'year' => $year, 'month' => $month), 1);
     if ($q->num_rows() > 0) {
@@ -112,6 +111,12 @@ class Timekeepers_model extends CI_Model
       return true;
     }
     return false;
+  }
+
+  public function deleteAllTimekeeperAndDetails($timekeeper_id){
+    if ($this->db->delete('timekeepers', array('id' => $timekeeper_id))) {
+      $this->db->delete('timekeeper_details', array('timekeeper_id' => $timekeeper_id));
+    }
   }
 
 }
