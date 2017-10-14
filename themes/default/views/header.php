@@ -485,17 +485,17 @@
                                 </ul>
                             </li>
 
-                            <li class="mm_check_working">
+                            <li class="mm_timekeepers">
                                 <a class="dropmenu" href="#"><i class="fa fa-building-o"></i><span
                                         class="text"> <?= lang('Chấm Công'); ?> </span> <span
                                         class="chevron closed"></span></a>
                                 <ul>
-                                    <li >
+                                    <li id="timekeepers_view">
                                         <a class="submenu" href="<?= site_url('timekeepers/view'); ?>">
-                                            <i class="fa fa-list"></i> <span class="text"> Xem danh sách chấm công</span>
+                                            <i class="fa fa-list"></i> <span class="text"> Danh sách chấm công</span>
                                         </a>
                                     </li>
-                                    <li >
+                                    <li id="timekeepers_import_xls">
                                         <a class="submenu" href="<?= site_url('timekeepers/import_xls'); ?>">
                                             <i class="fa fa-list"></i> <span class="text"> Import chấm công</span>
                                         </a>
@@ -504,6 +504,7 @@
 
                                 </ul>
                             </li>
+
 
                             <li class="mm_check_payroll">
                                 <a class="dropmenu" href="#"><i class="fa fa-money"></i><span

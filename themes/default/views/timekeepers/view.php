@@ -106,8 +106,8 @@
 </div>
 
 <script type="text/javascript">
-    var year = null;
-    var month = null;
+  var year = null;
+  var month = null;
   /**
    * count all date in month and get current year
    * @param  integer month
@@ -126,81 +126,90 @@
         const input = prompt('Nhập thay đổi: ');
         if(input != null) {
           if ((input >= 0 && input <= 24) || (input == "CT" || input == "P" || input == "Ro" || input == "R" || input == "Ô" || input == "Đ" || input == "NB" || input == "V" || input == "L")) {
-            if (input == 0) {
-              $(this).text('');
-            }else{
-              $(this).text(input);
-            }
 
-            sheetContentData[$(this).attr('data-row')][$(this).attr('data-col')] = input;
-
-            totalHours = 0;
-            totalOvertime = 0;
-            sundayHours = 0;
-            p   = 0;
-            ro  = 0;
-            r   = 0;
-            d   = 0;
-            v   = 0;
-            l   = 0;
             isOverTime = ($(this).attr('data-row') % 2 != 0) ? true : false;
 
-
-            var myDate = new Date();
-            myDate.setFullYear(year);
-            myDate.setMonth(parseInt(month)-1);
-
-            for (var i = 0; i < sheetContentData[$(this).attr('data-row')].length; i++) {
-              hours = (sheetContentData[$(this).attr('data-row')][i] === 0) ? 0 : sheetContentData[$(this).attr('data-row')][i];
-
-              if (hours === "P") {
-                  p++;
-              }else if(hours === "Ro"){
-                  ro++;
-              }else if(hours === "R"){
-                  r++;
-              }else if(hours === "Đ"){
-                  d++;
-              }else if(hours === "V"){
-                  v++;
-              }else if(hours === "L"){
-                  l++;
+            if (isOverTime && (input == "CT" || input == "P" || input == "Ro" || input == "R" || input == "Ô" || input == "Đ" || input == "NB" || input == "V" || input == "L")) {
+              bootbox.alert('Dòng tăng ca chỉ được nhập chữ số.');
+            }else{
+              if (input == 0) {
+                $(this).text('');
               }else{
-                if (!isNaN(parseInt(hours))) {
-                  totalHours = totalHours + parseInt(hours);
-                }
+                $(this).text(input);
               }
 
-              myDate.setDate(i+1);
+              sheetContentData[$(this).attr('data-row')][$(this).attr('data-col')] = input;
 
-              if (isOverTime) {
+              totalHours = 0;
+              totalOvertime = 0;
+              sundayHours = 0;
+              p   = 0;
+              ro  = 0;
+              r   = 0;
+              d   = 0;
+              v   = 0;
+              l   = 0;
+
+
+
+              var myDate = new Date();
+              myDate.setFullYear(year);
+              myDate.setMonth(parseInt(month)-1);
+
+              for (var i = 0; i < sheetContentData[$(this).attr('data-row')].length; i++) {
+                hours = (sheetContentData[$(this).attr('data-row')][i] === 0) ? 0 : sheetContentData[$(this).attr('data-row')][i];
+
+                if (hours === "P") {
+                    p++;
+                }else if(hours === "Ro"){
+                    ro++;
+                }else if(hours === "R"){
+                    r++;
+                }else if(hours === "Đ"){
+                    d++;
+                }else if(hours === "V"){
+                    v++;
+                }else if(hours === "L"){
+                    l++;
+                }else{
+                  if (!isNaN(parseFloat(hours))) {
+                    totalHours = totalHours + parseFloat(hours);
+                  }
+                }
+
+                myDate.setDate(i+1);
+
+                if (isOverTime) {
                   if (myDate.getDay() != 0) {
-                    if (!isNaN(parseInt(hours))) {
-                      totalOvertime = totalOvertime + parseInt(hours);
+                    if (!isNaN(parseFloat(hours))) {
+                      totalOvertime = totalOvertime + parseFloat(hours);
                     }
 
                   }else{
-                    if (!isNaN(parseInt(hours))) {
-                      sundayHours = sundayHours + parseInt(hours);
+                    if (!isNaN(parseFloat(hours))) {
+                      sundayHours = sundayHours + parseFloat(hours);
                     }
                   }
+                }
+
               }
 
+              if (isOverTime) {
+                $(this).parent().find('.sunday-hours').text(sundayHours);
+                $(this).parent().find('.over-time').text(totalOvertime);
+              }else{
+                total = totalHours/8;
+                $(this).parent().find('.total').text(total);
+                $(this).parent().find('.p').text(p);
+                $(this).parent().find('.ro').text(ro);
+                $(this).parent().find('.r').text(r);
+                $(this).parent().find('.d').text(d);
+                $(this).parent().find('.v').text(v);
+                $(this).parent().find('.l').text(l);
+              }
             }
 
-            if (isOverTime) {
-              $(this).parent().find('.sunday-hours').text(sundayHours);
-              $(this).parent().find('.over-time').text(totalOvertime);
-            }else{
-              total = totalHours/8;
-              $(this).parent().find('.total').text(total);
-              $(this).parent().find('.p').text(p);
-              $(this).parent().find('.ro').text(ro);
-              $(this).parent().find('.r').text(r);
-              $(this).parent().find('.d').text(d);
-              $(this).parent().find('.v').text(v);
-              $(this).parent().find('.l').text(l);
-            }
+
 
 
 
@@ -293,8 +302,6 @@
                     }
                 });
 
-
-                // updateRemark(sheet);
 
                 $("#J_timingDisable").click(function(ev){
                     sheet.disable();

@@ -344,7 +344,10 @@
                         }else if(hours == "L"){
                             l++;
                         }else{
-                            totalHours = totalHours + parseInt(hours);
+                            if (!isNaN(parseFloat(hours))){
+                                totalHours = totalHours + parseFloat(hours);    
+                            }
+
                         }
 
 
@@ -352,9 +355,15 @@
 
                         if (row % 2 != 0) {
                             if (myDate.getDay() != 0) {
-                                totalOvertime = totalOvertime + parseInt(hours);  
+                                if (!isNaN(parseFloat(hours))){
+                                    totalOvertime = totalOvertime + parseFloat(hours);    
+                                }
+                                  
                             }else{
-                                sundayHours = sundayHours + parseInt(hours);
+                                if (!isNaN(parseFloat(hours))){
+                                    sundayHours = sundayHours + parseFloat(hours);    
+                                }
+                                
                             }
                         }
 

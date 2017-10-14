@@ -161,6 +161,18 @@ class Timekeepers extends MY_Controller
         // echo json_encode($billers);
     }
 
+    public function checkTimekeeper(){
+        $department_id  = $this->input->post('department_id');
+        $year           = $this->input->post('year');
+        $month           = $this->input->post('month');
+
+        if ($this->timekeepers_model->isExistTimekepper($department_id, $year, $month)) {
+            echo json_encode(array('status' => 'exist'));
+        }else{
+            echo json_encode(array('status' => 'none'));
+        }
+    }
+
     public function import_xls(){
 
         require_once(APPPATH . "third_party" . DIRECTORY_SEPARATOR . 'PHPExcel' . DIRECTORY_SEPARATOR . 'PHPExcel.php');

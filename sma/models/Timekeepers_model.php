@@ -105,4 +105,13 @@ class Timekeepers_model extends CI_Model
     return false;
   }
 
+  public function isExistTimekepper($department_id, $year, $month){
+    $q = $this->db->get_where('timekeepers', array('department_id' => $department_id
+     , 'year' => $year, 'month' => $month), 1);
+    if ($q->num_rows() > 0) {
+      return true;
+    }
+    return false;
+  }
+
 }

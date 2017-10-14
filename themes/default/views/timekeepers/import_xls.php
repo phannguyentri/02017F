@@ -18,9 +18,7 @@
                             <a href="<?php echo base_url(); ?>assets/xls/timekeepers_import.xlsx"
                                class="btn btn-primary pull-right"><i
                                     class="fa fa-download"></i> <?= lang("download_sample_file") ?></a>
-                            <span class="text-warning"><?= lang("csv1"); ?></span><br/><?= lang("csv2"); ?> <span
-                                class="text-info">(<?= lang("product_code") . ', ' . lang("product_name") . ', ' . lang("category_code") . ', ' . lang("product_unit") . ', ' . lang("product_cost") . ', ' . lang("product_price") . ', Quy cách, Trọng lượng, Định mức nhân công, Định mức máy móc, Độ dài, Độ rộng, Số lượng cấu thành'; ?>
-                                )</span> <?= lang("csv3"); ?>
+                            <span class="text-warning">Vui lòng không thay đổi thứ tự các cột. bạn phải nhập theo thứ tự trong file mẫu.</span>
 
                         </div>
 
@@ -30,7 +28,7 @@
                             <div class="form-group">
                                 <label>Năm</label>
 
-                                <select name="year" class="form-control select" style="width: 100%;">
+                                <select id="year" name="year" class="form-control select" style="width: 100%;">
                                     <?php
                                         for ($i=date('Y')-1; $i <= date('Y') + 1 ; $i++) {
                                             if ($i == date('Y')) {
@@ -47,7 +45,7 @@
                             <div class="form-group">
                                 <label>Tháng</label>
 
-                                <select name="month" class="form-control select" style="width: 100%;">
+                                <select id="month" name="month" class="form-control select" style="width: 100%;">
                                     <?php
                                         for ($i=1; $i <= 12 ; $i++) {
                                             if ($i == date('m')) {
@@ -78,7 +76,7 @@
                             </div>
 
                             <div class="form-group">
-                                <?php echo form_submit('import', 'Nhập chấm công', 'class="btn btn-primary"'); ?>
+                                <?php echo form_submit('import', 'Nhập chấm công', 'id="btn-save" class="btn btn-primary"'); ?>
                             </div>
                         </div>
                     </div>
@@ -90,3 +88,35 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#btn-save').click(function(e) {
+
+      department_id = $('#department').val();
+      month         = $('#month').val();
+      year          = $('#year').val();
+
+      $.ajax({
+        url: '<?= site_url('timekeepers/checkTimekeeper'); ?>',
+        type: 'post',
+        dataType: 'json',
+        data: {
+          department_id : department_id,
+          month         : month,
+          year          : year,
+          <?php echo $this->security->get_csrf_token_name() ?> : '<?php echo $this->security->get_csrf_hash() ?>'
+        },
+      })
+      .done(function(responses) {
+        if (responses.status === "exist") {
+          if (confirm('Đã tồn tại bảng chấm công tháng '+$('#month').val()+' năm '+$('#year').val()+' phòng ban '+$('#department option:selected').text().toLowerCase()+'.\nBạn có muốn cập nhật lại dữ liệu không?')) {
+            return true;
+          }
+          return false;
+        }
+      });
+
+    });
+  })
+</script>
