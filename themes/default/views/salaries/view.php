@@ -1,18 +1,24 @@
 <div class="box">
     <div class="box-header">
-        <h2 class="blue"><i class="fa-fw fa fa-users"></i>Chấm công</h2>
+        <h2 class="blue"><i class="fa-fw fa fa-users"></i>Tính lương</h2>
     </div>
     <div class="box-content">
         <div class="row">
             <div class="col-lg-12">
 
-                  <div class="well well-small">
+<!--                   <div class="well well-small">
                     <a href="<?php echo base_url(); ?>assets/xls/timekeepers_import.xlsx" class="btn btn-primary pull-right"><i class="fa fa-download"></i> Tải file mẫu</a>
                       <span class="text-info"><b>0 đến 24</b></span> là những số hợp lệ bạn có thể điền vào bảng chấm công.
                       </br>
                       <span class="text-info"><b>P, Ro, R, Đ, V, L</b></span> là những từ hợp lệ bạn có thể điền vào bảng chấm công.</br>
                       <span class="text-warning">Vui lòng nhập theo quy định này</span>
-                  </div>
+                  </div> -->
+
+                  <?php
+                    echo "<pre>";
+                    print_r($productions);
+                    echo "</pre>";
+                   ?>
 
                   <div class="col-md-3">
 
@@ -69,7 +75,7 @@
 
                   <div class="col-md-3" style="margin-top: 15px;">
                     <div class="form-group">
-                      <input type="submit" value="Chấm công" id="btn-show" class="btn btn-success"
+                      <input type="submit" value="Tính lương" id="btn-show" class="btn btn-success"
                        style="margin-top: 15px;">
                     </div>
                   </div>
@@ -93,7 +99,7 @@
                   <div class="col-md-3" style="margin-top: 15px;">
                     <div class="form-group">
                       <div class="controls">
-                        <input type="submit" name="add_user" value="Lưu bảng chấm công" id="btn-save" class="btn btn-primary" disabled>
+                        <input type="submit" name="add_user" value="Lưu bảng tính lương" id="btn-save" class="btn btn-primary" disabled>
                       </div>
                     </div>
                   </div>
@@ -104,6 +110,8 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript" src="<?=base_url();?>themes/default/assets/js/TimeSheetSalary.js"></script>
 
 <script type="text/javascript">
   var year = null;
@@ -121,104 +129,9 @@
 
   var sheetContentData = [];
   var timekeeperDetailIds = null;
-  $(function() {
-      $(document).on('click', '.TimeSheet-cell', function() {
-        const input = prompt('Nhập thay đổi: ');
-        if(input != null) {
-          if ((input >= 0 && input <= 24) || (input == "CT" || input == "P" || input == "Ro" || input == "R" || input == "Ô" || input == "Đ" || input == "NB" || input == "V" || input == "L")) {
 
-            isOverTime = ($(this).attr('data-row') % 2 != 0) ? true : false;
-
-            if (isOverTime && (input == "CT" || input == "P" || input == "Ro" || input == "R" || input == "Ô" || input == "Đ" || input == "NB" || input == "V" || input == "L")) {
-              bootbox.alert('Dòng tăng ca chỉ được nhập chữ số.');
-            }else{
-              if (input == 0) {
-                $(this).text('');
-              }else{
-                $(this).text(input);
-              }
-
-              sheetContentData[$(this).attr('data-row')][$(this).attr('data-col')] = input;
-
-              totalHours = 0;
-              totalOvertime = 0;
-              sundayHours = 0;
-              p   = 0;
-              ro  = 0;
-              r   = 0;
-              d   = 0;
-              v   = 0;
-              l   = 0;
-
-
-
-              var myDate = new Date();
-              myDate.setFullYear(year);
-              myDate.setMonth(parseInt(month)-1);
-
-              for (var i = 0; i < sheetContentData[$(this).attr('data-row')].length; i++) {
-                hours = (sheetContentData[$(this).attr('data-row')][i] === 0) ? 0 : sheetContentData[$(this).attr('data-row')][i];
-
-                if (hours === "P") {
-                    p++;
-                }else if(hours === "Ro"){
-                    ro++;
-                }else if(hours === "R"){
-                    r++;
-                }else if(hours === "Đ"){
-                    d++;
-                }else if(hours === "V"){
-                    v++;
-                }else if(hours === "L"){
-                    l++;
-                }else{
-                  if (!isNaN(parseFloat(hours))) {
-                    totalHours = totalHours + parseFloat(hours);
-                  }
-                }
-
-                myDate.setDate(i+1);
-
-                if (isOverTime) {
-                  if (myDate.getDay() != 0) {
-                    if (!isNaN(parseFloat(hours))) {
-                      totalOvertime = totalOvertime + parseFloat(hours);
-                    }
-
-                  }else{
-                    if (!isNaN(parseFloat(hours))) {
-                      sundayHours = sundayHours + parseFloat(hours);
-                    }
-                  }
-                }
-
-              }
-
-              if (isOverTime) {
-                $(this).parent().find('.sunday-hours').text(sundayHours);
-                $(this).parent().find('.over-time').text(totalOvertime);
-              }else{
-                total = totalHours/8;
-                $(this).parent().find('.total').text(total);
-                $(this).parent().find('.p').text(p);
-                $(this).parent().find('.ro').text(ro);
-                $(this).parent().find('.r').text(r);
-                $(this).parent().find('.d').text(d);
-                $(this).parent().find('.v').text(v);
-                $(this).parent().find('.l').text(l);
-              }
-            }
-
-          }else{
-            bootbox.alert('Ký tự không hợp lệ!');
-          }
-        }
-
-      });
-  });
 
   $(document).ready(function () {
-
     $('#btn-show').click(function(e) {
       sheetContentData = [];
 
@@ -228,7 +141,7 @@
       year          = $("#year").val();
 
       $.ajax({
-          url: '<?= site_url('timekeepers/getAllTimekeeperDetails'); ?>',
+          url: '<?= site_url('salaries/getAllTimekeeperDetails'); ?>',
           async : false,
           type: 'GET',
           dataType: 'json',
@@ -285,7 +198,10 @@
                         rowHead : nameList,
                         sheetHead : {name:"Ngày trong tháng"},
                         sheetData : sheetData,
-                        sheetContentData : sheetContentData,
+                        sheetContentData  : sheetContentData,
+                        basicSalariesData : response.basicSalaries,
+                        productionsData   : response.productionsInMonthYear,
+                        companyIdsData    : response.companyIds,
                         month: month,
                         year: year
                     },
@@ -307,51 +223,5 @@
 
     });
 
-    $("#btn-save").click(function(e){
-        e.preventDefault();
-        $.ajax({
-          url: '<?= site_url('timekeepers/editView'); ?>',
-          type: 'POST',
-          dataType: 'json',
-          data: {
-            sheetContentData,
-            timekeeperDetailIds: timekeeperDetailIds,
-            year: year,
-            month: month,
-            <?php echo $this->security->get_csrf_token_name() ?> : '<?php echo $this->security->get_csrf_hash() ?>',
-
-          },
-          success: function (response_edit) {
-            // console.log(response_edit);
-            if (response_edit.status === "success") {
-              bootbox.alert('Lưu bảng chấm công thành công!');
-            }else{
-              bootbox.alert('Lưu bảng chấm công thất bại');
-            }
-            $('#btn-save').attr('disabled', 'disabled');
-          }
-        });
-
-    });
-
   });
-
-</script>
-
-
-<script type="text/javascript" src="<?=base_url();?>themes/default/assets/js/TimeSheet.js"></script>
-
-<script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-36251023-1']);
-  _gaq.push(['_setDomainName', 'jqueryscript.net']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
 </script>

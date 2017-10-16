@@ -44,9 +44,9 @@ class Timekeepers extends MY_Controller
             'page_title' => 'Chấm công',
             'bc' => $bc
         );
-        $this->load->model('companies_model');
+
         $this->load->model('departments_model');
-        // $this->data['billers'] = $this->billers->getAllBillerByDepartmentId($department_id);
+
         $this->data['departments'] = $this->departments_model->getAllDepartments();
         $this->page_construct('timekeepers/view', $meta, $this->data);
     }

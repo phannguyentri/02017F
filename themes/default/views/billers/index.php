@@ -1,5 +1,9 @@
 <script>
     $(document).ready(function () {
+        function format_money(x){
+            return formatMoney(x);
+        }
+
         var oTable = $('#SupData').dataTable({
             "aaSorting": [[1, "asc"]],
             "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
@@ -16,15 +20,16 @@
             "aoColumns": [{
                 "bSortable": false,
                 "mRender": checkbox
-            }, null, null, null, null, null, null, null, {"bSortable": false}]
+            }, null, null, {"mRender": format_money}, null, null, null, null, null, {"bSortable": false}]
         }).dtFilter([
             {column_number: 1, filter_default_label: "[<?=lang('name');?>]", filter_type: "text", data: []},
             {column_number: 2, filter_default_label: "[<?=lang('company');?>]", filter_type: "text", data: []},
-            {column_number: 3, filter_default_label: "[<?=lang('vat_no');?>]", filter_type: "text", data: []},
-            {column_number: 4, filter_default_label: "[<?=lang('phone');?>]", filter_type: "text", data: []},
-            {column_number: 5, filter_default_label: "[<?=lang('email_address');?>]", filter_type: "text", data: []},
-            {column_number: 6, filter_default_label: "[<?=lang('city');?>]", filter_type: "text", data: []},
-            {column_number: 7, filter_default_label: "[<?=lang('country');?>]", filter_type: "text", data: []},
+            {column_number: 3, filter_default_label: "Lương cơ bản", filter_type: "text", data: []},
+            {column_number: 4, filter_default_label: "[<?=lang('vat_no');?>]", filter_type: "text", data: []},
+            {column_number: 5, filter_default_label: "[<?=lang('phone');?>]", filter_type: "text", data: []},
+            {column_number: 6, filter_default_label: "[<?=lang('email_address');?>]", filter_type: "text", data: []},
+            {column_number: 7, filter_default_label: "[<?=lang('city');?>]", filter_type: "text", data: []},
+            {column_number: 8, filter_default_label: "[<?=lang('country');?>]", filter_type: "text", data: []},
         ], "footer");
     });
 </script>
@@ -73,7 +78,8 @@
                                 <input class="checkbox checkth" type="checkbox" name="check"/>
                             </th>
                             <th><?= lang("full_name"); ?></th>
-                            <th><?= lang("company"); ?></th>                            
+                            <th><?= lang("company"); ?></th>
+                            <th>Lương cơ bản</th>
                             <th><?= lang("vat_no"); ?></th>
                             <th><?= lang("phone"); ?></th>
                             <th><?= lang("email_address"); ?></th>
@@ -92,6 +98,7 @@
                             <th style="min-width:30px; width: 30px; text-align: center;">
                                 <input class="checkbox checkft" type="checkbox" name="check"/>
                             </th>
+                            <th></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -119,5 +126,5 @@
     echo '<script>$(document).ready(function(){$("#add").trigger("click");});</script>';
 }
 ?>
-	
+
 

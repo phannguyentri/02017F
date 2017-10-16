@@ -35,6 +35,12 @@
                         <label>Họ và tên *</label>
                         <?php echo form_input('name', $biller->name, 'class="form-control tip" id="name" required="required"'); ?>
                     </div>
+
+                    <div class="form-group person">
+                        <label>Lương cơ bản *</label>
+                        <?php echo form_input('basic_salary', $this->sma->formatNumber($biller->basic_salary), 'class="form-control tip" id="basic_salary" required="required"'); ?>
+                    </div>
+
                     <div class="form-group">
                         <label>Phòng ban</label>
                         <select name="department" class="form-control select" id="department" style="width: 100%;">

@@ -36,6 +36,11 @@
                         <?php echo form_input('name', '', 'class="form-control tip" id="name" data-bv-notempty="true"'); ?>
                     </div>
 
+                    <div class="form-group person">
+                        <label>Lương cơ bản *</label>
+                        <?php echo form_input('basic_salary', '', 'class="form-control tip" id="basic_salary" data-bv-notempty="true"'); ?>
+                    </div>
+
                     <div class="form-group">
                         <label>Phòng ban</label>
                         <select name="department" class="form-control select" id="department" style="width: 100%;">

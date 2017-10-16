@@ -37,7 +37,7 @@ class Billers extends MY_Controller
 
         $this->load->library('datatables');
         $this->datatables
-            ->select("id, CONCAT(cf1,' ',name) as name , company, vat_no, phone, email, city, country",false)
+            ->select("id, name , company, basic_salary, vat_no, phone, email, city, country",false)
             ->from("companies")
             ->where('group_name', 'biller')
             ->add_column("Actions", "<center><a class=\"tip\" title='" . $this->lang->line("edit_biller") . "' href='" . site_url('billers/edit/$1') . "' data-toggle='modal' data-target='#myModal'><i class=\"fa fa-edit\"></i></a> <a href='#' class='tip po' title='<b>" . $this->lang->line("delete_biller") . "</b>' data-content=\"<p>" . lang('r_u_sure') . "</p><a class='btn btn-danger po-delete' href='" . site_url('billers/delete/$1') . "'>" . lang('i_m_sure') . "</a> <button class='btn po-close'>" . lang('no') . "</button>\"  rel='popover'><i class=\"fa fa-trash-o\"></i></a></center>", "id");
@@ -56,6 +56,7 @@ class Billers extends MY_Controller
             $data = array(
                 'name' => $this->input->post('name'),
                 'department_id' => $this->input->post('department'),
+                'basic_salary' => $this->input->post('basic_salary'),
                 'email' => $this->input->post('email'),
                 'group_id' => NULL,
                 'group_name' => 'biller',
@@ -112,6 +113,7 @@ class Billers extends MY_Controller
             $data = array(
                 'name' => $this->input->post('name'),
                 'department_id' => $this->input->post('department'),
+                'basic_salary' => $this->input->post('basic_salary'),
                 'email' => $this->input->post('email'),
                 'group_id' => NULL,
                 'group_name' => 'biller',

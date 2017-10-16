@@ -119,4 +119,33 @@ class Timekeepers_model extends CI_Model
     }
   }
 
+  public function getBasicCompanies($department_id, $year, $month){
+    $this->db->select('companies.name, companies.basic_salary');
+
+    $this->db->join('timekeeper_details', 'timekeeper_details.timekeeper_id = timekeepers.id');
+    $this->db->join('companies', 'companies.id = timekeeper_details.company_id');
+    $q = $this->db->get_where('timekeepers', array('timekeepers.department_id' => $department_id, 'timekeepers.year' => $year, 'timekeepers.month' => $month));
+    if ($q->num_rows() > 0) {
+        foreach (($q->result()) as $row) {
+            $data[] = $row;
+        }
+        return $data;
+    }
+    return FALSE;
+  }
+
+  public function getCompanyIds($department_id, $year, $month){
+    $this->db->select('timekeeper_details.company_id');
+
+    $this->db->join('timekeeper_details', 'timekeeper_details.timekeeper_id = timekeepers.id');
+    $q = $this->db->get_where('timekeepers', array('timekeepers.department_id' => $department_id, 'timekeepers.year' => $year, 'timekeepers.month' => $month));
+    if ($q->num_rows() > 0) {
+        foreach (($q->result()) as $row) {
+            $data[] = $row;
+        }
+        return $data;
+    }
+    return FALSE;
+  }
+
 }
