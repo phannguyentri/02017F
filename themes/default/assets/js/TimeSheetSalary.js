@@ -252,7 +252,7 @@
 
         var initColHeads = function(){
             // console.log('year:'+ sheetOption.data.year + ', month:'+ sheetOption.data.month);
-            
+
             var colHeadHtml = '<tr>';
             for(var i=0,curColHead=''; i<=sheetOption.data.dimensions[1]; ++i){
                 if(i===0){
@@ -264,7 +264,7 @@
                     }else{
                         curColHead = '<td title="'+(sheetOption.data.colHead[i-1].title ? sheetOption.data.colHead[i-1].title:"")+'" data-col="'+(i-1)+'" class="TimeSheet-colHead '+(i===sheetOption.data.dimensions[1]?'rightMost':'')+'" style=""><b>'+sheetOption.data.colHead[i-1].name+'</b></td>';
                     }
-                    
+
                 }
                 colHeadHtml += curColHead;
             }
@@ -289,7 +289,7 @@
 
         var initRows = function(){
             workDay = 0;
-            
+
             for(var col= 1, curCell=''; col<=sheetOption.data.dimensions[1]; ++col){
                 myDate.setDate(col);
                 if (myDate.getDay() != 0) {
@@ -311,11 +311,11 @@
 
                 for(var col= 0, curCell=''; col<=sheetOption.data.dimensions[1]; ++col){
                     if(col===0){
-                        curCell = '<td title="" class="TimeSheet-rowHead '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'" style="color:#428bca;">'+sheetOption.data.rowHead[row].name+'</td>';
+                        curCell = '<td title="" class="TimeSheet-rowHead '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'" style="color:#428bca;"><b>'+sheetOption.data.rowHead[row].name+'</b></td>';
                     }else{
                         text = (sheetOption.data.sheetContentData[row][col-1] == 0) ? '' : sheetOption.data.sheetContentData[row][col-1];
                         hours = (sheetOption.data.sheetContentData[row][col-1] == 0) ? 0 : sheetOption.data.sheetContentData[row][col-1];
-                        
+
                         if (hours == "P") {
                             p++;
                         }else if(hours == "Ro"){
@@ -330,7 +330,7 @@
                             l++;
                         }else{
                             if (!isNaN(parseFloat(hours))){
-                                totalHours = totalHours + parseFloat(hours);    
+                                totalHours = totalHours + parseFloat(hours);
                             }
 
                         }
@@ -341,14 +341,14 @@
                         if (row % 2 != 0) {
                             if (myDate.getDay() != 0) {
                                 if (!isNaN(parseFloat(hours))){
-                                    totalOvertime = totalOvertime + parseFloat(hours);    
+                                    totalOvertime = totalOvertime + parseFloat(hours);
                                 }
-                                  
+
                             }else{
                                 if (!isNaN(parseFloat(hours))){
-                                    sundayHours = sundayHours + parseFloat(hours);    
+                                    sundayHours = sundayHours + parseFloat(hours);
                                 }
-                                
+
                             }
                         }
 
@@ -356,9 +356,9 @@
                             curCell = '<td class="TimeSheet-cell '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+(col===sheetOption.data.dimensions[1]?'rightMost':'')+'" data-row="'+row+'" data-col="'+(col-1)+'" style="background-color: #9ae89c;">'+ text +'</td>';
                         }else{
                             curCell = '<td class="TimeSheet-cell '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+(col===sheetOption.data.dimensions[1]?'rightMost':'')+'" data-row="'+row+'" data-col="'+(col-1)+'">'+ text +'</td>';
-                            // workDay++;                            
+                            // workDay++;
                         }
-                        
+
                     }
                     curRowHtml += curCell;
                 }
@@ -371,7 +371,7 @@
 
                 if(sheetOption.remarks){
                     // console.log(finalTotal);
-                    
+
                     if (row % 2 == 0) {
                         curRowHtml += '<td class="TimeSheet-remark total'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+finalTotal+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
@@ -405,33 +405,46 @@
                     // curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+finalTotal+'</td>';
                 }
                 curRowHtml += '</tr>';
-            
+
                 if (row % 2 != 0) {
                     company_id = sheetOption.data.companyIdsData[row].company_id;
-                    arrProductBonus = [];
+                    arrIdProductBonus = [];
+                    arrNameProductBonus = [];
 
                     for (var j = 0; j < sheetOption.data.productionsData.length; j++) {
                         tempEmp = sheetOption.data.productionsData[j].employee.split(",");
                         for (var v = 0; v < tempEmp.length; v++) {
                             if (tempEmp[v] == company_id) {
-                                if (!arrProductBonus.includes(sheetOption.data.productionsData[j].product_id)) {
-                                    arrProductBonus.push(sheetOption.data.productionsData[j].product_id);
+                                if (!arrIdProductBonus.includes(sheetOption.data.productionsData[j].product_id)) {
+                                    arrIdProductBonus.push(sheetOption.data.productionsData[j].product_id);
+                                    arrNameProductBonus.push(sheetOption.data.productionsData[j].product_name);
                                 }
                             }
                         }
                     }
 
-                    if (arrProductBonus.length) {
-                        for (var i = 0; i < arrProductBonus.length; i++) {
-                            
-                            curRowHtml += '<tr class="TimeSheet-row"><td title="" class="TimeSheet-rowHead" style="color:#428bca;"></td><td class="TimeSheet-cell" data-row="3" data-col="30" colspan="31">'+arrProductBonus[i]+'</td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark sunday-hours ">0</td><td class="TimeSheet-remark over-time ">0</td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td></tr>'
+                    if (arrIdProductBonus.length) {
+                        curRowHtml += '<tr class="TimeSheet-row"><td class="TimeSheet-rowHead" style="color:#428bca;"></td>'
+                        curRowHtml += '<td class="TimeSheet-cell" data-row="3" data-col="30" colspan="10" style="text-align: center;"><b>Đơn giá nguyên công</b></td>'
+                        curRowHtml += '<td class="TimeSheet-cell" data-row="3" data-col="30" colspan="10" style="text-align: center;"><b>Số lượng cấu thành</b></td>'
+                        curRowHtml += '<td class="TimeSheet-cell" data-row="3" data-col="30" colspan="11" style="text-align: center;"><b>Hoàn thành thực tế</b></td>'
+                        curRowHtml += '<td class="TimeSheet-remark"></td><td class="TimeSheet-remark"></td><td class="TimeSheet-remark"></td><td class="TimeSheet-remark"></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark"></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td></tr>';
+                        for (var i = 0; i < arrIdProductBonus.length; i++) {
+
+                            curRowHtml += '<tr>'
+                            curRowHtml += '<td style="color:#428bca;">'+arrNameProductBonus[i]+'</td>'
+                            curRowHtml += '<td class="TimeSheet-cell" data-row="3" data-col="30" colspan="10">4,000</td>'
+                            curRowHtml += '<td class="TimeSheet-cell" data-row="3" data-col="30" colspan="10">3</td>'
+                            curRowHtml += '<td class="TimeSheet-cell" data-row="3" data-col="30" colspan="11">50</td>'
+                            curRowHtml += '<td class="TimeSheet-remark"></td><td class="TimeSheet-remark sunday-hours "></td><td class="TimeSheet-remark over-time "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td><td class="TimeSheet-remark  "></td></tr>';
                         }
-                        
+
                     }
 
+                    console.log('arrNameProductBonus', arrNameProductBonus);
                     console.log('company_id', company_id);
-                    console.log('arrProductBonus', arrProductBonus);
-                    console.log('-------------------------------------------------------------------------------');                  
+                    console.log('arrIdProductBonus', arrIdProductBonus);
+                    console.log('-------------------------------------------------------------------------------');
                 }
                 thisSheet.append(curRowHtml);
             }
@@ -501,7 +514,7 @@
 
         /*
          * topLeftCell ： [1,4]，
-         * bottomRightCell ： [3,9]     
+         * bottomRightCell ： [3,9]
          * */
         var duringSelecting = function(ev,topLeftCell,bottomRightCell){
             var curDom = $(ev.currentTarget);
@@ -544,9 +557,9 @@
             }
         };
 
-        var isSelecting = false;  
+        var isSelecting = false;
 
-        var isColSelecting = false; 
+        var isColSelecting = false;
 
         var eventBinding = function(){
 

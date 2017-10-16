@@ -14,10 +14,15 @@
                       <span class="text-warning">Vui lòng nhập theo quy định này</span>
                   </div> -->
 
+
+
                   <?php
                     echo "<pre>";
                     print_r($productions);
                     echo "</pre>";
+
+                    echo '<h1>'.(29%3).'</h1>';
+
                    ?>
 
                   <div class="col-md-3">
