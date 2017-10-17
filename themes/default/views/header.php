@@ -511,9 +511,10 @@
                                         class="text"> <?= lang('Tính lương'); ?> </span> <span
                                         class="chevron closed"></span></a>
                                 <ul>
-                                        <li id="auth_users"><a class="submenu" href="<?= site_url('users'); ?>"><i
-                                                    class="fa fa-list"></i><span
-                                                    class="text"> <?= lang('Danh sách lương'); ?></span></a></li>
+                                        <li id="auth_users">
+                                            <a class="submenu" href="<?= site_url('salaries/view'); ?>"><i class="fa fa-list"></i>
+                                            <span class="text"> <?= lang('Danh sách lương'); ?></span></a>
+                                        </li>
 
                                 </ul>
                             </li>

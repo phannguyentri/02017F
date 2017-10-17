@@ -2493,15 +2493,18 @@ class Productions_model extends CI_Model
     }
 
     public function getProductionByYearMonth($year, $month){
-        $this->db->select('productions.id, production_items.product_id, productions.created_at, productions.reference_no, production_items.product_name, production_items.product_name, production_stages.employee, production_stages.stage, production_stages.quantity as soluonghoanthanh');
+        $this->db->select('productions.id, production_items.product_id, productions.created_at, productions.reference_no, production_items.product_name, production_items.product_name, production_stages.employee, production_stages.stage, production_stages.quantity as soluonghoanthanh, products.wage, products.quantity_config');
 
         $this->db->where('MONTH(created_at) = '.$month);
         $this->db->where('YEAR(created_at) = '.$year);
         $this->db->where('production_items.status', 'completed');
         $this->db->where('production_stages.product_id = production_items.product_id');
         $this->db->where('production_stages.date_start <>','NULL');
+        // $this->db->where('products.id','production_items.product_id');
+
 
         $this->db->join('production_items', 'production_items.sale_id = productions.id');
+        $this->db->join('products','products.id = production_items.product_id');
         $this->db->join('production_stages', 'production_stages.production_id = productions.id');
 
         $q = $this->db->get('productions');

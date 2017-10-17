@@ -6,25 +6,6 @@
         <div class="row">
             <div class="col-lg-12">
 
-<!--                   <div class="well well-small">
-                    <a href="<?php echo base_url(); ?>assets/xls/timekeepers_import.xlsx" class="btn btn-primary pull-right"><i class="fa fa-download"></i> Tải file mẫu</a>
-                      <span class="text-info"><b>0 đến 24</b></span> là những số hợp lệ bạn có thể điền vào bảng chấm công.
-                      </br>
-                      <span class="text-info"><b>P, Ro, R, Đ, V, L</b></span> là những từ hợp lệ bạn có thể điền vào bảng chấm công.</br>
-                      <span class="text-warning">Vui lòng nhập theo quy định này</span>
-                  </div> -->
-
-
-
-                  <?php
-                    echo "<pre>";
-                    print_r($productions);
-                    echo "</pre>";
-
-                    echo '<h1>'.(29%3).'</h1>';
-
-                   ?>
-
                   <div class="col-md-3">
 
                     <div class="form-group">
@@ -91,7 +72,7 @@
                           <div id="J_calenderWrapper">
                             <table class="table" style="width:1000px; max-width:1000px; ">
                                 <thead></thead>
-                                <tbody id="J_timedSheet">
+                                <tbody id="J_timedSheet" >
                                 </tbody>
                             </table>
                           </div>
@@ -101,13 +82,13 @@
 
 
 
-                  <div class="col-md-3" style="margin-top: 15px;">
+<!--                   <div class="col-md-3" style="margin-top: 15px;">
                     <div class="form-group">
                       <div class="controls">
                         <input type="submit" name="add_user" value="Lưu bảng tính lương" id="btn-save" class="btn btn-primary" disabled>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
 
             </div>
 
@@ -158,7 +139,7 @@
           success: function (response) {
               if (response.timekeeperDetails.length != undefined) {
                 console.log(response);
-                $('#btn-save').removeAttr('disabled');
+                // $('#btn-save').removeAttr('disabled');
 
                 timekeeperDetailIds = response.timekeeperDetailIds;
                 var nameList = []; // new Array
