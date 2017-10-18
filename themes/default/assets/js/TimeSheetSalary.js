@@ -295,7 +295,6 @@
                 rowBonusProductHtml = '';
                 totalBonusMoney = 0;
 
-
                 curRowHtml= '<tr id="row-'+row+'" class="TimeSheet-row">'
                 totalHours = 0;
                 totalOvertime = 0;

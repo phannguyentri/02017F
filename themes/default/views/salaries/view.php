@@ -6,6 +6,10 @@
         <div class="row">
             <div class="col-lg-12">
 
+              <?php
+                echo date("w",strtotime('17-7-2017'));
+
+               ?>
                   <div class="col-md-3">
 
                     <div class="form-group">
@@ -82,13 +86,17 @@
 
 
 
-<!--                   <div class="col-md-3" style="margin-top: 15px;">
+                  <div class="col-md-3" style="margin-top: 15px;">
                     <div class="form-group">
                       <div class="controls">
-                        <input type="submit" name="add_user" value="Lưu bảng tính lương" id="btn-save" class="btn btn-primary" disabled>
+                        <a href="#" id="btn-xls" target="_blank">
+                          <button type="button" class="btn btn-info">
+                            <span class="icon fa fa-file-excel-o"></span> Tải về dạng XLS
+                          </button>
+                        </a>
                       </div>
                     </div>
-                  </div> -->
+                  </div>
 
             </div>
 
@@ -122,9 +130,11 @@
       sheetContentData = [];
 
       e.preventDefault();
-      var department_id = $("#department" ).val();
+      department_id = $("#department" ).val();
       month         = $("#month").val();
       year          = $("#year").val();
+
+      $('#btn-xls').attr('href', '<?= site_url('salaries/xls/'); ?>?department_id='+department_id+'&month='+month+'&year='+year);
 
       $.ajax({
           url: '<?= site_url('salaries/getAllTimekeeperDetails'); ?>',

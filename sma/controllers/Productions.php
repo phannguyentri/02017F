@@ -1636,8 +1636,6 @@ class Productions extends MY_Controller
                 $this->excel->getActiveSheet()->SetCellValue('A2', lang('HỢP ĐỒNG: ').$inv->reference_no );
 
 
-
-
                 $this->excel->getActiveSheet()->mergeCells('A1:K1');
                 $this->excel->getActiveSheet()->mergeCells('A2:K2');
 
@@ -1664,8 +1662,6 @@ class Productions extends MY_Controller
                 ));
 
 
-
-
                 $this->excel->getActiveSheet()->mergeCells('A4:A6');
                 $this->excel->getActiveSheet()->mergeCells('B4:B6');
                 $this->excel->getActiveSheet()->mergeCells('C4:C6');
@@ -1683,7 +1679,6 @@ class Productions extends MY_Controller
                 $this->excel->getActiveSheet()->SetCellValue('H6', lang('Trọng lượng'));
 
 
-
                 $this->excel->getActiveSheet()->SetCellValue('I4', lang('Số lượng bộ'));
                 $this->excel->getActiveSheet()->SetCellValue('J4', lang('Tổng số chi tiết'));
                 $this->excel->getActiveSheet()->SetCellValue('K4', lang('Tổng khối lượng'));
@@ -1692,8 +1687,6 @@ class Productions extends MY_Controller
                 $this->excel->getActiveSheet()->mergeCells('I4:I6');
                 $this->excel->getActiveSheet()->mergeCells('J4:J6');
                 $this->excel->getActiveSheet()->mergeCells('K4:K6');
-
-
 
 
                 $this->excel->getActiveSheet()->SetCellValue('L4', lang('Số lượng cộng dồn'));
@@ -1724,7 +1717,6 @@ class Productions extends MY_Controller
                     }
 
 
-
                 if($sum_row_stage > 0){
                     if(75+($countA*1) < 91){
                         $this->excel->getActiveSheet()->mergeCells('L4:'.(chr(75+($sum_row_stage*1))).'4');
@@ -1734,17 +1726,11 @@ class Productions extends MY_Controller
                 }
 
 
-
-
                 $rowB = 76+$countA ;
                 $rowB1 = 65+$countA1 ;
                 $countB = 0 ;
                 $countB1 = 0 ;
                 $this->excel->getActiveSheet()->SetCellValue(chr($rowB).'4', lang('Tổng khối lượng'));
-
-
-
-
 
                     foreach ($rows[0]->stages2 as $key => $value) {
                         if($value->stages1){
@@ -1957,8 +1943,6 @@ class Productions extends MY_Controller
                         }
 
                     }
-
-
 
 
                     $rowCate++;
