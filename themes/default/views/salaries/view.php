@@ -7,8 +7,7 @@
             <div class="col-lg-12">
 
               <?php
-                echo date("w",strtotime('17-7-2017'));
-
+                // echo date("w",strtotime('17-7-2017'));
                ?>
                   <div class="col-md-3">
 

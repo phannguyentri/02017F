@@ -282,7 +282,7 @@
             colspan = (sheetOption.data.dimensions[1] - (sheetOption.data.dimensions[1] % 4)) /4;
             oddCol  = colspan + (sheetOption.data.dimensions[1] % 4);
             arrTotalBonusMoney = [];
-            
+
 
             for(var col= 1, curCell=''; col<=sheetOption.data.dimensions[1]; ++col){
                 myDate.setDate(col);
@@ -404,7 +404,7 @@
 
                 }
                 curRowHtml += '</tr>';
-            
+
                 if (row % 2 != 0) {
                     company_id = sheetOption.data.companyIdsData[row].company_id;
                     arrIdProductBonus   = [];
@@ -415,7 +415,6 @@
                     arrBonusMoney       = [];
 
                     arrIdProduction     = [];
-
 
 
                     for (var p = 0; p < sheetOption.data.productionsData.length; p++) {
@@ -447,15 +446,15 @@
                                             if ((x != 0) && sheetOption.data.productionsData[x].id != sheetOption.data.productionsData[x-1].id) {
                                                 console.log('curr', sheetOption.data.productionsData[x].id);
                                                 totalRealCompleted += Math.min(...arrQuantityCompleted);
-                                                arrQuantityCompleted = [];    
+                                                arrQuantityCompleted = [];
                                             }
-                                            
+
                                             arrQuantityCompleted.push(sheetOption.data.productionsData[x].soluonghoanthanh);
 
-                                        }                      
+                                        }
                                     }
                                     totalRealCompleted += Math.min(...arrQuantityCompleted);
-                                    arrRealCompleted.push(totalRealCompleted);                             
+                                    arrRealCompleted.push(totalRealCompleted);
 
                                     bonusMoney = sheetOption.data.productionsData[j].wage*totalRealCompleted*sheetOption.data.productionsData[j].quantity_config;
                                     totalBonusMoney += bonusMoney;

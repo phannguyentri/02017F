@@ -75,8 +75,14 @@ class Salaries extends MY_Controller
 
         if ($department_id && $month && $year) {
             $this->load->model('timekeepers_model');
+            $this->load->model('productions_model');
 
             $allInfoTimekeeperDetails = $this->timekeepers_model->getAllInfoTimekeeperDetails($department_id, $year, $month);
+            $productionsInMonthYear = $this->productions_model->getProductionByYearMonth($year, $month);
+
+            // echo "<pre>";
+            // print_r($productionsInMonthYear);
+            // echo "</pre>";
 
             $this->load->library('excel');
             $this->excel->setActiveSheetIndex(0);
@@ -85,6 +91,21 @@ class Salaries extends MY_Controller
             $styleHead = array(
                 'font'  => array(
                     'bold'  => true,
+                    'size'  => 12,
+                ),
+                'alignment' => array(
+                    'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                ),
+                'borders' => array(
+                  'allborders' => array(
+                      'style' => PHPExcel_Style_Border::BORDER_THIN
+                  )
+                )
+            );
+
+            $styleSub = array(
+                'font'  => array(
                     'size'  => 12,
                 ),
                 'alignment' => array(
@@ -229,8 +250,6 @@ class Salaries extends MY_Controller
 // END Init Head
 
 // Init Rows
-
-
             $dayWork = 0;
             for ($i=0; $i < cal_days_in_month(CAL_GREGORIAN, $month, $year); $i++) {
                 if (date("w",strtotime(($i+1).'-'.$month.'-'.$year)) != 0) {
@@ -238,10 +257,10 @@ class Salaries extends MY_Controller
                 }
             }
 
-
             $countRow = 4;
 
             foreach ($allInfoTimekeeperDetails as $key => $detail) {
+                $companyID = $detail->company_id;
                 $countHeadOnceDetail = 1;
                 $countHeadSecondDetail = 0;
                 if ($key % 2 == 0) {
@@ -257,9 +276,31 @@ class Salaries extends MY_Controller
                     $basicSalary = $detail->basic_salary;
                 }
 
+                $arrProductId = array();
+
+                if ($productionsInMonthYear) {
+                  foreach ($productionsInMonthYear as $production) {
+                    $empIds = explode(',', $production->employee);
+                    foreach ($empIds as $emp) {
+                      if ($emp == $companyID) {
+                        if (!in_array($production->product_id, $arrProductId)) {
+                          $arrProductId[] = $production->product_id;
+                        }
+                      }
+                    }
+                  }
+                }
+
+                // echo "------------------------------------------------------------------";
+                // echo "<pre>";
+                // print_r($arrProductId);
+                // echo "</pre>";
+                // die();
 
                 unset($detail->name);
                 unset($detail->basic_salary);
+                unset($detail->company_id);
+                // var_dump($companyID);
 
                 $salaryEachDay = $basicSalary/$dayWork;
                 $i = 0;
@@ -340,6 +381,28 @@ class Salaries extends MY_Controller
                 }else{
                     $this->excel->getActiveSheet()->SetCellValue('AH'.($countRow-1), $overTimeSunDay);
                     $this->excel->getActiveSheet()->SetCellValue('AI'.($countRow-1), $overTime);
+
+                    if (!empty($arrProductId)) {
+                      $countRow++;
+                      $this->excel->getActiveSheet()->SetCellValue('B'.$countRow, 'Đơn giá nguyên công');
+                      $this->excel->getActiveSheet()->mergeCells('B'.$countRow.':I'.$countRow);
+                      $this->excel->getActiveSheet()->getStyle('B'.$countRow.':I'.$countRow)->applyFromArray($styleSub);
+
+                      $this->excel->getActiveSheet()->SetCellValue('J'.$countRow, 'Số lượng cấu thành');
+                      $this->excel->getActiveSheet()->mergeCells('J'.$countRow.':Q'.$countRow);
+                      $this->excel->getActiveSheet()->getStyle('J'.$countRow.':Q'.$countRow)->applyFromArray($styleSub);
+
+                      $this->excel->getActiveSheet()->SetCellValue('R'.$countRow, 'Hoàn thành thực tế');
+                      $this->excel->getActiveSheet()->mergeCells('R'.$countRow.':Y'.$countRow);
+                      $this->excel->getActiveSheet()->getStyle('R'.$countRow.':Y'.$countRow)->applyFromArray($styleSub);
+
+                      $this->excel->getActiveSheet()->SetCellValue('Z'.$countRow, 'Tổng tiền(VNĐ)');
+                      $this->excel->getActiveSheet()->mergeCells('Z'.$countRow.':AF'.$countRow);
+                      $this->excel->getActiveSheet()->getStyle('Z'.$countRow.':AF'.$countRow)->applyFromArray($styleSub);
+                      foreach ($arrProductId as $productId) {
+
+                      }
+                    }
                 }
 
                 $countRow++;
