@@ -1,8 +1,9 @@
 <script type="text/javascript">
-     <?php if ($this->session->userdata('remove_pols')) { ?>
-    if (localStorage.getItem('poitemss')) {
-        localStorage.removeItem('poitemss');
-    }
+    localStorage.removeItem('poitemss');
+    localStorage.removeItem('poref');
+
+    <?php if ($this->session->userdata('remove_pols')) { ?>
+
     if (localStorage.getItem('podiscount')) {
         localStorage.removeItem('podiscount');
     }
@@ -12,9 +13,7 @@
     if (localStorage.getItem('poshipping')) {
         localStorage.removeItem('poshipping');
     }
-    if (localStorage.getItem('poref')) {
-        localStorage.removeItem('poref');
-    }
+
     if (localStorage.getItem('powarehouse')) {
         localStorage.removeItem('powarehouse');
     }
@@ -30,9 +29,9 @@
     if (localStorage.getItem('poextras')) {
         localStorage.removeItem('poextras');
     }
-    if (localStorage.getItem('podate')) {
-        localStorage.removeItem('podate');
-    }
+
+    localStorage.removeItem('podate');
+
     if (localStorage.getItem('postatus')) {
         localStorage.removeItem('postatus');
     }
@@ -138,6 +137,7 @@
                 localStorage.setItem('poitemss', JSON.stringify(poitemss));
             }
 
+
             $.ajax({
                 url: '<?= site_url('enquiry/getMaterialNorms'); ?>',
                 async : false,
@@ -207,10 +207,9 @@
 
                 <p class="introtext"><?php echo lang('enter_info'); ?></p>
                 <?php
-                $attrib = array('data-toggle' => 'validator', 'role' => 'form');
-                echo form_open_multipart("enquiry/add", $attrib)
+                    $attrib = array('data-toggle' => 'validator', 'role' => 'form');
+                    echo form_open_multipart("enquiry/add", $attrib)
                 ?>
-
 
                 <div class="row">
                     <div class="col-lg-12">
@@ -254,10 +253,16 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Đơn hàng sản xuất</label>
-                                <select name="production_id" class="form-control select" id="production_id" style="width: 100%;">
+                                <select name="production_id" class="form-control select" id="production_id"
+                                 data-exist="<?= ($availableProductionId) ? 'true' : 'false' ?>" style="width: 100%;">
                                     <?php
                                         foreach ($productions as $value) {
-                                            echo '<option value="'.$value->id.'">'.$value->reference_no.'</option>';
+                                            if ($availableProductionId == $value->id) {
+                                                echo '<option value="'.$value->id.'" selected="selected">'.$value->reference_no.'</option>';
+                                            }else{
+                                                echo '<option value="'.$value->id.'">'.$value->reference_no.'</option>';
+                                            }
+
                                         }
                                      ?>
                                 </select>
@@ -271,9 +276,6 @@
                                        data-show-preview="false" class="form-control file">
                             </div>
                         </div>
-
-
-
 
                         <div class="col-md-12" id="sticker">
                             <div class="well well-sm">
@@ -290,7 +292,6 @@
                                 <div class="clearfix"></div>
                             </div>
                         </div>
-
 
 
                         <div class="col-md-12">
@@ -544,6 +545,72 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $('#wps').select2({});
+
+        if ($('#production_id').attr('data-exist') == 'true') {
+            event.preventDefault();
+            var production_id = $( "#production_id" ).val();
+
+            for (var k in poitemss){
+                delete poitemss[k];
+                localStorage.setItem('poitemss', JSON.stringify(poitemss));
+            }
+
+
+            $.ajax({
+                url: '<?= site_url('enquiry/getMaterialNorms'); ?>',
+                async : false,
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    production_id: production_id
+                },
+                success: function (data) {
+                    item = {};
+
+                    for(i in data){
+                        $.ajax({
+                            url: 'enquiry/suggestions',
+                            async : false,
+                            type: 'GET',
+                            dataType: 'json',
+                            data: {
+                                select_option: 1,
+                                item_name: data[i].item,
+                            },
+                            success: function (data2) {
+                                if (data2[0].id !== 0) {
+
+                                    if (parseInt(data[i].items_quantity) < parseInt(data[i].total_quantity)) {
+                                        quantity_need = parseInt(data[i].total_quantity - data[i].items_quantity);
+                                        data2[0].row.qty = quantity_need;
+
+                                        var item_id = site.settings.item_addition == 1 ? data2[0].item_id : data2[0].id;
+                                        if (poitemss[item_id]) {
+                                            poitemss[item_id].row.qty = parseFloat(poitemss[item_id].row.qty) + 1;
+                                        } else {
+                                            poitemss[item_id] = data2[0];
+                                        }
+                                        localStorage.setItem('poitemss', JSON.stringify(poitemss));
+
+                                    }
+
+                                } else {
+                                    //audio_error.play();
+                                    bootbox.alert('<?= lang('no_match_found') ?>');
+                                }
+                            }
+                        })
+                    }
+
+                    if (localStorage.getItem('poitemss')) {
+                        loadItems();
+                    }
+
+                }
+            })
+        }
+
     })
+
 
 </script>

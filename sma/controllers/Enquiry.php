@@ -566,6 +566,9 @@ class Enquiry extends MY_Controller
             $this->data['tax_rates'] = $this->site->getAllTaxRates();
             $this->data['warehouses'] = $this->site->getAllWarehouses();
             $this->data['productions'] = $this->site->getProductions();
+
+            $this->data['availableProductionId'] = ($this->input->get('production')) ? $this->input->get('production') : false;
+
             $this->data['ponumber'] = ''; //$this->site->getReference('po');
             $this->load->helper('string');
             $this->data['date'] = date('Y-m-d');

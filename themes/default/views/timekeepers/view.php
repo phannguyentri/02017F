@@ -7,7 +7,6 @@
             <div class="col-lg-12">
 
                   <div class="well well-small">
-                    <a href="<?php echo base_url(); ?>assets/xls/timekeepers_import.xlsx" class="btn btn-primary pull-right"><i class="fa fa-download"></i> Tải file mẫu</a>
                       <span class="text-info"><b>0 đến 24</b></span> là những số hợp lệ bạn có thể điền vào bảng chấm công.
                       </br>
                       <span class="text-info"><b>P, Ro, R, Đ, V, L</b></span> là những từ hợp lệ bạn có thể điền vào bảng chấm công.</br>
@@ -124,12 +123,13 @@
   $(function() {
       $(document).on('click', '.TimeSheet-cell', function() {
         const input = prompt('Nhập thay đổi: ');
+
         if(input != null) {
+          isOverTime = ($(this).attr('data-row') % 2 != 0) ? true : false;
           if ((input >= 0 && input <= 24) || (input == "CT" || input == "P" || input == "Ro" || input == "R" || input == "Ô" || input == "Đ" || input == "NB" || input == "V" || input == "L")) {
 
-            isOverTime = ($(this).attr('data-row') % 2 != 0) ? true : false;
-
             if (isOverTime && (input == "CT" || input == "P" || input == "Ro" || input == "R" || input == "Ô" || input == "Đ" || input == "NB" || input == "V" || input == "L")) {
+
               bootbox.alert('Dòng tăng ca chỉ được nhập chữ số.');
             }else{
               if (input == 0) {
@@ -149,7 +149,6 @@
               d   = 0;
               v   = 0;
               l   = 0;
-
 
 
               var myDate = new Date();
@@ -209,6 +208,8 @@
               }
             }
 
+          }else if(isOverTime){
+            bootbox.alert('Dòng tăng ca chỉ được nhập chữ số');
           }else{
             bootbox.alert('Ký tự không hợp lệ!');
           }

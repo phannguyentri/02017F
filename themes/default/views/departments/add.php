@@ -1,37 +1,3 @@
-<!-- <div class="box">
-    <div class="box-header">
-        <h2 class="blue"><i class="fa-fw fa fa-users"></i>Thêm phòng ban</h2>
-    </div>
-    <div class="box-content">
-        <div class="row">
-            <div class="col-lg-12">
-
-                <?php $attrib = array('class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form');
-                echo form_open("", $attrib);
-                ?>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <label>Tên phòng ban</label>
-                                <div class="controls">
-                                    <?php echo form_input('name', '', 'class="form-control" id="first_name" required="required" '); ?>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <p><?php echo form_submit('add_user', 'Thêm phòng ban', 'class="btn btn-primary"'); ?></p>
-
-                <?php echo form_close(); ?>
-            </div>
-        </div>
-    </div>
-</div>
- -->
-
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
@@ -43,16 +9,40 @@
         <div class="modal-body">
             <p><?= lang('enter_info'); ?></p>
 
-            <div class="form-group">
-                <label for="percent">Tên phòng ban</label>
-                <div class="controls"> <?php echo form_input('name', '', 'class="form-control" id="percent" required="required"'); ?>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="percent">Tên phòng ban</label>
+                    <div class="controls">
+                        <?php echo form_input('name', '', 'class="form-control" id="percent" required="required"'); ?>
+                    </div>
+                </div>
             </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Loại phòng ban</label>
+                    <select name="type" class="form-control type" style="width: 100%;">
+                          <option value="office" selected>Văn phòng</option>
+                          <option value="production">Sản xuất</option>
+                    </select>
+                </div>
+            </div>
+
 
         </div>
         <div class="modal-footer">
-            <?php echo form_submit('add_department', 'Thêm phòng ban', 'class="btn btn-primary"'); ?>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <?php echo form_submit('add_department', 'Thêm phòng ban', 'class="btn btn-primary pull-left"'); ?>
+                </div>
+            </div>
+
         </div>
     </div>
     <?php echo form_close(); ?>
 </div>
-<?= $modal_js ?>
+<script type="text/javascript">
+    $(document).ready(function (e) {
+        $('.type').select2();
+    });
+</script>

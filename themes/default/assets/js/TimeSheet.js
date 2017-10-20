@@ -402,22 +402,6 @@
              bottomRight : cell2
          }
         * */
-        var cellCompare = function(cell1,cell2){  //check which cell is more top-left
-            var sum1 = cell1[0] + cell1[1];
-            var sum2 = cell2[0] + cell2[1];
-
-            if((cell1[0]-cell2[0])*(cell1[1]-cell2[1])<0){
-                return {
-                    topLeft : cell1[0]<cell2[0] ? [cell1[0],cell2[1]] : [cell2[0],cell1[1]],
-                    bottomRight : cell1[0]<cell2[0] ? [cell2[0],cell1[1]] : [cell1[0],cell2[1]]
-                };
-            }
-
-            return {
-                topLeft : sum1<=sum2 ? cell1 : cell2,
-                bottomRight : sum1>sum2 ? cell1 : cell2
-            };
-        };
 
         var repaintSheet = function(){
             var sheetStates = sheetModel.getSheetStates();
@@ -434,10 +418,6 @@
             });
         };
 
-        var removeSelecting = function(){
-            thisSheet.find(".TimeSheet-cell-selecting").removeClass("TimeSheet-cell-selecting");
-        };
-
         var cleanRemark = function(){
             thisSheet.find(".TimeSheet-remark").each(function(idx,ele){
                 var curDom = $(ele);
@@ -446,138 +426,12 @@
             });
         };
 
-        /*
-        * startCel ： [1,4]
-        * */
-        var startSelecting = function(ev,startCel){
-            operationArea.startCell = startCel;
-            if(sheetOption.start){
-                sheetOption.start(ev);
-            }
-        };
-
-        /*
-         * topLeftCell ： [1,4]，
-         * bottomRightCell ： [3,9]     
-         * */
-        var duringSelecting = function(ev,topLeftCell,bottomRightCell){
-            var curDom = $(ev.currentTarget);
-
-            if(isSelecting && curDom.hasClass("TimeSheet-cell") || isColSelecting && curDom.hasClass("TimeSheet-colHead")){
-                removeSelecting();
-                for(var row=topLeftCell[0]; row<=bottomRightCell[0]; ++row){
-                    for(var col=topLeftCell[1]; col<=bottomRightCell[1]; ++col){
-                        $($(thisSheet.find(".TimeSheet-row")[row]).find(".TimeSheet-cell")[col]).addClass("TimeSheet-cell-selecting");
-                    }
-                }
-            }
-        };
-
-        /*
-         * targetArea ： {
-         *      topLeft ： [1,2],
-         *      bottomRight: [3,8]
-         * }
-         * */
-        var afterSelecting = function(ev,targetArea){
-            var curDom = $(ev.currentTarget);
-            var key = $(ev.which);
-            var targetState = undefined;
-
-            if(key[0]===1){       targetState = 1;}   //1
-            else if(key[0]===3){ targetState = 0;}   //0
-
-            if(isSelecting && curDom.hasClass("TimeSheet-cell") || isColSelecting && curDom.hasClass("TimeSheet-colHead")){
-
-            }else{
-                removeSelecting();
-            }
-
-            isSelecting = false;
-            isColSelecting = false;
-            operationArea = {
-                startCell : undefined,
-                endCell : undefined
-            }
-        };
 
         var isSelecting = false;  
 
         var isColSelecting = false; 
 
-        var eventBinding = function(){
-
-            thisSheet.undelegate(".umsSheetEvent");
-
-            thisSheet.delegate(".TimeSheet-cell","mousedown.umsSheetEvent",function(ev){
-                var curCell = $(ev.currentTarget);
-                var startCell = [curCell.data("row"),curCell.data("col")];
-                isSelecting = true;
-                startSelecting(ev,startCell);
-            });
-
-            thisSheet.delegate(".TimeSheet-cell","mouseup.umsSheetEvent",function(ev){
-                if(!operationArea.startCell){
-                    return;
-                }
-                var curCell = $(ev.currentTarget);
-                var endCell = [curCell.data("row"),curCell.data("col")];
-                var correctedCells = cellCompare(operationArea.startCell,endCell);
-                afterSelecting(ev,correctedCells);
-            });
-
-            thisSheet.delegate(".TimeSheet-cell","mouseover.umsSheetEvent",function(ev){
-                if(!isSelecting){
-                    return;
-                }
-                var curCell = $(ev.currentTarget);
-                var curCellIndex = [curCell.data("row"),curCell.data("col")];
-                var correctedCells = cellCompare(operationArea.startCell,curCellIndex);
-                var topLeftCell = correctedCells.topLeft;
-                var bottomRightCell = correctedCells.bottomRight;
-
-                duringSelecting(ev,topLeftCell,bottomRightCell);
-            });
-
-
-            thisSheet.delegate(".TimeSheet-colHead","mousedown.umsSheetEvent",function(ev){
-                var curColHead = $(ev.currentTarget);
-                var startCell = [0,curColHead.data("col")];
-                isColSelecting = true;
-                startSelecting(ev,startCell);
-            });
-
-            thisSheet.delegate(".TimeSheet-colHead","mouseup.umsSheetEvent",function(ev){
-                if(!operationArea.startCell){
-                    return;
-                }
-                var curColHead = $(ev.currentTarget);
-                var endCell = [sheetOption.data.dimensions[0]-1,curColHead.data("col")];
-                var correctedCells = cellCompare(operationArea.startCell,endCell);
-                afterSelecting(ev,correctedCells);
-            });
-
-            thisSheet.delegate(".TimeSheet-colHead","mouseover.umsSheetEvent",function(ev){
-                if(!isColSelecting){
-                    return;
-                }
-                var curColHead = $(ev.currentTarget);
-                var curCellIndex = [sheetOption.data.dimensions[0]-1,curColHead.data("col")];
-                var correctedCells = cellCompare(operationArea.startCell,curCellIndex);
-                var topLeftCell = correctedCells.topLeft;
-                var bottomRightCell = correctedCells.bottomRight;
-
-                duringSelecting(ev,topLeftCell,bottomRightCell);
-            });
-
-            thisSheet.delegate("td","contextmenu.umsSheetEvent",function(ev){
-                return false;
-            });
-        };
-
-
         initSheet();
-        eventBinding();
 
 
         var publicAPI = {

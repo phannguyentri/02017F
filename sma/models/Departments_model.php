@@ -47,4 +47,12 @@ class Departments_model extends CI_Model
       }
       return false;
     }
+
+    public function isProductionById($department_id){
+      $q = $this->db->get_where('departments', array('id' => $department_id, 'type' => 'production'), 1);
+      if ($q->num_rows() > 0) {
+          return TRUE;
+      }
+      return FALSE;
+    }
 }

@@ -506,12 +506,12 @@
                             </li>
 
 
-                            <li class="mm_check_payroll">
+                            <li class="mm_salaries">
                                 <a class="dropmenu" href="#"><i class="fa fa-money"></i><span
                                         class="text"> <?= lang('Tính lương'); ?> </span> <span
                                         class="chevron closed"></span></a>
                                 <ul>
-                                        <li id="auth_users">
+                                        <li id="salaries_view">
                                             <a class="submenu" href="<?= site_url('salaries/view'); ?>"><i class="fa fa-list"></i>
                                             <span class="text"> <?= lang('Danh sách lương'); ?></span></a>
                                         </li>

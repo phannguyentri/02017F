@@ -46,7 +46,8 @@ class Departments extends MY_Controller
         if ($this->form_validation->run() == true) {
 
             $data = array(
-                'name'  => $this->input->post('name')
+                'name'  => $this->input->post('name'),
+                'type'  => $this->input->post('type')
             );
             if ($this->departments_model->editDepartment($id, $data)) {
                 $this->session->set_flashdata('message', "Sửa phòng ban thành công");
@@ -72,7 +73,8 @@ class Departments extends MY_Controller
         if ($this->form_validation->run() == true) {
 
             $data = array(
-                'name'  => $this->input->post('name')
+                'name'  => $this->input->post('name'),
+                'type'  => $this->input->post('type')
             );
             if ($this->departments_model->addDepartment($data)) {
                 $this->session->set_flashdata('message', "Thêm phòng ban thành công");

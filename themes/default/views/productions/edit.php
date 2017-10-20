@@ -482,7 +482,7 @@
 
                                             <div class="col-md-12 <?php echo ($a->sale_status == 'completed' || $a->sale_status == 'cancel') ? 'completed' : '' ?>">
                                                 <div  id="detail"></div>
-                                                <div  id="enquiry">
+                                                <div  id="enquiry" style="margin-left: 0px; width: 100%;">
 
                                                 </div>
                                             </div>
@@ -701,9 +701,6 @@ $(document).ready(function () {
         html+='<div class="table-responsive">';
         html+='<table id="attrTable'+indexx+'" class="table table-bordered table-condensed table-striped" style="margin-bottom: 0; margin-top: 10px;"><caption>'+caption+'</caption>';
         html+='<thead><tr class="active"><th style="width:20% !important"><?= lang('name') ?></th><th style="width: 11%;"><?= lang('Ngày bắt đầu') ?></th><th style="width: 11%;"><?= lang('Ngày kết thúc') ?><th style="width: 9%;">Phần trăm</th></th><th><?= lang('Phân công') ?></th><th class="text-center" style="width: 4%;"><i class="fa fa-times attr-remove-all"></i></th></tr></thead><tbody>';
-        // console.log(indexx);
-        // console.log('data 1:',data_variants_current);
-        // console.log('data variants:',data_variants);
 
         console.log('data_stages_current',data_stages_current);
         if(data_stages_current!=null && data_stages_current!=false)
@@ -715,18 +712,14 @@ $(document).ready(function () {
        else
        {
             var current_emp;
-            // console.log(production_items);
+
             for(i in production_items){
                 if(production_items[i].product_id == current_product){
                     current_emp = production_items[i].employees;
-                    // console.log('emp', production_items[i]);
                 }
             }
-            // console.log('emp', data_variants);
+
             $.each(data_variants, function( index, vbillerslue) {
-                // console.log(index, vbillerslue);
-                // console.log('day', production_items);
-                // console.log('inv:', <?=$inv->id?>);
 
                 html += '<tr class="attr"><td><input type="hidden" name="delivery_times[]" value="'+indexx+'"><input type="hidden" name="attr_name[]" value="'+vbillerslue.name+'">'+vbillerslue.name+'</td><td style="width:135px"><input type="text" name="date_start[]" value="" class="form-control input-tip date date-start" id="date_start'+index+'" style="width:99px" data-original-title="" title="" data-bv-field="date"></td><td style="width:135px"><input type="text" name="date_end[]" value="" class="form-control input-tip date date-end" id="date_end'+index+'" style="width:99px" data-original-title="" title="" data-bv-field="date"></td> <td style="text-align: center"><input type="hidden" name="stages_percent[]" value="'+vbillerslue.percent+'"><input type="hidden" name="stage_id[]" value="'+vbillerslue.id+'">'+vbillerslue.percent+'</td><td style="width: 100px"><input type="text" name="emp[]" value="'+current_emp+'" class="form-control select" id="emp'+index+'" placeholder="Chọn danh sách nhân viên trước" /></td><td class="text-center" ><i class="fa fa-times delAttr"></i></td></tr>'
             });
@@ -872,7 +865,13 @@ $(document).ready(function () {
                                 if(scdata.productions['sale_status'] == 'not_start' || scdata.productions['sale_status'] == 'completed' ){
                                     $.each(scdata.material_norms, function( index, vbillerslue ) {
 
-                                    html +='<tr data-id="'+ vbillerslue['item_id'] +'" class="attr"><td><input type="hidden" name="id[]" value="'+this.item_id+'"><input type="hidden" name="item[]" value="'+this.item+'">'+this.item+'</td><td><input type="hidden" name="ord_quantity[]" id="ord_quantity'+index+'" value="'+this.ord_quantity+'"><input type="text" name="quantity[]"  class="form-control" id="quantity'+index+'" value="'+this.quantity+'"/></td><td><input type="text" name="total_quantity[]"  class="form-control" id="total_quantity'+index+'" value="'+this.total_quantity+'"/></td><td class="text-center" ><i class="fa fa-times delAttr"></i></td></tr>'
+                                        $.each(scdata.product.cf5, function( i, item) {
+                                            if (vbillerslue.item_id == item.id) {
+                                                norms = item.quantity;
+                                                console.log('norms', norms);
+                                            }
+                                        })
+                                        html +='<tr data-id="'+ vbillerslue['item_id'] +'" class="attr"><td><input type="hidden" name="id[]" value="'+this.item_id+'"><input type="hidden" name="item[]" value="'+this.item+'">'+this.item+'</td><td><input type="hidden" name="ord_quantity[]" id="ord_quantity'+index+'" value="'+this.ord_quantity+'"><input type="text" name="quantity[]"  class="form-control" id="quantity'+index+'" value="'+this.quantity+'" data-old="'+this.quantity+'" data-norms="'+norms+'" /></td><td><input type="text" name="total_quantity[]"  class="form-control" id="total_quantity'+index+'" value="'+this.total_quantity+'"/></td><td class="text-center" ><i class="fa fa-times delAttr"></i></td></tr>'
 
                                     });
                                 }
@@ -889,8 +888,9 @@ $(document).ready(function () {
                                         total_quantity=item_quantity*this.quantity;
 
                                     }
+                                    norms = vbillerslue.quantity;
 
-                                    html +='<tr class="attr"><td><input type="hidden" name="id[]" value="'+this.id+'"><input type="hidden" name="item[]" value="'+this.item+'">'+this.item+'</td><td><input type="hidden" name="ord_quantity[]" id="ord_quantity'+index+'" value="'+item_quantity+'"><input type="text" name="quantity[]"  class="form-control" id="quantity'+index+'" value="'+this.quantity+'"/></td><td><input type="text" name="total_quantity[]"  class="form-control" id="total_quantity'+index+'" value="'+total_quantity+'" readonly/></td><td class="text-center"><i class="fa fa-times delAttr"></i></td></tr>'
+                                    html +='<tr class="attr"><td><input type="hidden" name="id[]" value="'+this.id+'"><input type="hidden" name="item[]" value="'+this.item+'">'+this.item+'</td><td><input type="hidden" name="ord_quantity[]" id="ord_quantity'+index+'" value="'+item_quantity+'"><input type="text" name="quantity[]"  class="form-control" id="quantity'+index+'" value="'+this.quantity+'" data-old="'+this.quantity+'" data-norms="'+norms+'" /></td><td><input type="text" name="total_quantity[]"  class="form-control" id="total_quantity'+index+'" value="'+total_quantity+'" readonly/></td><td class="text-center"><i class="fa fa-times delAttr"></i></td></tr>'
                                     });
                                 }else{
                                     if(confirm("Thành phẩm "+ scdata.product.name + " chưa khai báo Định mức nguyên vật liệu, bạn có muốn quay lại chỉnh sửa thành phẩm "+ scdata.product.name + " không?")){
@@ -909,22 +909,6 @@ $(document).ready(function () {
                            $('#detail').append(html);
 
 
-                            // arr_emps =new Array();
-                            // for(i in production_items){
-                            //     if (production_items[i].product_id == v) {
-                            //         var str = production_items[i].employees;
-                            //         var res = str.split(",");
-
-                            //         for(j in res){
-                            //             for(k in billers){
-                            //                 if(res[j] == billers[k].id){
-                            //                     // console.log(billers[k].name);
-                            //                     arr_emps.push({id:billers[k].id,text:billers[k].name});
-                            //                 }
-                            //             }
-                            //         }
-                            //     }
-                            // }
                             arr_billers =new Array();
                             for(biller in billers){
                                 arr_billers.push({id:billers[biller].id,text:billers[biller].name});
@@ -939,27 +923,6 @@ $(document).ready(function () {
 
 
 
-                            // $.each(production_items, function( index, vbillerslue ) {
-                            //     var str = production_items[index].employees;
-                            //     var res = str.split(",");
-                            //     console.log('res', res);
-                            //     var name='';
-                            //     arr.push({id:$(this).val(),text:$(this).text()});
-                            // });
-
-                            // if(arr)
-                            // {
-                            //     $("table input[name='emp[]']").select2("destroy").empty().attr("placeholder", "<?= lang('Chọn nhân viên') ?>").select2({
-                            //         placeholder: "<?= lang('Chọn nhân viên') ?>",
-                            //         data: arr,
-                            //         multiple: true
-                            //     });
-                            //     console.log(arr);
-                            // }
-
-
-
-
                            if(scdata['group_material_norms']){
 
 
@@ -968,6 +931,7 @@ $(document).ready(function () {
                             enquiry +='<thead><tr><td>Nguyên vật liệu</td><td>Số lượng cần nhập</td></tr></thead>'
                             ltotal=0;
                             enquiry +='<tbody>'
+                            console.log('group_material_norms', scdata['group_material_norms']);
                                 $.each(scdata['group_material_norms'], function( index, vbillerslue ) {
 
 
@@ -976,7 +940,7 @@ $(document).ready(function () {
                                         ltotal = vbillerslue['rquatity']-vbillerslue['total_quantity1'];
                                         if(ltotal <= 0){
 
-                                            enquiry +='<tr data-id="'+vbillerslue['item_id'] +'"><td>'+ vbillerslue['item'] +'</td><td>'+ ltotal +'</td><input type="hidden" name="item_total[]" value="'+ (ltotal*-1) +'"></tr>'
+                                            enquiry +='<tr data-id="'+vbillerslue['item_id'] +'"><td>'+ vbillerslue['item'] +'</td><td>'+ (ltotal*-1) +'</td><input type="hidden" name="item_total[]" value="'+ (ltotal*-1) +'"></tr>'
                                         }
 
                                     }
@@ -985,8 +949,8 @@ $(document).ready(function () {
                             enquiry +='</tbody>'
                             enquiry +='</table>'
 
-                            enquiry +='<div class="col-md-6 text-left "><a style="text-decoration: underline;" id="quick_enquiry" href="javascript:void(0)">Thêm hàng tự động</a></div>'
-                            enquiry +='<div class="col-md-6 text-right "><a style="text-decoration: underline;"   href="enquiry/add">Thêm hàng thủ công</a></div>'
+                            enquiry +='<div class="col-md-6 text-left "><a style="text-decoration: underline; margin-left: 12px;" id="quick_enquiry" href="<?= site_url('enquiry/add?production='.$id) ?>"><button class="btn btn-success">Thêm hàng tự động</button></a></div>'
+                            enquiry +='<div class="col-md-6 text-right "><a style="text-decoration: underline; margin-right: 10px;"   href="enquiry/add"><button class="btn btn-success">Thêm hàng thủ công</button></a></div>'
                             $('#enquiry').css({'display':'block'});
                             $('#enquiry').empty().html(enquiry);
                            }
@@ -1139,43 +1103,53 @@ $(document).ready(function () {
 
         $('#detail').on('keyup', 'input[name="quantity[]"]', function (e) {
 
+            if ($(this).val() >= 0 && parseInt($(this).val()) >= parseInt($(this).attr('data-norms'))) {
+                var id_item = $(this).parent().prev().find('input[name="id[]"]').val();
+                var ord_quantity=$(this).prev().val();
+                var quantity=$(this).val();
 
-            var id_item = $(this).parent().prev().find('input[name="id[]"]').val();
-            var ord_quantity=$(this).prev().val();
-            var quantity=$(this).val();
-
-            $(this).parent().next().find('input').val(parseFloat(ord_quantity)*parseFloat(quantity))
-
-
-            var id = <?php echo $id; ?>;
-
-            var v = parseFloat(ord_quantity)*parseFloat(quantity);
-            var id_pro = $('#items option:checked').val();
+                $(this).parent().next().find('input').val(parseFloat(ord_quantity)*parseFloat(quantity))
 
 
-             if (id) {
-                 $.ajax({
-                    type: "get",
-                    async: false,
-                    url: "<?= site_url('productions/getItemQuantity') ?>/" + v,
-                    dataType: "json",
-                    data:{
-                        'id':id,
-                        'quantity':v,
-                        'id_item':id_item,
-                        'id_pro' : id_pro,
-                    },
-                    success: function (scdata) {
+                var id = <?php echo $id; ?>;
 
-                        if(scdata['group']!=null && scdata['item']!=false){
-                            $('#enquiry tr[data-id="'+ scdata['group'][0]['item_id']+'"]').remove();
-                            if((scdata['total_new']*1) < 0 ){
-                             $('#enquiry table tbody').prepend('<tr data-id="'+  scdata['group'][0]['item_id'] +'"><td>'+ scdata['group'][0]['item']+'</td><td>'+ scdata['total_new'] +'</td><input type="hidden" name="item_total[]" value="'+ (scdata['total_new']*-1) +'"></tr>')
-                           }
-                       }
-                    },
-             });
-            };
+                var v = parseFloat(ord_quantity)*parseFloat(quantity);
+                var id_pro = $('#items option:checked').val();
+                $(this).attr('data-old', $(this).val());
+
+                if (id) {
+                    $.ajax({
+                        type: "get",
+                        async: false,
+                        url: "<?= site_url('productions/getItemQuantity') ?>/" + v,
+                        dataType: "json",
+                        data:{
+                            'id':id,
+                            'quantity':v,
+                            'id_item':id_item,
+                            'id_pro' : id_pro,
+                        },
+                        success: function (scdata) {
+
+                            if(scdata['group']!=null && scdata['item']!=false){
+                                $('#enquiry tr[data-id="'+ scdata['group'][0]['item_id']+'"]').remove();
+                                if((scdata['total_new']*1) < 0 ){
+                                    $('#enquiry table tbody').prepend('<tr data-id="'+  scdata['group'][0]['item_id'] +'"><td>'+ scdata['group'][0]['item']+'</td><td>'+ (scdata['total_new']*-1) +'</td><input type="hidden" name="item_total[]" value="'+ (scdata['total_new']*-1) +'"></tr>')
+                                }
+                            }
+                        },
+                    });
+                };
+            }else{
+                $(this).val($(this).attr('data-old'));
+                bootbox.alert('Số lượng phải là số và lớn hơn số lượng định mức');
+
+                old_total = parseFloat($(this).attr('data-old')) * parseFloat($(this).parent().find('input[name="ord_quantity[]"]').val());
+                $(this).parent().next().find('input[name="total_quantity[]"]').val(old_total);
+
+            }
+
+
         });
 
         // $("input[name='quantity[]']").keyup(function(){
@@ -1225,48 +1199,6 @@ $(document).ready(function () {
             var parts = dateStr.split("/");
             return new Date(parts[2], parts[1] - 1, parts[0]);
         }
-        //validate ngày bắt đầu
-        // $('#detail').on('change','.date-start',function(){
-        //     var date=toDate($('#sldate').val());// ngay tao lenh san xuat
-        //     // alert(date);
-        //     var duedate=toDate($('#due_date').val());// ngay giao hang
-        //     if(toDate($(this).val())<date){
-
-        //          bootbox.alert('<?= lang('Ngày bắt đầu không được nhỏ hơn ngày tạo lệnh sản xuất!') ?>');
-        //          $(this).val('');
-        //     }
-        //     if(toDate($(this).val())>duedate){
-        //          bootbox.alert('<?= lang('Ngày bắt đầu không được lớn hơn ngày giao hàng!') ?>');
-        //          $(this).val('');
-        //     }
-        // });
-
-         //validate ngày kết thúc
-        // $('#detail').on('change','.date-end',function(){
-        //     var date=toDate($('#sldate').val());// ngay tao lenh san xuat
-        //     var duedate=toDate($('#due_date').val());// ngay giao hang
-        //     if(toDate($(this).val())<date){
-
-        //          bootbox.alert('<?= lang('Ngày kết thúc không được nhỏ hơn ngày tạo lệnh sản xuất!') ?>');
-        //          $(this).val('');
-        //     }
-        //     if(toDate($(this).val())>duedate){
-        //          bootbox.alert('<?= lang('Ngày kết thúc không được lớn hơn ngày giao hàng!') ?>');
-        //          $(this).val('');
-        //     }
-        // });
-
-        // $('#detail').on('change','.date',function(){
-        //     var datestart=toDate($('input[name="date_start[]"]').val());// ngay tao lenh san xuat
-        //     var dateend=toDate($('input[name="date_end[]"]').val());// ngay giao hang
-        //     var n = datestart.getTime();
-        //     var n1 = dateend.getTime();
-        //     if(n>n1){
-        //         bootbox.alert('<?= lang('Ngày bắt đầu phải nhỏ hơn ngày kết thúc giai đoạn!') ?>');
-        //         $(this).val('');
-        //     }
-        // });
-
 
 
         $('#detail').on('keyup','input[name="total_quantity[]"]',function(){

@@ -50,6 +50,7 @@ class Salaries extends MY_Controller
 
     public function getAllTimekeeperDetails(){
         $this->load->model('productions_model');
+        $this->load->model('departments_model');
 
         $department_id  = $this->input->get('department_id');
         $year           = $this->input->get('year');
@@ -59,7 +60,13 @@ class Salaries extends MY_Controller
         $data['timekeeperDetails']      = $this->timekeepers_model->getTimekeeperDetails($department_id, $year, $month);
         $data['timekeeperDetailIds']    = $this->timekeepers_model->getTimekeeperDetailsId($department_id, $year, $month);
         $data['companyIds']             = $this->timekeepers_model->getCompanyIds($department_id, $year, $month);
-        $data['productionsInMonthYear'] = $this->data['productions'] = $this->productions_model->getProductionByYearMonth($year, $month);
+
+        $data['productionsInMonthYear'] = false;
+        if ($this->departments_model->isProductionById($department_id)) {
+            $data['productionsInMonthYear'] = $this->productions_model->getProductionByYearMonth($year, $month);
+        }
+
+
         $data['basicSalaries']          = $this->timekeepers_model->getBasicCompanies($department_id, $year, $month);
 
 
@@ -76,22 +83,38 @@ class Salaries extends MY_Controller
         if ($department_id && $month && $year) {
             $this->load->model('timekeepers_model');
             $this->load->model('productions_model');
+            $this->load->model('departments_model');
 
             $allInfoTimekeeperDetails = $this->timekeepers_model->getAllInfoTimekeeperDetails($department_id, $year, $month);
-            $productionsInMonthYear = $this->productions_model->getProductionByYearMonth($year, $month);
+            if ($this->departments_model->isProductionById($department_id)) {
+                $productionsInMonthYear = $this->productions_model->getProductionByYearMonth($year, $month);
+            }
 
-            // echo "<pre>";
-            // print_r($productionsInMonthYear);
-            // echo "</pre>";
 
             $this->load->library('excel');
             $this->excel->setActiveSheetIndex(0);
 
 // Init Head
+            $styleDefault = array(
+                'font' => array(
+                    'name' => "Times New Roman"
+                ),
+                'borders' => array(
+                  'allborders' => array(
+                      'style' => PHPExcel_Style_Border::BORDER_THIN
+                  )
+                ),
+                'alignment' => array(
+                    'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                )
+            );
+
             $styleHead = array(
                 'font'  => array(
                     'bold'  => true,
                     'size'  => 12,
+                    'name' => "Times New Roman"
                 ),
                 'alignment' => array(
                     'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
@@ -107,6 +130,7 @@ class Salaries extends MY_Controller
             $styleSub = array(
                 'font'  => array(
                     'size'  => 12,
+                    'name' => "Times New Roman"
                 ),
                 'alignment' => array(
                     'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
@@ -123,6 +147,7 @@ class Salaries extends MY_Controller
                 'font'  => array(
                     'bold'  => true,
                     'size'  => 15,
+                    'name' => "Times New Roman"
                 ),
                 'alignment' => array(
                     'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
@@ -136,6 +161,9 @@ class Salaries extends MY_Controller
             );
 
             $styleSunday = array(
+                'font'  => array(
+                    'name' => "Times New Roman"
+                ),
                 'fill' => array(
                     'type' => PHPExcel_Style_Fill::FILL_SOLID,
                     'color' => array('rgb' => '07ABEA')
@@ -150,6 +178,41 @@ class Salaries extends MY_Controller
                     'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
                 )
             );
+
+            $styleName = array(
+                'font'  => array(
+                    'color' => array('rgb' => '3c45f2'),
+                    'bold'  => true,
+                    'name' => "Times New Roman"
+                ),
+                'borders' => array(
+                  'allborders' => array(
+                      'style' => PHPExcel_Style_Border::BORDER_THIN
+                  )
+                ),
+                'alignment' => array(
+                    'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                    'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                )
+            );
+
+            $styleNameProduct = array(
+                'font'  => array(
+                    'name' => "Times New Roman"
+                ),
+                'borders' => array(
+                    'allborders' => array(
+                      'style' => PHPExcel_Style_Border::BORDER_THIN
+                    )
+                ),
+                'alignment' => array(
+                    'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                    'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                )
+            );
+
+            $this->excel->getDefaultStyle()->applyFromArray($styleDefault);
+            $this->excel->getDefaultStyle()->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
             $this->excel->getActiveSheet()->setTitle('Bảng tính lương');
 
@@ -271,12 +334,14 @@ class Salaries extends MY_Controller
                     $v  = 0;
                     $l  = 0;
                     $this->excel->getActiveSheet()->SetCellValue('A'.$countRow, $detail->name);
+                    $this->excel->getActiveSheet()->getStyle('A'.$countRow)->applyFromArray($styleName);
                     $this->excel->getActiveSheet()->SetCellValue('AS'.$countRow, $this->sma->formatMoney($detail->basic_salary));
 
                     $basicSalary = $detail->basic_salary;
                 }
 
                 $arrProductId = array();
+                $allInfoProduct = array();
 
                 if ($productionsInMonthYear) {
                   foreach ($productionsInMonthYear as $production) {
@@ -285,22 +350,18 @@ class Salaries extends MY_Controller
                       if ($emp == $companyID) {
                         if (!in_array($production->product_id, $arrProductId)) {
                           $arrProductId[] = $production->product_id;
+                          $allInfoProduct[$production->product_id]['name'] = $production->product_name;
+                          $allInfoProduct[$production->product_id]['quantity_config'] = $production->quantity_config;
+                          $allInfoProduct[$production->product_id]['wage'] = $production->wage;
                         }
                       }
                     }
                   }
                 }
 
-                // echo "------------------------------------------------------------------";
-                // echo "<pre>";
-                // print_r($arrProductId);
-                // echo "</pre>";
-                // die();
-
                 unset($detail->name);
                 unset($detail->basic_salary);
                 unset($detail->company_id);
-                // var_dump($companyID);
 
                 $salaryEachDay = $basicSalary/$dayWork;
                 $i = 0;
@@ -400,33 +461,73 @@ class Salaries extends MY_Controller
                       $this->excel->getActiveSheet()->mergeCells('Z'.$countRow.':AF'.$countRow);
                       $this->excel->getActiveSheet()->getStyle('Z'.$countRow.':AF'.$countRow)->applyFromArray($styleSub);
                       foreach ($arrProductId as $productId) {
+                        $soluonghoanthanh = array();
+                        $realCompleted = 0;
 
+                        foreach ($productionsInMonthYear as $kProt => $production) {
+                            if ($production->product_id == $productId) {
+
+                                if (($kProt != 0) && ($production->id != $productionsInMonthYear[$kProt - 1]->id)) {
+                                    $min = min($soluonghoanthanh);
+                                    $realCompleted = $realCompleted + $min;
+                                    $soluonghoanthanh = array();
+                                }
+                                $soluonghoanthanh[] = $production->soluonghoanthanh;
+                            }
+                        }
+
+                        $realCompleted = $realCompleted + min($soluonghoanthanh);
+                        $allInfoProduct[$productId]['realCompleted'] = $realCompleted;
                       }
                     }
+
+                    $totalBonus = 0;
+                    foreach ($allInfoProduct as $product) {
+                        $countRow++;
+                        $this->excel->getActiveSheet()->SetCellValue('A'.$countRow, $product['name']);
+                        $this->excel->getActiveSheet()->getStyle('A'.$countRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+                        $this->excel->getActiveSheet()->getStyle('A'.$countRow)->applyFromArray($styleNameProduct);
+                        $this->excel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+
+                        $this->excel->getActiveSheet()->SetCellValue('B'.$countRow, $product['wage']);
+                        $this->excel->getActiveSheet()->mergeCells('B'.$countRow.':I'.$countRow);
+
+                        $this->excel->getActiveSheet()->SetCellValue('J'.$countRow, $product['quantity_config']);
+                        $this->excel->getActiveSheet()->mergeCells('J'.$countRow.':Q'.$countRow);
+
+                        $this->excel->getActiveSheet()->SetCellValue('R'.$countRow, $product['realCompleted']);
+                        $this->excel->getActiveSheet()->mergeCells('R'.$countRow.':Y'.$countRow);
+
+                        $totalProductBonus = $product['wage']*$product['realCompleted']*$product['quantity_config'];
+                        $totalBonus = $totalBonus + $totalProductBonus;
+
+                        $this->excel->getActiveSheet()->SetCellValue('Z'.$countRow, $this->sma->formatMoney($totalProductBonus));
+                        $this->excel->getActiveSheet()->mergeCells('Z'.$countRow.':AF'.$countRow);
+                    }
+
+                    if (!empty($arrProductId)) {
+                        $beyondRow = $countRow - (count($allInfoProduct) + 2);
+                        $salaryWorkDay = $this->excel->getActiveSheet()->getCell('AT'.$beyondRow)->getValue();
+                        $salaryWorkDay = (float)str_replace(',','',$salaryWorkDay);
+                        $finalSalary =  $salaryWorkDay + $totalBonus;
+
+                        $this->excel->getActiveSheet()->SetCellValue('AU'.$beyondRow, $this->sma->formatMoney($totalBonus));
+                        $this->excel->getActiveSheet()->SetCellValue('AV'.$beyondRow, $this->sma->formatMoney($finalSalary));
+                    }else{
+                        $beyondRow = $countRow - 1;
+                        $salaryWorkDay = $this->excel->getActiveSheet()->getCell('AT'.$beyondRow)->getValue();
+                        $this->excel->getActiveSheet()->SetCellValue('AU'.$beyondRow, 0);
+                        $this->excel->getActiveSheet()->SetCellValue('AV'.$beyondRow, $salaryWorkDay);
+                    }
                 }
+
 
                 $countRow++;
             }
 
-
-
 // END Init Rows
 
-            $styleDefault = array(
-                'borders' => array(
-                  'allborders' => array(
-                      'style' => PHPExcel_Style_Border::BORDER_THIN
-                  )
-                ),
-                'alignment' => array(
-                    'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                    'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
-                )
-            );
-
             $filename = 'salaries-view-'.$month.'-'.$year.'-'.$department_id;
-            $this->excel->getDefaultStyle()->applyFromArray($styleDefault);
-            $this->excel->getDefaultStyle()->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment;filename="' . $filename . '.xls"');
             header('Cache-Control: max-age=0');

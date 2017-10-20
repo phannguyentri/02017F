@@ -88,11 +88,9 @@
                   <div class="col-md-3" style="margin-top: 15px;">
                     <div class="form-group">
                       <div class="controls">
-                        <a href="#" id="btn-xls" target="_blank">
-                          <button type="button" class="btn btn-info">
+                          <button id="btn-xls" type="button" class="btn btn-info" disabled>
                             <span class="icon fa fa-file-excel-o"></span> Tải về dạng XLS
                           </button>
-                        </a>
                       </div>
                     </div>
                   </div>
@@ -109,6 +107,7 @@
 <script type="text/javascript">
   var year = null;
   var month = null;
+  var department_id = null;
   /**
    * count all date in month and get current year
    * @param  integer month
@@ -125,6 +124,7 @@
 
 
   $(document).ready(function () {
+
     $('#btn-show').click(function(e) {
       sheetContentData = [];
 
@@ -132,8 +132,6 @@
       department_id = $("#department" ).val();
       month         = $("#month").val();
       year          = $("#year").val();
-
-      $('#btn-xls').attr('href', '<?= site_url('salaries/xls/'); ?>?department_id='+department_id+'&month='+month+'&year='+year);
 
       $.ajax({
           url: '<?= site_url('salaries/getAllTimekeeperDetails'); ?>',
@@ -148,7 +146,8 @@
           success: function (response) {
               if (response.timekeeperDetails.length != undefined) {
                 console.log(response);
-                // $('#btn-save').removeAttr('disabled');
+                $('#link-xls').attr('href', );
+                $('#btn-xls').removeAttr('disabled');
 
                 timekeeperDetailIds = response.timekeeperDetailIds;
                 var nameList = []; // new Array
@@ -216,6 +215,11 @@
           }
       })
 
+    });
+
+    $('#btn-xls').click(function(e) {
+      event.preventDefault();
+      window.location.href = '<?= site_url('salaries/xls/'); ?>?department_id='+department_id+'&month='+month+'&year='+year;
     });
 
   });

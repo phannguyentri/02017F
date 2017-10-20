@@ -2267,8 +2267,8 @@ class Productions_model extends CI_Model
         $this->db->select('material_norms.id, item_id, material_norms.item, items.cost, items.quantity as items_quantity');
         $this->db->join('items','items.id=material_norms.item_id','left');
         $this->db->group_by('material_norms.item_id');
-        $this->db->select_sum('material_norms.ord_quantity');
-        $this->db->select_sum('material_norms.quantity');
+        // $this->db->select_sum('material_norms.ord_quantity');
+        // $this->db->select_sum('material_norms.quantity');
         $this->db->select_sum('material_norms.total_quantity');
         $q = $this->db->get_where('material_norms',array('material_norms.production_id'=>$production_id));
         if ($q->num_rows() > 0) {

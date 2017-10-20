@@ -40,7 +40,11 @@ class Site extends CI_Model
     }
 
     public function getAllCompanies($group_name) {
-        $q = $this->db->get_where('companies', array('group_name' => $group_name));
+        $this->db->select('companies.id, companies.name');
+        $this->db->join('departments', 'departments.id = companies.department_id');
+
+        $q = $this->db->get_where('companies', array('departments.type' => 'production'));
+
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
                 $data[] = $row;
