@@ -278,6 +278,17 @@
         };
 
         var initRows = function(){
+
+            console.log(sheetOption.data.efficiencysData);
+            arrEfficiency   = [];
+            arrCompanyId    = [];
+
+            for (var i = 0; i < sheetOption.data.efficiencysData.length; (i+=2)) {
+                arrEfficiency.push(sheetOption.data.efficiencysData[i].efficiency);
+                arrCompanyId.push(sheetOption.data.companyIdsData[i].company_id);
+            }
+
+            console.log('arrEfficiency', arrEfficiency);
             workDay = 0;
             colspan = (sheetOption.data.dimensions[1] - (sheetOption.data.dimensions[1] % 4)) /4;
             oddCol  = colspan + (sheetOption.data.dimensions[1] % 4);
@@ -424,7 +435,7 @@
                     }
 
                     // console.log('arrIdProduction', arrIdProduction);
-
+                    console.log(sheetOption.data.productionsData);
                     for (var j = 0; j < sheetOption.data.productionsData.length; j++) {
                         tempEmp = sheetOption.data.productionsData[j].employee.split(",");
                         for (var v = 0; v < tempEmp.length; v++) {
@@ -434,6 +445,7 @@
 
 
                                     arrNameProductBonus.push(sheetOption.data.productionsData[j].product_name);
+                                    wage = sheetOption.data.productionsData[j].wage;
                                     arrWage.push(sheetOption.data.productionsData[j].wage);
                                     arrQuatityConfig.push(sheetOption.data.productionsData[j].quantity_config);
 
@@ -441,19 +453,50 @@
                                     arrQuantityCompletedTest = [];
 
                                     totalRealCompleted = 0;
+                                    tmp_id_prot = null;
+                                    sameEmp = false;
+                                    teamEmp = [];
+
                                     for (var x = 0; x < sheetOption.data.productionsData.length; x++) {
                                         if ((sheetOption.data.productionsData[j].product_id == sheetOption.data.productionsData[x].product_id)) {
-                                            if ((x != 0) && sheetOption.data.productionsData[x].id != sheetOption.data.productionsData[x-1].id) {
-                                                console.log('curr', sheetOption.data.productionsData[x].id);
-                                                totalRealCompleted += Math.min(...arrQuantityCompleted);
+
+                                            tempEmp2    = sheetOption.data.productionsData[x].employee.split(",");
+                                             
+
+                                            if ((x != 0) && (sheetOption.data.productionsData[x].id != tmp_id_prot) && (tmp_id_prot != null)) {
+                                                if (sameEmp == true) {
+                                                    totalRealCompleted += Math.min(...arrQuantityCompleted); 
+                                                }
+                                                sameEmp = false;
+                                                console.log('teamEmp', teamEmp);
+                                                countEmp = teamEmp.length;
+                                                console.log(countEmp*Math.min(...arrQuantityCompleted)*wage);
+                                                teamEmp = [];
                                                 arrQuantityCompleted = [];
+
                                             }
 
-                                            arrQuantityCompleted.push(sheetOption.data.productionsData[x].soluonghoanthanh);
+                                            for (var a = 0; a < tempEmp2.length; a++) {
+                                                if (tempEmp2[a] == company_id) {
+                                                    sameEmp = true;
+                                                }
+                                                if (!teamEmp.includes(tempEmp2[a])) {
+                                                    teamEmp.push(tempEmp2[a]);
+                                                }
+                                                
+                                            }
+
+                                            tmp_id_prot = sheetOption.data.productionsData[x].id;
+
+                                            arrQuantityCompleted.push(parseInt(sheetOption.data.productionsData[x].soluonghoanthanh));
 
                                         }
                                     }
-                                    totalRealCompleted += Math.min(...arrQuantityCompleted);
+
+                                    if (sameEmp == true) {
+                                        console.log('teamEmp', teamEmp);
+                                        totalRealCompleted += Math.min(...arrQuantityCompleted);
+                                    }
                                     arrRealCompleted.push(totalRealCompleted);
 
                                     bonusMoney = sheetOption.data.productionsData[j].wage*totalRealCompleted*sheetOption.data.productionsData[j].quantity_config;
@@ -474,7 +517,8 @@
                         $('#row-'+(row-1)).find('.bonus').text(0);
                         $('#row-'+(row-1)).find('.final-salary').text(finalSalary);
                     }
-                    console.log('totalBonusMoney', totalBonusMoney);
+                    // console.log('totalBonusMoney', totalBonusMoney);
+                    console.log('--------------------------------------------------');
 
                     if (arrIdProductBonus.length) {
                         rowBonusProductHtml += '<tr class="TimeSheet-row"><td class="TimeSheet-rowHead" style="color:#428bca; border-top: none;"></td>'

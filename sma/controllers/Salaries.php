@@ -60,6 +60,7 @@ class Salaries extends MY_Controller
         $data['timekeeperDetails']      = $this->timekeepers_model->getTimekeeperDetails($department_id, $year, $month);
         $data['timekeeperDetailIds']    = $this->timekeepers_model->getTimekeeperDetailsId($department_id, $year, $month);
         $data['companyIds']             = $this->timekeepers_model->getCompanyIds($department_id, $year, $month);
+        $data['efficiencys'] = $this->timekeepers_model->getTimekeeperDetailsEfficiency($department_id, $year, $month);
 
         $data['productionsInMonthYear'] = false;
         if ($this->departments_model->isProductionById($department_id)) {
@@ -461,22 +462,40 @@ class Salaries extends MY_Controller
                       $this->excel->getActiveSheet()->mergeCells('Z'.$countRow.':AF'.$countRow);
                       $this->excel->getActiveSheet()->getStyle('Z'.$countRow.':AF'.$countRow)->applyFromArray($styleSub);
                       foreach ($arrProductId as $productId) {
-                        $soluonghoanthanh = array();
-                        $realCompleted = 0;
+                        $soluonghoanthanh   = array();
+                        $realCompleted      = 0;
+                        $tmpIdProt          = null;
+                        $sameEmp            = false;
 
                         foreach ($productionsInMonthYear as $kProt => $production) {
                             if ($production->product_id == $productId) {
 
-                                if (($kProt != 0) && ($production->id != $productionsInMonthYear[$kProt - 1]->id)) {
-                                    $min = min($soluonghoanthanh);
-                                    $realCompleted = $realCompleted + $min;
+                                $tempEmp = explode(',', $production->employee);
+
+                                if (($kProt != 0) && ($production->id != $tmpIdProt) && ($tmpIdProt != null)) {
+                                    if ($sameEmp == true) {
+                                        $min = min($soluonghoanthanh);
+                                        $realCompleted = $realCompleted + $min;
+                                    }
+                                    $sameEmp = false;
                                     $soluonghoanthanh = array();
                                 }
+
+                                foreach ($tempEmp as $empId) {
+                                    if ($empId == $companyID) {
+                                        $sameEmp = true;
+                                    }
+                                }
+
+                                $tmpIdProt = $production->id;
+
                                 $soluonghoanthanh[] = $production->soluonghoanthanh;
                             }
                         }
+                        if ($sameEmp == true) {
+                            $realCompleted = $realCompleted + min($soluonghoanthanh);
+                        }
 
-                        $realCompleted = $realCompleted + min($soluonghoanthanh);
                         $allInfoProduct[$productId]['realCompleted'] = $realCompleted;
                       }
                     }

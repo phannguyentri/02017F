@@ -8,6 +8,9 @@
 
               <?php
                 // echo date("w",strtotime('17-7-2017'));
+                echo "<pre>";
+                print_r($productions);
+                echo "</pre>";
                ?>
                   <div class="col-md-3">
 
@@ -196,6 +199,7 @@
                         basicSalariesData : response.basicSalaries,
                         productionsData   : response.productionsInMonthYear,
                         companyIdsData    : response.companyIds,
+                        efficiencysData   : response.efficiencys,
                         month: month,
                         year: year
                     },

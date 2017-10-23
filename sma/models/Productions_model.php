@@ -2497,7 +2497,7 @@ class Productions_model extends CI_Model
 
         $this->db->where('MONTH(created_at) = '.$month);
         $this->db->where('YEAR(created_at) = '.$year);
-        $this->db->where('production_items.status', 'completed');
+        // $this->db->where('production_items.status', 'completed');
         $this->db->where('production_stages.product_id = production_items.product_id');
         $this->db->where('production_stages.date_start <>','NULL');
         // $this->db->where('products.id','production_items.product_id');
