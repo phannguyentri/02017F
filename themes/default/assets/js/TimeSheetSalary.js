@@ -282,13 +282,15 @@
             console.log(sheetOption.data.efficiencysData);
             arrEfficiency   = [];
             arrCompanyId    = [];
-
-            for (var i = 0; i < sheetOption.data.efficiencysData.length; (i+=2)) {
-                arrEfficiency.push(sheetOption.data.efficiencysData[i].efficiency);
-                arrCompanyId.push(sheetOption.data.companyIdsData[i].company_id);
+            arrInfoCompanies = [];
+            for (var i = 0; i < sheetOption.data.companyIdsData.length; (i+=2)) {
+                arrInfoCompanies[sheetOption.data.companyIdsData[i].company_id] =  {
+                  'name'        : sheetOption.data.nameData[i].name,
+                  'efficiency'  : sheetOption.data.efficiencysData[i].efficiency
+                };
             }
 
-            console.log('arrEfficiency', arrEfficiency);
+            console.log('arrInfoCompanies', arrInfoCompanies);
             workDay = 0;
             colspan = (sheetOption.data.dimensions[1] - (sheetOption.data.dimensions[1] % 4)) /4;
             oddCol  = colspan + (sheetOption.data.dimensions[1] % 4);
@@ -461,11 +463,11 @@
                                         if ((sheetOption.data.productionsData[j].product_id == sheetOption.data.productionsData[x].product_id)) {
 
                                             tempEmp2    = sheetOption.data.productionsData[x].employee.split(",");
-                                             
+
 
                                             if ((x != 0) && (sheetOption.data.productionsData[x].id != tmp_id_prot) && (tmp_id_prot != null)) {
                                                 if (sameEmp == true) {
-                                                    totalRealCompleted += Math.min(...arrQuantityCompleted); 
+                                                    totalRealCompleted += Math.min(...arrQuantityCompleted);
                                                 }
                                                 sameEmp = false;
                                                 console.log('teamEmp', teamEmp);
@@ -483,7 +485,7 @@
                                                 if (!teamEmp.includes(tempEmp2[a])) {
                                                     teamEmp.push(tempEmp2[a]);
                                                 }
-                                                
+
                                             }
 
                                             tmp_id_prot = sheetOption.data.productionsData[x].id;

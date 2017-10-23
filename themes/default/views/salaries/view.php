@@ -200,6 +200,7 @@
                         productionsData   : response.productionsInMonthYear,
                         companyIdsData    : response.companyIds,
                         efficiencysData   : response.efficiencys,
+                        nameData          : response.timekeeperDetailsName,
                         month: month,
                         year: year
                     },
