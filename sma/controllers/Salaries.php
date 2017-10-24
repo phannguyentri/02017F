@@ -86,7 +86,34 @@ class Salaries extends MY_Controller
             $this->load->model('productions_model');
             $this->load->model('departments_model');
 
+            $dataCompanyId = $this->timekeepers_model->getCompanyIds($department_id, $year, $month);
+            $dataName  = $this->timekeepers_model->getTimekeeperDetailsName($department_id, $year, $month);
+            $dataEfficiency = $this->timekeepers_model->getTimekeeperDetailsEfficiency($department_id, $year, $month);
+            $arrInfoCompanies = array();
+
+            $onlyDayTimekeeperDetails = $this->timekeepers_model->getTimekeeperDetails($department_id, $year, $month);
+            foreach ($dataCompanyId as $key => $val) {
+                if ($key % 2 == 0) {
+                    $hours = 0;
+
+                    foreach ($onlyDayTimekeeperDetails[$key] as  $detail) {
+                        $hours += $detail;
+                    }
+
+                    $arrInfoCompanies[$val->company_id] = array(
+                        'name'          => $dataName[$key]->name,
+                        'efficiency'    => $dataEfficiency[$key]->efficiency,
+                        'workday'       => $hours/8
+                    );
+                }
+            }
+
             $allInfoTimekeeperDetails = $this->timekeepers_model->getAllInfoTimekeeperDetails($department_id, $year, $month);
+
+            // echo "<pre>";
+            // print_r($arrInfoCompanies);
+            // echo "</pre>";
+
             if ($this->departments_model->isProductionById($department_id)) {
                 $productionsInMonthYear = $this->productions_model->getProductionByYearMonth($year, $month);
             }
@@ -466,6 +493,17 @@ class Salaries extends MY_Controller
                         $realCompleted      = 0;
                         $tmpIdProt          = null;
                         $sameEmp            = false;
+                        $teamEmp            = array();
+                        $currentWorkDay     = $arrInfoCompanies[$companyID]['workday'];
+                        $currentEfficiency  = $arrInfoCompanies[$companyID]['efficiency'];
+                        $moneyBonusProduct  = 0;
+
+                        // var_dump($currentWorkDay);
+                        // var_dump($currentEfficiency);
+                        // echo "<pre>";
+                        // print_r($productionsInMonthYear);
+                        // echo "</pre>";
+                        // die();
 
                         foreach ($productionsInMonthYear as $kProt => $production) {
                             if ($production->product_id == $productId) {
@@ -476,14 +514,38 @@ class Salaries extends MY_Controller
                                     if ($sameEmp == true) {
                                         $min = min($soluonghoanthanh);
                                         $realCompleted = $realCompleted + $min;
+
+                                        $countEmp = count($teamEmp);
+                                        $totalWorkDay = 0;
+                                        $totalEfficiency = 0;
+
+                                        foreach ($teamEmp as $teamEmpId) {
+                                            $totalWorkDay = $totalWorkDay + $arrInfoCompanies[$teamEmpId]['workday'];
+                                            $totalEfficiency = $totalEfficiency + $arrInfoCompanies[$teamEmpId]['efficiency'];
+                                        }
+
+                                        $a  = $production->wage*$min*$countEmp;
+
+
+
+                                        $b  = $totalWorkDay*$totalEfficiency;
+
+                                        $moneyBonusProduct += (($a/$b) * $currentWorkDay * $currentEfficiency);
+                                        // var_dump($moneyBonusProduct);die();
                                     }
                                     $sameEmp = false;
+
+                                    $teamEmp = array();
                                     $soluonghoanthanh = array();
                                 }
+
 
                                 foreach ($tempEmp as $empId) {
                                     if ($empId == $companyID) {
                                         $sameEmp = true;
+                                    }
+                                    if (!in_array($empId, $teamEmp)) {
+                                        $teamEmp[] = $empId;
                                     }
                                 }
 
@@ -493,15 +555,36 @@ class Salaries extends MY_Controller
                             }
                         }
                         if ($sameEmp == true) {
+
                             $realCompleted = $realCompleted + min($soluonghoanthanh);
+
+                            $min = min($soluonghoanthanh);
+                            $countEmp = count($teamEmp);
+                            $totalWorkDay = 0;
+                            $totalEfficiency = 0;
+
+                            foreach ($teamEmp as $teamEmpId) {
+                                $totalWorkDay = $totalWorkDay + $arrInfoCompanies[$teamEmpId]['workday'];
+                                $totalEfficiency = $$totalEfficiency + $arrInfoCompanies[$teamEmpId]['efficiency'];
+                            }
+
+                            $a  = $production->wage*$min*$countEmp;
+                            $b  = $totalWorkDay*$totalEfficiency;
+
+                            $moneyBonusProduct +=  (($a/$b) * $currentWorkDay * $currentEfficiency);
+                            var_dump($moneyBonusProduct);
+                            die();
                         }
 
                         $allInfoProduct[$productId]['realCompleted'] = $realCompleted;
+                        $allInfoProduct[$productId]['moneyBonusProduct'] = $moneyBonusProduct;
                       }
                     }
 
+                    // die('1');
                     $totalBonus = 0;
                     foreach ($allInfoProduct as $product) {
+
                         $countRow++;
                         $this->excel->getActiveSheet()->SetCellValue('A'.$countRow, $product['name']);
                         $this->excel->getActiveSheet()->getStyle('A'.$countRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
@@ -518,13 +601,15 @@ class Salaries extends MY_Controller
                         $this->excel->getActiveSheet()->mergeCells('R'.$countRow.':Y'.$countRow);
 
                         $totalProductBonus = $product['wage']*$product['realCompleted']*$product['quantity_config'];
-                        $totalBonus = $totalBonus + $totalProductBonus;
+                        $totalBonus = $totalBonus + $product['moneyBonusProduct'];
 
-                        $this->excel->getActiveSheet()->SetCellValue('Z'.$countRow, $this->sma->formatMoney($totalProductBonus));
+                        $this->excel->getActiveSheet()->SetCellValue('Z'.$countRow, $this->sma->formatMoney($product['moneyBonusProduct']));
                         $this->excel->getActiveSheet()->mergeCells('Z'.$countRow.':AF'.$countRow);
+
                     }
 
                     if (!empty($arrProductId)) {
+
                         $beyondRow = $countRow - (count($allInfoProduct) + 2);
                         $salaryWorkDay = $this->excel->getActiveSheet()->getCell('AT'.$beyondRow)->getValue();
                         $salaryWorkDay = (float)str_replace(',','',$salaryWorkDay);
@@ -532,6 +617,7 @@ class Salaries extends MY_Controller
 
                         $this->excel->getActiveSheet()->SetCellValue('AU'.$beyondRow, $this->sma->formatMoney($totalBonus));
                         $this->excel->getActiveSheet()->SetCellValue('AV'.$beyondRow, $this->sma->formatMoney($finalSalary));
+
                     }else{
                         $beyondRow = $countRow - 1;
                         $salaryWorkDay = $this->excel->getActiveSheet()->getCell('AT'.$beyondRow)->getValue();
@@ -553,6 +639,7 @@ class Salaries extends MY_Controller
             ob_clean();
             $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');
             $objWriter->save('php://output');
+
             exit();
 
         }else{

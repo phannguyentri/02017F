@@ -284,17 +284,44 @@
             arrCompanyId    = [];
             arrInfoCompanies = [];
             for (var i = 0; i < sheetOption.data.companyIdsData.length; (i+=2)) {
+                totalHours = 0;
+
+                for (var j = 0; j < sheetOption.data.sheetContentData[i].length; j++) {
+                    hours = (sheetOption.data.sheetContentData[i][j] == 0) ? 0 : sheetOption.data.sheetContentData[i][j];
+                    if (hours == "P") {
+                        continue;
+                    }else if(hours == "Ro"){
+                        continue;
+                    }else if(hours == "R"){
+                        continue;
+                    }else if(hours == "Đ"){
+                        continue;
+                    }else if(hours == "V"){
+                        continue;
+                    }else if(hours == "L"){
+                        continue;
+                    }else{
+                        if (!isNaN(parseFloat(hours))){
+                            totalHours = totalHours + parseFloat(hours);
+                        }
+
+                    }
+
+                }
+
+
                 arrInfoCompanies[sheetOption.data.companyIdsData[i].company_id] =  {
                   'name'        : sheetOption.data.nameData[i].name,
-                  'efficiency'  : sheetOption.data.efficiencysData[i].efficiency
+                  'efficiency'  : sheetOption.data.efficiencysData[i].efficiency,
+                  'workday'     : totalHours/8
                 };
             }
 
             console.log('arrInfoCompanies', arrInfoCompanies);
+            console.log('sheetOption.data.sheetContentData', sheetOption.data.sheetContentData);
             workDay = 0;
             colspan = (sheetOption.data.dimensions[1] - (sheetOption.data.dimensions[1] % 4)) /4;
             oddCol  = colspan + (sheetOption.data.dimensions[1] % 4);
-            arrTotalBonusMoney = [];
 
 
             for(var col= 1, curCell=''; col<=sheetOption.data.dimensions[1]; ++col){
@@ -458,21 +485,38 @@
                                     tmp_id_prot = null;
                                     sameEmp = false;
                                     teamEmp = [];
+                                    currentWorkDay = parseFloat(arrInfoCompanies[parseInt(company_id)].workday);
+                                    currentEfficiency = parseFloat(arrInfoCompanies[parseInt(company_id)].efficiency);
+                                    moneyBonusProduct = 0;
 
                                     for (var x = 0; x < sheetOption.data.productionsData.length; x++) {
                                         if ((sheetOption.data.productionsData[j].product_id == sheetOption.data.productionsData[x].product_id)) {
 
                                             tempEmp2    = sheetOption.data.productionsData[x].employee.split(",");
 
-
                                             if ((x != 0) && (sheetOption.data.productionsData[x].id != tmp_id_prot) && (tmp_id_prot != null)) {
                                                 if (sameEmp == true) {
                                                     totalRealCompleted += Math.min(...arrQuantityCompleted);
+
+                                                    countEmp = teamEmp.length;
+                                                    
+                                                    totalWorkDay = 0;
+                                                    totalEfficiency = 0;
+
+                                                    $.each(teamEmp, function( index, val) {
+                                                        totalWorkDay += arrInfoCompanies[parseInt(val)].workday;
+                                                        totalEfficiency += parseFloat(arrInfoCompanies[parseInt(val)].efficiency);
+                                                    })
+
+                                                    a   = countEmp*Math.min(...arrQuantityCompleted)*wage;
+                                                    b   = totalWorkDay * totalEfficiency;
+                                                    
+                                                    moneyBonusProduct += (a/b) * currentWorkDay * currentEfficiency;
+
                                                 }
+
                                                 sameEmp = false;
-                                                console.log('teamEmp', teamEmp);
-                                                countEmp = teamEmp.length;
-                                                console.log(countEmp*Math.min(...arrQuantityCompleted)*wage);
+
                                                 teamEmp = [];
                                                 arrQuantityCompleted = [];
 
@@ -498,12 +542,31 @@
                                     if (sameEmp == true) {
                                         console.log('teamEmp', teamEmp);
                                         totalRealCompleted += Math.min(...arrQuantityCompleted);
+
+                                        countEmp = teamEmp.length;
+                                        
+                                        totalWorkDay = 0;
+                                        totalEfficiency = 0;
+
+                                        $.each(teamEmp, function( index, val) {
+                                            totalWorkDay += arrInfoCompanies[parseInt(val)].workday;
+                                            totalEfficiency += parseFloat(arrInfoCompanies[parseInt(val)].efficiency);
+                                        })
+
+                                        a   = countEmp*Math.min(...arrQuantityCompleted)*wage;
+                                        b   = totalWorkDay * totalEfficiency;
+
+                                        moneyBonusProduct += ((a/b) * currentWorkDay * currentEfficiency);
+
                                     }
+
+                                    console.log('moneyBonusProduct', moneyBonusProduct);
+                                    console.log('--------------------------------------------');
+
                                     arrRealCompleted.push(totalRealCompleted);
 
-                                    bonusMoney = sheetOption.data.productionsData[j].wage*totalRealCompleted*sheetOption.data.productionsData[j].quantity_config;
-                                    totalBonusMoney += bonusMoney;
-                                    arrBonusMoney.push(bonusMoney);
+                                    totalBonusMoney += moneyBonusProduct;
+                                    arrBonusMoney.push(moneyBonusProduct);
                                     $('#row-'+(row-1)).find('.bonus').text(formatMoney(totalBonusMoney));
                                     salaryDaywork = ($('#row-'+(row-1)).find('.salary-daywork').text());
                                     salaryDaywork = parseFloat(salaryDaywork.replace(/,/g,''));
@@ -513,13 +576,13 @@
                             }
                         }
                     }
-                    arrTotalBonusMoney.push(totalBonusMoney);
+
                     if (totalBonusMoney == 0) {
                         finalSalary = $('#row-'+(row-1)).find('.salary-daywork').text();
                         $('#row-'+(row-1)).find('.bonus').text(0);
                         $('#row-'+(row-1)).find('.final-salary').text(finalSalary);
                     }
-                    // console.log('totalBonusMoney', totalBonusMoney);
+
                     console.log('--------------------------------------------------');
 
                     if (arrIdProductBonus.length) {
