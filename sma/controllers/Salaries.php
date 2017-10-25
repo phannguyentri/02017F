@@ -86,9 +86,6 @@ class Salaries extends MY_Controller
             $this->load->model('productions_model');
             $this->load->model('departments_model');
 
-
-
-
             $allInfoTimekeeperDetails = $this->timekeepers_model->getAllInfoTimekeeperDetails($department_id, $year, $month);
 
             if ($this->departments_model->isProductionById($department_id)) {
@@ -103,22 +100,33 @@ class Salaries extends MY_Controller
             $onlyDayTimekeeperDetails = $this->timekeepers_model->getTimekeeperDetails($department_id, $year, $month);
             foreach ($dataCompanyId as $key => $val) {
                 if ($key % 2 == 0) {
-                    $hours = 0;
+                    $hours          = 0;
+                    $hoursOverTime  = 0;
+                    $hoursSunday    = 0;
 
                     echo "<pre>";
                     print_r($onlyDayTimekeeperDetails[$key+1]);
                     echo "</pre>";
+                    $i = 1;
 
                     foreach ($onlyDayTimekeeperDetails[$key+1] as $detail) {
-                        # code...
+                        if (date("w",strtotime($i.'-'.$month.'-'.$year)) != 0) {
+                            $hoursOverTime += $detail;
+                        }else{
+                            $hoursSunday += $detail;
+                        }
+                        $i++;
                     }
+
 
                     foreach ($onlyDayTimekeeperDetails[$key] as  $detail) {
                         $hours += $detail;
                     }
 
                     $allInfoCompanies[$val->company_id] = array(
-                        'workday'       => $hours/8
+                        'workday'         => $hours/8,
+                        'hoursOverTime'   => $hoursOverTime,
+                        'hoursSunday'     => $hoursSunday
                     );
 
 
