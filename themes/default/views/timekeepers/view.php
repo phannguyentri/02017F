@@ -126,9 +126,9 @@
 
         if(input != null) {
           isOverTime = ($(this).attr('data-row') % 2 != 0) ? true : false;
-          if ((input >= 0 && input <= 24) || (input == "CT" || input == "P" || input == "Ro" || input == "R" || input == "Ô" || input == "Đ" || input == "NB" || input == "V" || input == "L")) {
+          if ((input >= 0 && input <= 24) || (input == "CT" || input == "P" || input == "Ro" || input == "R" || input == "Ô" || input == "Đ" || input == "NB" || input == "V" || input == "L" || input == "Lễ")) {
 
-            if (isOverTime && (input == "CT" || input == "P" || input == "Ro" || input == "R" || input == "Ô" || input == "Đ" || input == "NB" || input == "V" || input == "L")) {
+            if (isOverTime && (input == "CT" || input == "P" || input == "Ro" || input == "R" || input == "Ô" || input == "Đ" || input == "NB" || input == "V" || input == "L" || input == "Lễ")) {
 
               bootbox.alert('Dòng tăng ca chỉ được nhập chữ số.');
             }else{
@@ -149,7 +149,7 @@
               d   = 0;
               v   = 0;
               l   = 0;
-
+              le  = 0;
 
               var myDate = new Date();
               myDate.setFullYear(year);
@@ -170,6 +170,8 @@
                     v++;
                 }else if(hours === "L"){
                     l++;
+                }else if(hours === "Lễ"){
+                    le++;
                 }else{
                   if (!isNaN(parseFloat(hours))) {
                     totalHours = totalHours + parseFloat(hours);
@@ -205,6 +207,7 @@
                 $(this).parent().find('.d').text(d);
                 $(this).parent().find('.v').text(v);
                 $(this).parent().find('.l').text(l);
+                $(this).parent().find('.le').text(le);
               }
             }
 

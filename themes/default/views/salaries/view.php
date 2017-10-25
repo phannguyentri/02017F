@@ -98,6 +98,16 @@
                     </div>
                   </div>
 
+                  <div class="col-md-3" style="margin-top: 15px;">
+                    <div class="form-group">
+                      <div class="controls">
+                          <button id="btn-general-xls" type="button" class="btn btn-info">
+                            <span class="icon fa fa-file-excel-o"></span> Tải về bảng tổng quát dạng XLS
+                          </button>
+                      </div>
+                    </div>
+                  </div>
+
             </div>
 
             </div>
@@ -226,6 +236,13 @@
       event.preventDefault();
       window.location.href = '<?= site_url('salaries/xls/'); ?>?department_id='+department_id+'&month='+month+'&year='+year;
     });
+
+    $('#btn-general-xls').click(function(e) {
+      event.preventDefault();
+      window.location.href = '<?= site_url('salaries/xlsGeneral/'); ?>?department_id='+department_id+'&month='+month+'&year='+year;
+    });
+
+
 
   });
 </script>

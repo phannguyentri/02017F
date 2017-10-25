@@ -300,6 +300,8 @@
                         continue;
                     }else if(hours == "L"){
                         continue;
+                    }else if(hours == "Lễ"){
+                        continue;
                     }else{
                         if (!isNaN(parseFloat(hours))){
                             totalHours = totalHours + parseFloat(hours);
@@ -345,6 +347,7 @@
                 d   = 0;
                 v   = 0;
                 l   = 0;
+                le  = 0;
 
                 for(var col= 0, curCell=''; col<=sheetOption.data.dimensions[1]; ++col){
                     if(col===0){
@@ -365,6 +368,8 @@
                             v++;
                         }else if(hours == "L"){
                             l++;
+                        }else if(hours == "Lễ"){
+                            le++;
                         }else{
                             if (!isNaN(parseFloat(hours))){
                                 totalHours = totalHours + parseFloat(hours);
@@ -410,7 +415,7 @@
                         curRowHtml += '<td class="TimeSheet-remark total'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+finalTotal+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
-                        curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark le'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+le+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark p'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+p+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark ro'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+ro+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark r'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+r+'</td>';
@@ -642,30 +647,6 @@
             }
         };
 
-        /*
-        * cell1:[2,3]
-        * cell2:[4,5]
-        * @return:{
-             topLeft : cell1,
-             bottomRight : cell2
-         }
-        * */
-        // var cellCompare = function(cell1,cell2){  //check which cell is more top-left
-        //     var sum1 = cell1[0] + cell1[1];
-        //     var sum2 = cell2[0] + cell2[1];
-
-        //     if((cell1[0]-cell2[0])*(cell1[1]-cell2[1])<0){
-        //         return {
-        //             topLeft : cell1[0]<cell2[0] ? [cell1[0],cell2[1]] : [cell2[0],cell1[1]],
-        //             bottomRight : cell1[0]<cell2[0] ? [cell2[0],cell1[1]] : [cell1[0],cell2[1]]
-        //         };
-        //     }
-
-        //     return {
-        //         topLeft : sum1<=sum2 ? cell1 : cell2,
-        //         bottomRight : sum1>sum2 ? cell1 : cell2
-        //     };
-        // };
 
         var removeSelecting = function(){
             thisSheet.find(".TimeSheet-cell-selecting").removeClass("TimeSheet-cell-selecting");
@@ -678,33 +659,6 @@
                 curDom.html(sheetOption.remarks.default);
             });
         };
-
-        /*
-        * startCel ： [1,4]
-        * */
-        // var startSelecting = function(ev,startCel){
-        //     operationArea.startCell = startCel;
-        //     if(sheetOption.start){
-        //         sheetOption.start(ev);
-        //     }
-        // };
-
-        /*
-         * topLeftCell ： [1,4]，
-         * bottomRightCell ： [3,9]
-         * */
-        // var duringSelecting = function(ev,topLeftCell,bottomRightCell){
-        //     var curDom = $(ev.currentTarget);
-
-        //     if(isSelecting && curDom.hasClass("TimeSheet-cell") || isColSelecting && curDom.hasClass("TimeSheet-colHead")){
-        //         removeSelecting();
-        //         for(var row=topLeftCell[0]; row<=bottomRightCell[0]; ++row){
-        //             for(var col=topLeftCell[1]; col<=bottomRightCell[1]; ++col){
-        //                 $($(thisSheet.find(".TimeSheet-row")[row]).find(".TimeSheet-cell")[col]).addClass("TimeSheet-cell-selecting");
-        //             }
-        //         }
-        //     }
-        // };
 
         /*
          * targetArea ： {

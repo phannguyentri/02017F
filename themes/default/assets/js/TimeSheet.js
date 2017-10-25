@@ -298,6 +298,7 @@
                 d   = 0;
                 v   = 0;
                 l   = 0;
+                le  = 0;
 
                 for(var col= 0, curCell=''; col<=sheetOption.data.dimensions[1]; ++col){
                     if(col===0){
@@ -318,6 +319,8 @@
                             v++;
                         }else if(hours == "L"){
                             l++;
+                        }else if(hours == "Lễ"){
+                            le++;
                         }else{
                             if (!isNaN(parseFloat(hours))){
                                 totalHours = totalHours + parseFloat(hours);    
@@ -361,7 +364,7 @@
                         curRowHtml += '<td class="TimeSheet-remark total'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+finalTotal+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
-                        curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark le'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+le+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark p'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+p+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark ro'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+ro+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark r'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+r+'</td>';

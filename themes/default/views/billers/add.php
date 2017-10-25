@@ -37,7 +37,7 @@
                     </div>
 
                     <div class="form-group person">
-                        <label>Lương cơ bản *</label>
+                        <label>Lương hệ số *</label>
                         <?php echo form_input('basic_salary', '', 'class="form-control tip" id="basic_salary" data-bv-notempty="true"'); ?>
                     </div>
 

@@ -113,7 +113,7 @@ class Timekeepers extends MY_Controller
                   if ($val2 == "CT") {
                     $ct++;
                   }elseif ($val2 == "P" || $val2 == "Ro" || $val2 == "R" || $val2 == "Ô" || $val2 == "Đ"
-                   || $val2 == "NB" || $val2 == "V" || $val2 == "L") {
+                   || $val2 == "NB" || $val2 == "V" || $val2 == "L" || $val2 == "Lễ") {
                     continue;
                   }else{
                     $totalHour = $totalHour + $val2;
@@ -314,7 +314,7 @@ class Timekeepers extends MY_Controller
                     if ($day === "CT") {
                       $ct++;
                     }elseif ($day === "P" || $day === "Ro" || $day === "R" || $day === "Ô" || $day === "Đ"
-                     || $day === "NB" || $day === "V" || $day === "L") {
+                     || $day === "NB" || $day === "V" || $day === "L" || $day === "Lễ") {
                       continue;
                     }else{
                       $totalHour  = $totalHour + $day;

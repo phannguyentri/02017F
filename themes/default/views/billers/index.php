@@ -79,7 +79,7 @@
                             </th>
                             <th><?= lang("full_name"); ?></th>
                             <th><?= lang("company"); ?></th>
-                            <th>Lương cơ bản</th>
+                            <th>Lương hệ số</th>
                             <th><?= lang("vat_no"); ?></th>
                             <th><?= lang("phone"); ?></th>
                             <th><?= lang("email_address"); ?></th>
