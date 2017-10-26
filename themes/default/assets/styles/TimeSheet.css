@@ -62,7 +62,7 @@ tbody.TimeSheet{
 }
 
 .TimeSheet-remarkHead, .TimeSheet-remark{
-    max-width: 120px;
+    /*max-width: 120px;*/
     background-color: #fbf0ed;
     /*white-space:nowrap;*/
     overflow:hidden;

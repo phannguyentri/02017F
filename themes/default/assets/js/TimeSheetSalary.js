@@ -268,7 +268,7 @@
                 colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>V</b></td>';
                 colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>L</b></td>';
                 colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Lương cơ bản(VNĐ)</b></td>';
-                
+
 
                 colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Lương đóng BHXH(VNĐ)</b></td>';
                 colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Hệ số HTCV</b></td>';
@@ -293,7 +293,7 @@
             colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Lương kỹ năng chuyên môn</b></td>';
             colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Thâm niên</b></td>';
             colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Lương hiệu suất</b></td>';
-            colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Công tác phí, ĐT+ Đồng phục + Nhà ở + Đi lại</b></td>';
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2" style="white-space: nowrap;"><b>Công tác phí, ĐT+ Đồng phục + Nhà ở + Đi lại</b></td>';
             colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Chuyên cần</b></td>';
             colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Thu hút</b></td>';
 
@@ -351,12 +351,12 @@
                 for (var j = 0; j < sheetOption.data.sheetContentData[i+1].length; j++) {
                     myDate.setDate(j+1);
                     if (myDate.getDay() == 0) {
-                        hoursSunday     += parseFloat(sheetOption.data.sheetContentData[i+1][j]); 
+                        hoursSunday     += parseFloat(sheetOption.data.sheetContentData[i+1][j]);
                     }else{
-                        hoursOvertime   += parseFloat(sheetOption.data.sheetContentData[i+1][j]);    
+                        hoursOvertime   += parseFloat(sheetOption.data.sheetContentData[i+1][j]);
                     }
 
-                    
+
                 }
 
                 arrInfoCompanies[sheetOption.data.companyIdsData[i].company_id] =  {
@@ -505,7 +505,7 @@
                         curRowHtml += '<td class="TimeSheet-remark v'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+v+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark l'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+l+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+formatMoney(sheetOption.data.basicSalariesData[row].basic_salary)+'</td>';
-                        
+
                         curRowHtml += '<td class="TimeSheet-remark ">'+formatMoney(arrInfoCompanies[company_id].info.social_insurance)+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark ">'+arrInfoCompanies[company_id].info.coefficient_htcv+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark color-blue" title="Hệ số lương">'+parseFloat(arrInfoCompanies[company_id].info.coefficient_salary).toFixed(2)+'</td>';
@@ -515,7 +515,7 @@
                         curRowHtml += '<td class="TimeSheet-remark color-blue" title="Phần trăm thâm niên">'+parseFloat(arrInfoCompanies[company_id].info.percent_seniority).toFixed(2)+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark color-blue" title="Hệ số hiệu suất">'+parseFloat(arrInfoCompanies[company_id].info.efficiency).toFixed(2)+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark color-blue" title="Phần trăm hiệu suất">'+parseFloat(arrInfoCompanies[company_id].info.percent_efficiency).toFixed(2)+'</td>';
-                        
+
                         curRowHtml += '<td class="TimeSheet-remark" title="Mức lương">'+formatMoney(wageSalary.toFixed(4))+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark" title="Lương quản lý">'+formatMoney(manageSalary.toFixed(4))+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark" title="Lương kỹ năng chuyên môn">'+formatMoney(specializeSalary.toFixed(4))+'</td>';
@@ -626,7 +626,7 @@
                                                     totalRealCompleted += Math.min(...arrQuantityCompleted);
 
                                                     countEmp = teamEmp.length;
-                                                    
+
                                                     totalWorkDay = 0;
                                                     totalEfficiency = 0;
 
@@ -637,7 +637,7 @@
 
                                                     a   = countEmp*Math.min(...arrQuantityCompleted)*wage;
                                                     b   = totalWorkDay * totalEfficiency;
-                                                    
+
                                                     moneyBonusProduct += (a/b) * currentWorkDay * currentEfficiency;
 
                                                 }
@@ -671,7 +671,7 @@
                                         totalRealCompleted += Math.min(...arrQuantityCompleted);
 
                                         countEmp = teamEmp.length;
-                                        
+
                                         totalWorkDay = 0;
                                         totalEfficiency = 0;
 
