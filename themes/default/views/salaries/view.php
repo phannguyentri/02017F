@@ -211,11 +211,12 @@
                         companyIdsData    : response.companyIds,
                         efficiencysData   : response.efficiencys,
                         nameData          : response.timekeeperDetailsName,
+                        infoCompaniesData : response.infoCompanies,
                         month: month,
                         year: year
                     },
                     remarks : {
-                        title : "Tổng cộng",
+                        title : "Ngày công làm việc",
                         default : "N/A"
                     },
                     end : function(ev,selectedArea){
@@ -246,3 +247,8 @@
 
   });
 </script>
+<style type="text/css">
+  .color-blue{
+    background-color: #c6e7f9;
+  }
+</style>

@@ -71,7 +71,7 @@ class Timekeepers_model extends CI_Model
   }
 
   public function getInfoCompanies($department_id, $year, $month){
-    $this->db->select('companies.name, companies.basic_salary, companies.coefficient_salary, companies.coefficient_manage, companies.coefficient_specialize, companies.coefficient_seniority, companies.percent_seniority, companies.percent_efficiency, companies.coefficient_htcv, companies.social_insurance');
+    $this->db->select('companies.name, companies.basic_salary, companies.efficiency, companies.coefficient_salary, companies.coefficient_manage, companies.coefficient_specialize, companies.coefficient_seniority, companies.percent_seniority, companies.percent_efficiency, companies.coefficient_htcv, companies.social_insurance');
     $this->db->join('timekeeper_details', 'timekeeper_details.timekeeper_id = timekeepers.id');
     $this->db->join('companies', 'companies.id = timekeeper_details.company_id');
     $q = $this->db->get_where('timekeepers', array('timekeepers.department_id' => $department_id, 'timekeepers.year' => $year, 'timekeepers.month' => $month));

@@ -238,42 +238,77 @@
         myDate.setMonth(parseInt(sheetOption.data.month)-1);
 
         var initColHeads = function(){
-            // console.log('year:'+ sheetOption.data.year + ', month:'+ sheetOption.data.month);
 
             var colHeadHtml = '<tr>';
             for(var i=0,curColHead=''; i<=sheetOption.data.dimensions[1]; ++i){
                 if(i===0){
-                    curColHead = '<td class="TimeSheet-head" style="'+(sheetOption.data.sheetHead.style?sheetOption.data.sheetHead.style:'')+'"><b>'+sheetOption.data.sheetHead.name+'</b></td>';
+                    curColHead = '<td class="TimeSheet-head" rowspan="3" style="'+(sheetOption.data.sheetHead.style?sheetOption.data.sheetHead.style:'')+';"><b>'+sheetOption.data.sheetHead.name+'</b></td>';
                 }else{
                     myDate.setDate(i);
                     if (myDate.getDay() == 0) {
-                        curColHead = '<td title="'+(sheetOption.data.colHead[i-1].title ? sheetOption.data.colHead[i-1].title:"")+'" data-col="'+(i-1)+'" class="TimeSheet-colHead '+(i===sheetOption.data.dimensions[1]?'rightMost':'')+'" style="background-color: #9ae89c;"><b>'+sheetOption.data.colHead[i-1].name+'</b></td>';
+                        curColHead = '<td rowspan="3" title="'+(sheetOption.data.colHead[i-1].title ? sheetOption.data.colHead[i-1].title:"")+'" data-col="'+(i-1)+'" class="TimeSheet-colHead '+(i===sheetOption.data.dimensions[1]?'rightMost':'')+'" style="background-color: #9ae89c;"><b>'+sheetOption.data.colHead[i-1].name+'</b></td>';
                     }else{
-                        curColHead = '<td title="'+(sheetOption.data.colHead[i-1].title ? sheetOption.data.colHead[i-1].title:"")+'" data-col="'+(i-1)+'" class="TimeSheet-colHead '+(i===sheetOption.data.dimensions[1]?'rightMost':'')+'" style=""><b>'+sheetOption.data.colHead[i-1].name+'</b></td>';
+                        curColHead = '<td rowspan="3" title="'+(sheetOption.data.colHead[i-1].title ? sheetOption.data.colHead[i-1].title:"")+'" data-col="'+(i-1)+'" class="TimeSheet-colHead '+(i===sheetOption.data.dimensions[1]?'rightMost':'')+'" style=""><b>'+sheetOption.data.colHead[i-1].name+'</b></td>';
                     }
 
                 }
                 colHeadHtml += curColHead;
             }
             if(sheetOption.remarks){
-                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>'+sheetOption.remarks.title+'</b></td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>Chủ nhật</b></td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>Tăng ca</b></td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>Lễ</b></td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>P</b></td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>Ro</b></td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>R</b></td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>Ô</b></td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>Đ</b></td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>NB</b></td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>V</b></td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>L</b></td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>Lương cơ bản(VNĐ)</b></td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>Tổng lương ngày công(VNĐ)</b></td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>Tổng lương sản phẩm(VNĐ)</b></td>';
-                colHeadHtml += '<td class="TimeSheet-remarkHead"><b>Tổng lương(VNĐ)</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3" style="color: #ed4444;"><b>'+sheetOption.remarks.title+'</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Chủ nhật</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Tăng ca</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Lễ</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>P</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Ro</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>R</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Ô</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Đ</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>NB</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>V</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>L</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Lương cơ bản(VNĐ)</b></td>';
+                
+
+                colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Lương đóng BHXH(VNĐ)</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Hệ số HTCV</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead color-blue" colspan="7"><b>Hệ số</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" colspan="8"><b>Lương cơ bản, phụ cấp</b></td>';
+
+
+                colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Tổng lương ngày công(VNĐ)</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Tổng lương sản phẩm(VNĐ)</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Tổng lương(VNĐ)</b></td>';
             }
             colHeadHtml += '</tr>';
+
+            colHeadHtml += '<tr>';
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead color-blue" colspan="3"><b>Lương và các khoản phụ cấp lương</b></td>'
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead color-blue" colspan="2"><b>Thâm niên</b></td>'
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead color-blue" colspan="2"><b>H.Suất</b></td>'
+
+
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Mức lương</b></td>';
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Lương quản lý</b></td>';
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Lương kỹ năng chuyên môn</b></td>';
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Thâm niên</b></td>';
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Lương hiệu suất</b></td>';
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Công tác phí, ĐT+ Đồng phục + Nhà ở + Đi lại</b></td>';
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Chuyên cần</b></td>';
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Thu hút</b></td>';
+
+            colHeadHtml += '</tr>';
+
+            colHeadHtml += '<tr>';
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead color-blue"><b>Hệ số lương</b></td>'
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead color-blue"><b>HS quản lý</b></td>'
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead color-blue"><b>HS kỹ năng chuyên môn</b></td>'
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead color-blue"><b>Hệ số</b></td>'
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead color-blue"><b>%</b></td>'
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead color-blue"><b>Hệ số</b></td>'
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead color-blue"><b>%</b></td>'
+            colHeadHtml += '</tr>';
+
             thisSheet.append(colHeadHtml);
         };
 
@@ -284,7 +319,9 @@
             arrCompanyId    = [];
             arrInfoCompanies = [];
             for (var i = 0; i < sheetOption.data.companyIdsData.length; (i+=2)) {
-                totalHours = 0;
+                totalHours      = 0;
+                hoursOvertime   = 0;
+                hoursSunday     = 0;
 
                 for (var j = 0; j < sheetOption.data.sheetContentData[i].length; j++) {
                     hours = (sheetOption.data.sheetContentData[i][j] == 0) ? 0 : sheetOption.data.sheetContentData[i][j];
@@ -311,11 +348,24 @@
 
                 }
 
+                for (var j = 0; j < sheetOption.data.sheetContentData[i+1].length; j++) {
+                    myDate.setDate(j+1);
+                    if (myDate.getDay() == 0) {
+                        hoursSunday     += parseFloat(sheetOption.data.sheetContentData[i+1][j]); 
+                    }else{
+                        hoursOvertime   += parseFloat(sheetOption.data.sheetContentData[i+1][j]);    
+                    }
+
+                    
+                }
 
                 arrInfoCompanies[sheetOption.data.companyIdsData[i].company_id] =  {
-                  'name'        : sheetOption.data.nameData[i].name,
-                  'efficiency'  : sheetOption.data.efficiencysData[i].efficiency,
-                  'workday'     : totalHours/8
+                  'info'            : sheetOption.data.infoCompaniesData[i],
+                  'name'            : sheetOption.data.nameData[i].name,
+                  'efficiency'      : sheetOption.data.efficiencysData[i].efficiency,
+                  'workday'         : totalHours/8,
+                  'hoursOverTime'   : hoursOvertime,
+                  'hoursSunday'     : hoursSunday
                 };
             }
 
@@ -334,6 +384,8 @@
             }
 
             for(var row=0,curRowHtml=''; row<sheetOption.data.dimensions[0]; ++row){
+                company_id = sheetOption.data.companyIdsData[row].company_id;
+
                 rowBonusProductHtml = '';
                 totalBonusMoney = 0;
 
@@ -412,7 +464,35 @@
                 if(sheetOption.remarks){
 
                     if (row % 2 == 0) {
-                        curRowHtml += '<td class="TimeSheet-remark total'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+finalTotal+'</td>';
+
+                        realBasicSalary = arrInfoCompanies[company_id].info.basic_salary*parseFloat(arrInfoCompanies[company_id].info.coefficient_salary);
+                        console.log('realBasicSalary', realBasicSalary);
+
+                        wageSalary = realBasicSalary*parseFloat(arrInfoCompanies[company_id].info.coefficient_salary)/workDay*parseFloat(arrInfoCompanies[company_id].workday)*parseFloat(arrInfoCompanies[company_id].info.coefficient_htcv);
+                        manageSalary = realBasicSalary
+                         *parseFloat(arrInfoCompanies[company_id].info.coefficient_manage)
+                         /workDay
+                         *parseFloat(arrInfoCompanies[company_id].workday)
+                         *parseFloat(arrInfoCompanies[company_id].info.coefficient_htcv);
+                        specializeSalary = parseFloat(arrInfoCompanies[company_id].info.coefficient_specialize)
+                         *500000
+                         /workDay
+                         *parseFloat(arrInfoCompanies[company_id].workday)
+                         *parseFloat(arrInfoCompanies[company_id].info.coefficient_htcv);
+                        senioritySalary = parseFloat(arrInfoCompanies[company_id].info.coefficient_seniority)
+                         *500000
+                         /workDay
+                         *parseFloat(arrInfoCompanies[company_id].workday)
+                         *parseFloat(arrInfoCompanies[company_id].info.coefficient_htcv)
+                         *parseFloat(arrInfoCompanies[company_id].info.percent_seniority);
+                        efficiencySalary = parseFloat(arrInfoCompanies[company_id].info.efficiency)
+                         *500000
+                         *parseFloat(arrInfoCompanies[company_id].info.percent_efficiency)
+                         *parseFloat(arrInfoCompanies[company_id].workday)
+                         /workDay;
+
+
+                        curRowHtml += '<td style="color: #ed4444;" class="TimeSheet-remark total'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+finalTotal+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
                         curRowHtml += '<td class="TimeSheet-remark le'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+le+'</td>';
@@ -425,6 +505,27 @@
                         curRowHtml += '<td class="TimeSheet-remark v'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+v+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark l'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+l+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+formatMoney(sheetOption.data.basicSalariesData[row].basic_salary)+'</td>';
+                        
+                        curRowHtml += '<td class="TimeSheet-remark ">'+formatMoney(arrInfoCompanies[company_id].info.social_insurance)+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark ">'+arrInfoCompanies[company_id].info.coefficient_htcv+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark color-blue" title="Hệ số lương">'+parseFloat(arrInfoCompanies[company_id].info.coefficient_salary).toFixed(2)+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark color-blue" title="Hệ số quản lý">'+parseFloat(arrInfoCompanies[company_id].info.coefficient_manage).toFixed(2)+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark color-blue" title="Hệ số kỹ năng chuyên môn">'+parseFloat(arrInfoCompanies[company_id].info.coefficient_specialize).toFixed(2)+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark color-blue" title="Hệ số thâm niên">'+parseFloat(arrInfoCompanies[company_id].info.coefficient_seniority).toFixed(2)+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark color-blue" title="Phần trăm thâm niên">'+parseFloat(arrInfoCompanies[company_id].info.percent_seniority).toFixed(2)+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark color-blue" title="Hệ số hiệu suất">'+parseFloat(arrInfoCompanies[company_id].info.efficiency).toFixed(2)+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark color-blue" title="Phần trăm hiệu suất">'+parseFloat(arrInfoCompanies[company_id].info.percent_efficiency).toFixed(2)+'</td>';
+                        
+                        curRowHtml += '<td class="TimeSheet-remark" title="Mức lương">'+formatMoney(wageSalary.toFixed(4))+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark" title="Lương quản lý">'+formatMoney(manageSalary.toFixed(4))+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark" title="Lương kỹ năng chuyên môn">'+formatMoney(specializeSalary.toFixed(4))+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark" title="Thâm niên">'+formatMoney(senioritySalary.toFixed(4))+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark" title="Lương hiệu suất">'+formatMoney(efficiencySalary.toFixed(4))+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark" title="Công tác phí, ĐT+ Đồng phục + Nhà ở + Đi lại"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark" title="Chuyên cần"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark" title="Thu hút"></td>';
+
+
                         curRowHtml += '<td class="TimeSheet-remark salary-daywork'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+formatMoney(totalSalary)+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark bonus'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
                         curRowHtml += '<td class="TimeSheet-remark final-salary'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
@@ -442,6 +543,27 @@
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
+
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
@@ -451,7 +573,7 @@
                 curRowHtml += '</tr>';
 
                 if (row % 2 != 0) {
-                    company_id = sheetOption.data.companyIdsData[row].company_id;
+                    // company_id = sheetOption.data.companyIdsData[row].company_id;
                     arrIdProductBonus   = [];
                     arrNameProductBonus = [];
                     arrWage             = [];
@@ -565,9 +687,6 @@
 
                                     }
 
-                                    console.log('moneyBonusProduct', moneyBonusProduct);
-                                    console.log('--------------------------------------------');
-
                                     arrRealCompleted.push(totalRealCompleted);
 
                                     totalBonusMoney += moneyBonusProduct;
@@ -609,6 +728,27 @@
                         rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
                         rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
                         rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+
                         rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
                         rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
                         rowBonusProductHtml += '<td class="TimeSheet-remark"></td></tr>';
@@ -633,6 +773,27 @@
                             rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
                             rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
                             rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+
                             rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
                             rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
                             rowBonusProductHtml += '<td class="TimeSheet-remark"></td></tr>';

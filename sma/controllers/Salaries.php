@@ -69,7 +69,7 @@ class Salaries extends MY_Controller
 
 
         $data['basicSalaries']          = $this->timekeepers_model->getBasicCompanies($department_id, $year, $month);
-
+        $data['infoCompanies']          = $this->timekeepers_model->getInfoCompanies($department_id, $year, $month);
 
         echo json_encode($data);
     }
@@ -104,9 +104,6 @@ class Salaries extends MY_Controller
                     $hoursOverTime  = 0;
                     $hoursSunday    = 0;
 
-                    echo "<pre>";
-                    print_r($onlyDayTimekeeperDetails[$key+1]);
-                    echo "</pre>";
                     $i = 1;
 
                     foreach ($onlyDayTimekeeperDetails[$key+1] as $detail) {
@@ -119,7 +116,7 @@ class Salaries extends MY_Controller
                     }
 
 
-                    foreach ($onlyDayTimekeeperDetails[$key] as  $detail) {
+                    foreach ($onlyDayTimekeeperDetails[$key] as $detail) {
                         $hours += $detail;
                     }
 
@@ -135,10 +132,13 @@ class Salaries extends MY_Controller
                     }
                 }
             }
-            echo "<pre>";
-            print_r($allInfoCompanies);
-            echo "</pre>";die();
 
+            $dayWorkInMonth = 0;
+            for ($i=0; $i < cal_days_in_month(CAL_GREGORIAN, $month, $year); $i++) {
+                if (date("w",strtotime(($i+1).'-'.$month.'-'.$year)) != 0) {
+                    $dayWorkInMonth++;
+                }
+            }
 
             $this->load->library('excel');
             $this->excel->setActiveSheetIndex(0);
@@ -217,24 +217,18 @@ class Salaries extends MY_Controller
 
             $this->excel->getActiveSheet()->SetCellValue('A2', 'STT');
             $this->excel->getActiveSheet()->mergeCells('A2:A4');
-            $this->excel->getActiveSheet()->getStyle("A2:A4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
             $this->excel->getActiveSheet()->SetCellValue('B2', 'Họ và tên');
             $this->excel->getActiveSheet()->mergeCells('B2:B4');
-            $this->excel->getActiveSheet()->getStyle("B2:B4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('C2', 'Chức danh');
             $this->excel->getActiveSheet()->mergeCells('C2:C4');
-            $this->excel->getActiveSheet()->getStyle("C2:C4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+
 
             $this->excel->getActiveSheet()->SetCellValue('D2', 'Lương đóng BHXH');
             $this->excel->getActiveSheet()->mergeCells('D2:D4');
-            $this->excel->getActiveSheet()->getStyle("D2:D4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+            $this->excel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
 
             $this->excel->getActiveSheet()->SetCellValue('E2', 'Ngày công làm việc');
             $this->excel->getActiveSheet()->mergeCells('E2:E4');
@@ -242,121 +236,81 @@ class Salaries extends MY_Controller
 
             $this->excel->getActiveSheet()->SetCellValue('F2', 'Hệ số HTCV');
             $this->excel->getActiveSheet()->mergeCells('F2:F4');
-            $this->excel->getActiveSheet()->getStyle("F2:F4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
 
 
             $this->excel->getActiveSheet()->SetCellValue('G2', 'Hệ số');
             $this->excel->getActiveSheet()->mergeCells('G2:M2');
-            $this->excel->getActiveSheet()->getStyle("G2:M2")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
 
             $this->excel->getActiveSheet()->SetCellValue('G3', 'Lương và các khoản phụ cấp lương');
             $this->excel->getActiveSheet()->mergeCells('G3:I3');
-            $this->excel->getActiveSheet()->getStyle("G3:I3")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('J3', 'Thâm niên');
             $this->excel->getActiveSheet()->mergeCells('J3:K3');
-            $this->excel->getActiveSheet()->getStyle("J3:K3")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+
 
             $this->excel->getActiveSheet()->SetCellValue('L3', 'H.Suất');
             $this->excel->getActiveSheet()->mergeCells('L3:M3');
-            $this->excel->getActiveSheet()->getStyle("L3:M3")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('G4', 'Hệ số lương');
-            $this->excel->getActiveSheet()->getStyle("G4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('H4', 'HS quản lý');
-            $this->excel->getActiveSheet()->getStyle("H4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('I4', 'HS kỹ năng chuyên môn');
-            $this->excel->getActiveSheet()->getStyle("I4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(12);
             $this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(12);
             $this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(12);
 
             $this->excel->getActiveSheet()->SetCellValue('J4', 'Hệ số');
-            $this->excel->getActiveSheet()->getStyle("J4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('K4', '%');
-            $this->excel->getActiveSheet()->getStyle("K4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('L4', 'Hệ số');
-            $this->excel->getActiveSheet()->getStyle("L4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('M4', '%');
-            $this->excel->getActiveSheet()->getStyle("M4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->freezePane('N2');
 
             $this->excel->getActiveSheet()->SetCellValue('N2', 'Lương cơ bản, phụ cấp');
             $this->excel->getActiveSheet()->mergeCells('N2:U2');
-            $this->excel->getActiveSheet()->getStyle("N2:U2")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+            $this->excel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
 
             $this->excel->getActiveSheet()->SetCellValue('N3', 'Mức lương');
             $this->excel->getActiveSheet()->mergeCells('N3:N4');
-            $this->excel->getActiveSheet()->getStyle("N3:N4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-             $this->excel->getActiveSheet()->getColumnDimension('N')->setWidth(18);
+            $this->excel->getActiveSheet()->getColumnDimension('N')->setWidth(20);
 
 
             $this->excel->getActiveSheet()->SetCellValue('O3', 'Lương quản lý');
             $this->excel->getActiveSheet()->mergeCells('O3:O4');
-            $this->excel->getActiveSheet()->getStyle("O3:O4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+            $this->excel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
 
             $this->excel->getActiveSheet()->SetCellValue('P3', 'Lương kỹ năng chuyên môn');
             $this->excel->getActiveSheet()->mergeCells('P3:P4');
-            $this->excel->getActiveSheet()->getStyle("P3:P4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
             $this->excel->getActiveSheet()->getColumnDimension('P')->setWidth(14);
 
             $this->excel->getActiveSheet()->SetCellValue('Q3', 'Thâm niên');
             $this->excel->getActiveSheet()->mergeCells('Q3:Q4');
-            $this->excel->getActiveSheet()->getStyle("Q3:Q4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+            $this->excel->getActiveSheet()->getColumnDimension('Q')->setWidth(15);
 
             $this->excel->getActiveSheet()->SetCellValue('R3', 'Lương hiệu suất');
             $this->excel->getActiveSheet()->mergeCells('R3:R4');
-            $this->excel->getActiveSheet()->getStyle("R3:R4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
             $this->excel->getActiveSheet()->getColumnDimension('R')->setWidth(12);
 
             $this->excel->getActiveSheet()->SetCellValue('S3', 'Công tác phí, ĐT+ Đồng phục + Nhà ở + Đi lại');
             $this->excel->getActiveSheet()->mergeCells('S3:S4');
-            $this->excel->getActiveSheet()->getStyle("S3:S4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
             $this->excel->getActiveSheet()->getColumnDimension('S')->setWidth(16);
 
             $this->excel->getActiveSheet()->SetCellValue('T3', 'Chuyên cần');
             $this->excel->getActiveSheet()->mergeCells('T3:T4');
-            $this->excel->getActiveSheet()->getStyle("T3:T4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
             $this->excel->getActiveSheet()->getColumnDimension('T')->setWidth(12);
 
             $this->excel->getActiveSheet()->SetCellValue('U3', 'Thu hút');
             $this->excel->getActiveSheet()->mergeCells('U3:U4');
-            $this->excel->getActiveSheet()->getStyle("U3:U4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('V2', 'Tăng ca');
             $this->excel->getActiveSheet()->mergeCells('V2:W2');
-            $this->excel->getActiveSheet()->getStyle("V2:W2")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('V3', 'Số giờ tăng ca');
             $this->excel->getActiveSheet()->mergeCells('V3:V4');
@@ -364,14 +318,10 @@ class Salaries extends MY_Controller
 
             $this->excel->getActiveSheet()->SetCellValue('W3', 'Thành tiền');
             $this->excel->getActiveSheet()->mergeCells('W3:W4');
-            $this->excel->getActiveSheet()->getStyle("W3:W4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
             $this->excel->getActiveSheet()->getColumnDimension('W')->setWidth(12);
 
             $this->excel->getActiveSheet()->SetCellValue('X2', 'Ngày Chủ Nhật');
             $this->excel->getActiveSheet()->mergeCells('X2:Y2');
-            $this->excel->getActiveSheet()->getStyle("X2:Y2")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('X3', 'Số giờ làm thêm');
             $this->excel->getActiveSheet()->mergeCells('X3:X4');
@@ -379,43 +329,27 @@ class Salaries extends MY_Controller
 
             $this->excel->getActiveSheet()->SetCellValue('Y3', 'Thành tiền');
             $this->excel->getActiveSheet()->mergeCells('Y3:Y4');
-            $this->excel->getActiveSheet()->getStyle("Y3:Y4")->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
             $this->excel->getActiveSheet()->getColumnDimension('Y')->setWidth(12);
 
             $this->excel->getActiveSheet()->SetCellValue('Z2', 'Tổng tiền lương theo hệ số HTCV(100%)');
             $this->excel->getActiveSheet()->mergeCells('Z2:Z4');
-            $this->excel->getActiveSheet()->getStyle('Z2:Z4')->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
             $this->excel->getActiveSheet()->getColumnDimension('Z')->setWidth(18);
 
 
             $this->excel->getActiveSheet()->SetCellValue('AA2', 'Các khoản thu nhập khác');
             $this->excel->getActiveSheet()->mergeCells('AA2:AD2');
-            $this->excel->getActiveSheet()->getStyle('AA2:AD2')->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('AA3', 'Tiền ăn giữa ca');
             $this->excel->getActiveSheet()->mergeCells('AA3:AC3');
-            $this->excel->getActiveSheet()->getStyle('AA3:AC3')->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('AA4', 'Số suất ăn');
-            $this->excel->getActiveSheet()->getStyle('AA4')->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('AB4', 'Thành tiền');
-            $this->excel->getActiveSheet()->getStyle('AB4')->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('AC4', 'Tiền ăn tăng ca');
-            $this->excel->getActiveSheet()->getStyle('AC4')->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('AD3', '18%BHXH, 3%BHYT, 2%KPCN, 1%BHTN (24%)');
             $this->excel->getActiveSheet()->mergeCells('AD3:AD4');
-            $this->excel->getActiveSheet()->getStyle('AD3:AD4')->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->getColumnDimension('AA')->setWidth(12);
             $this->excel->getActiveSheet()->getColumnDimension('AB')->setWidth(12);
@@ -429,29 +363,19 @@ class Salaries extends MY_Controller
 
             $this->excel->getActiveSheet()->SetCellValue('AF2', 'Các khoản phải thu');
             $this->excel->getActiveSheet()->mergeCells('AF2:AI2');
-            $this->excel->getActiveSheet()->getStyle('AF2:AI2')->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('AF3', 'TỨ đợt 1');
             $this->excel->getActiveSheet()->mergeCells('AF3:AF4');
-            $this->excel->getActiveSheet()->getStyle('AF3:AF4')->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('AG3', '8%BHXH, 1.5%BHYT 1%BHTN (10.5%)');
             $this->excel->getActiveSheet()->mergeCells('AG3:AG4');
-            $this->excel->getActiveSheet()->getStyle('AG3:AG4')->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
             $this->excel->getActiveSheet()->getColumnDimension('AG')->setWidth(13);
 
             $this->excel->getActiveSheet()->SetCellValue('AH3', 'Thuế TNCN');
             $this->excel->getActiveSheet()->mergeCells('AH3:AH4');
-            $this->excel->getActiveSheet()->getStyle('AH3:AH4')->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('AI3', 'Cộng');
             $this->excel->getActiveSheet()->mergeCells('AI3:AI4');
-            $this->excel->getActiveSheet()->getStyle('AI3:AI4')->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
 
             $this->excel->getActiveSheet()->SetCellValue('AJ2', 'Tiền lương được lĩnh');
@@ -461,33 +385,88 @@ class Salaries extends MY_Controller
 
             $this->excel->getActiveSheet()->SetCellValue('AK2', 'Ký nhận');
             $this->excel->getActiveSheet()->mergeCells('AK2:AK4');
-            $this->excel->getActiveSheet()->getStyle('AK2:AK4')->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
             $this->excel->getActiveSheet()->getColumnDimension('AK')->setWidth(11);
 
             $this->excel->getActiveSheet()->SetCellValue('AL2', 'Thuế TNCN');
             $this->excel->getActiveSheet()->mergeCells('AL2:AM2');
-            $this->excel->getActiveSheet()->getStyle('AL2:AM2')->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('AL3', 'Giảm trừ gia cảnh');
-            $this->excel->getActiveSheet()->getStyle('AL3')->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
-            $this->excel->getActiveSheet()->getStyle('AL4')->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->SetCellValue('AM3', 'Thu nhập chịu thuế');
             $this->excel->getActiveSheet()->mergeCells('AM3:AM4');
-            $this->excel->getActiveSheet()->getStyle('AM3:AM4')->getBorders()->getAllBorders()
-             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
             $this->excel->getActiveSheet()->getColumnDimension('AL')->setWidth(18);
             $this->excel->getActiveSheet()->getColumnDimension('AM')->setWidth(18);
 
-            $this->excel->getActiveSheet()->getStyle("G2:M4")->applyFromArray($styleStatic);
-
             // END Init Rows
+
+            $i = 1;
+            $row = 4;
+
+            // echo "<pre>";
+            // print_r($allInfoCompanies);
+            // echo "</pre>";
+            // echo "dayWorkInMonth: ".$dayWorkInMonth;
+
+            // die();
+
+            foreach ($allInfoCompanies as $key => $info) {
+                $row++;
+                $realBasicSalary = $info['basic_salary']*$info['coefficient_salary'];
+                // var_dump($realBasicSalary);die();
+
+                $this->excel->getActiveSheet()->SetCellValue('A'.$row, $i);
+                $this->excel->getActiveSheet()->SetCellValue('B'.$row, $info['name']);
+                $this->excel->getActiveSheet()->getStyle('B'.$row)->getAlignment()
+                 ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+                $this->excel->getActiveSheet()->SetCellValue('D'.$row, $this->sma->formatMoney($this->checkZero($info['social_insurance'])));
+                $this->excel->getActiveSheet()->SetCellValue('E'.$row, $info['workday']);
+                $this->excel->getActiveSheet()->getStyle('E'.$row)->applyFromArray($colorRed);
+                $this->excel->getActiveSheet()->SetCellValue('F'.$row, $this->checkZero($info['coefficient_htcv']));
+                $this->excel->getActiveSheet()->SetCellValue('G'.$row, $this->checkZero($info['coefficient_salary']));
+                $this->excel->getActiveSheet()->SetCellValue('H'.$row, $this->checkZero($info['coefficient_manage']));
+                $this->excel->getActiveSheet()->SetCellValue('I'.$row, $this->checkZero($info['coefficient_specialize']));
+                $this->excel->getActiveSheet()->SetCellValue('J'.$row, $this->checkZero($info['coefficient_seniority']));
+                $this->excel->getActiveSheet()->SetCellValue('K'.$row, $this->checkZero($info['percent_seniority']));
+                $this->excel->getActiveSheet()->SetCellValue('L'.$row, $this->checkZero($info['efficiency']));
+                $this->excel->getActiveSheet()->SetCellValue('M'.$row, $this->checkZero($info['percent_efficiency']));
+
+                $wageSalary = $info['coefficient_salary']*$realBasicSalary/$dayWorkInMonth*$info['workday']*$info['coefficient_htcv'];
+                $this->excel->getActiveSheet()->SetCellValue('N'.$row, $this->checkZero($wageSalary, '-', true));
+                $manageSalary = $info['coefficient_manage']*$realBasicSalary/$dayWorkInMonth*$info['workday']*$info['coefficient_htcv'];
+                $this->excel->getActiveSheet()->SetCellValue('O'.$row, $this->checkZero($manageSalary, '-', true));
+                $specializeSalary = $info['coefficient_specialize']*500000/$dayWorkInMonth*$info['workday']*$info['coefficient_htcv'];
+                $this->excel->getActiveSheet()->SetCellValue('P'.$row, $this->checkZero($specializeSalary, '-', true));
+                $senioritySalary = $info['coefficient_seniority']*500000/$dayWorkInMonth*$info['workday']*$info['coefficient_htcv']*$info['percent_seniority'];
+                $this->excel->getActiveSheet()->SetCellValue('Q'.$row, $this->checkZero($senioritySalary, '-', true));
+                $efficiencySalary = $info['efficiency']*500000*$info['percent_efficiency']*$info['workday']/$dayWorkInMonth;
+                $this->excel->getActiveSheet()->SetCellValue('R'.$row, $this->checkZero($efficiencySalary, '-', true));
+
+
+                $this->excel->getActiveSheet()->SetCellValue('V'.$row, $this->checkZero($info['hoursOverTime']));
+                $this->excel->getActiveSheet()->getStyle('V'.$row)->applyFromArray($colorRed);
+                $overTimeSalary = ($wageSalary/$dayWorkInMonth/8)*1.5*$info['hoursOverTime'] + ($specializeSalary/$dayWorkInMonth/8*$info['hoursOverTime']);
+                $this->excel->getActiveSheet()->SetCellValue('W'.$row, $this->checkZero($overTimeSalary, '-', true));
+
+                $this->excel->getActiveSheet()->SetCellValue('X'.$row, $this->checkZero($info['hoursSunday']));
+                $this->excel->getActiveSheet()->getStyle('X'.$row)->applyFromArray($colorRed);
+                $moreTimeSalary = ($wageSalary/$dayWorkInMonth/8)*2*$info['hoursSunday'] + ($specializeSalary/$dayWorkInMonth/8*$info['hoursSunday']);
+                $this->excel->getActiveSheet()->SetCellValue('Y'.$row, $this->checkZero($moreTimeSalary, '-', true));
+
+
+                /*----- to be continue -----*/
+
+
+
+                $i++;
+
+            }
+
+            $this->excel->getActiveSheet()->getStyle('A2:'.'AM'.$row)->getBorders()->getAllBorders()
+             ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+            $this->excel->getActiveSheet()->getStyle('G2:'.'M'.$row)->applyFromArray($styleStatic);
+
 
             $filename = 'salaries-general-view-'.$month.'-'.$year.'-'.$department_id;
             header('Content-Type: application/vnd.ms-excel');
@@ -508,6 +487,14 @@ class Salaries extends MY_Controller
 
 //-------------------------------------------------------------------------------------------
 
+    private function checkZero($number, $text = '', $optionFormat = false){
+        if ($number == 0) {
+            return $text;
+        }
+        return ($optionFormat) ? $this->sma->formatMoney($number) : $number;
+    }
+
+//-------------------------------------------------------------------------------------------
     public function xls(){
 
         $department_id  = $this->input->get('department_id');
