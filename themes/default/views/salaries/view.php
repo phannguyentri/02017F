@@ -8,9 +8,9 @@
 
               <?php
                 // echo date("w",strtotime('17-7-2017'));
-                echo "<pre>";
-                print_r($productions);
-                echo "</pre>";
+                // echo "<pre>";
+                // print_r($productions);
+                // echo "</pre>";
                ?>
                   <div class="col-md-3">
 
@@ -89,7 +89,7 @@
                   <div class="col-md-3" style="margin-top: 15px;">
                     <div class="form-group">
                       <div class="controls">
-                          <button id="btn-save-salaries" type="button" class="btn btn-primary">
+                          <button id="btn-save-salaries" type="button" class="btn btn-primary" disabled>
                             <span class="icon fa fa-floppy-o"></span> Lưu bảng lương
                           </button>
                       </div>
@@ -99,7 +99,7 @@
                   <div class="col-md-3" style="margin-top: 15px;">
                     <div class="form-group">
                       <div class="controls">
-                          <button id="btn-xls" type="button" class="btn btn-primary" style="background-color:#367b59; border-color: #3c763d;" disabled>
+                          <button id="btn-xls" type="button" class="btn btn-primary" style="background-color:#449a70; border-color: #449a70;" disabled>
                             <span class="icon fa fa-file-excel-o"></span> Tải về dạng XLS
                           </button>
                       </div>
@@ -109,7 +109,8 @@
                   <div class="col-md-3" style="margin-top: 15px;">
                     <div class="form-group">
                       <div class="controls">
-                          <button id="btn-general-xls" type="button" class="btn btn-primary" style="background-color:#367b59; border-color: #3c763d;">
+                          <button id="btn-general-xls" type="button" class="btn btn-primary"
+                           style="background-color:#449a70; border-color: #449a70;" disabled>
                             <span class="icon fa fa-file-excel-o"></span> Tải về bảng tổng quát dạng XLS
                           </button>
                       </div>
@@ -153,8 +154,7 @@
             if (input == 0) {
               $(this).text('');
             }else{
-              $(this).text(input);
-              console.log($(this).parent().attr('data-company-id'));
+              $(this).text(formatMoney(input));
               companyId = $(this).parent().attr('data-company-id');
               fieldName = $(this).attr('data-field-name');
 
@@ -163,6 +163,7 @@
               }
               dataUpdateSalaries[companyId][fieldName] = input
 
+              $('#btn-save-salaries').removeAttr('disabled');
               console.log(dataUpdateSalaries);
             }
           }else{
@@ -192,8 +193,10 @@
           success: function (response) {
               if (response.timekeeperDetails.length != undefined) {
                 console.log(response);
+                $('#btn-save-salaries').attr('disabled', 'disabled');
                 $('#link-xls').attr('href', );
                 $('#btn-xls').removeAttr('disabled');
+                $('#btn-general-xls').removeAttr('disabled');
 
                 timekeeperDetailIds = response.timekeeperDetailIds;
                 var nameList = []; // new Array
@@ -246,8 +249,8 @@
                         nameData          : response.timekeeperDetailsName,
                         infoCompaniesData : response.infoCompanies,
                         salariesData      : response.salaries,
-                        month: month,
-                        year: year
+                        month             : month,
+                        year              : year
                     },
                     remarks : {
                         title : "Ngày công làm việc",
@@ -297,6 +300,7 @@
           success: function (response) {
             if (response.status == "success") {
               bootbox.alert('Lưu bảng lương thành công!');
+              $('#btn-save-salaries').attr('disabled', 'disabled');
             }else{
               bootbox.alert('Lưu bảng lương thất bại!');
             }
