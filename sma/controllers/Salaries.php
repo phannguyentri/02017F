@@ -51,6 +51,7 @@ class Salaries extends MY_Controller
     public function getAllTimekeeperDetails(){
         $this->load->model('productions_model');
         $this->load->model('departments_model');
+        $this->load->model('salaries_model');
 
         $department_id  = $this->input->get('department_id');
         $year           = $this->input->get('year');
@@ -67,11 +68,25 @@ class Salaries extends MY_Controller
             $data['productionsInMonthYear'] = $this->productions_model->getProductionByYearMonth($year, $month);
         }
 
-
         $data['basicSalaries']          = $this->timekeepers_model->getBasicCompanies($department_id, $year, $month);
         $data['infoCompanies']          = $this->timekeepers_model->getInfoCompanies($department_id, $year, $month);
+        $data['salaries']               = $this->salaries_model->getAllSalaries($year, $month);
 
         echo json_encode($data);
+    }
+
+    public function saveSalaries(){
+
+        $month = $this->input->post('month');
+        $year  = $this->input->post('year');
+        $dataSalaries = $this->input->post('dataSalaries');
+
+        $this->load->model('salaries_model');
+        if ($this->salaries_model->save($dataSalaries, $month, $year)) {
+            echo json_encode(array('status' => 'success'));
+        }else{
+            echo json_encode(array('status' => 'error'));
+        }
     }
 
 

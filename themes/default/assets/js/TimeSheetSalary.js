@@ -274,7 +274,11 @@
                 colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Hệ số HTCV</b></td>';
                 colHeadHtml += '<td class="TimeSheet-remarkHead color-blue" colspan="7"><b>Hệ số</b></td>';
                 colHeadHtml += '<td class="TimeSheet-remarkHead" colspan="8"><b>Lương cơ bản, phụ cấp</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" colspan="2"><b>Tăng ca</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" colspan="2"><b>Ngày chủ nhật</b></td>';
+                colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Tổng tiền lương theo hệ số HTCV(100%)</b></td>';
 
+                colHeadHtml += '<td class="TimeSheet-remarkHead" colspan="4"><b>Các khoản thu nhập khác</b></td>';
 
                 colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Tổng lương ngày công(VNĐ)</b></td>';
                 colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Tổng lương sản phẩm(VNĐ)</b></td>';
@@ -296,6 +300,13 @@
             colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2" style="white-space: nowrap;"><b>Công tác phí, ĐT+ Đồng phục + Nhà ở + Đi lại</b></td>';
             colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Chuyên cần</b></td>';
             colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Thu hút</b></td>';
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2" style="color: #ed4444;"><b>Số giờ tăng ca</b></td>';
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Thành tiền</b></td>';
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2" style="color: #ed4444;"><b>Số giờ làm thêm</b></td>';
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Thành tiền</b></td>';
+
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead" colspan="3"><b>Tiền ăn giữa ca</b></td>';
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>18%BHXH, 3%BHYT, 2%KPCÑ, 1%BHTN (24%)</b></td>';
 
             colHeadHtml += '</tr>';
 
@@ -307,6 +318,11 @@
             colHeadHtml +=  '<td class="TimeSheet-remarkHead color-blue"><b>%</b></td>'
             colHeadHtml +=  '<td class="TimeSheet-remarkHead color-blue"><b>Hệ số</b></td>'
             colHeadHtml +=  '<td class="TimeSheet-remarkHead color-blue"><b>%</b></td>'
+
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead"><b>Số xuất ăn</b></td>'
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead"><b>Thành tiền</b></td>'
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead"><b>Tiền ăn tăng ca</b></td>'
+
             colHeadHtml += '</tr>';
 
             thisSheet.append(colHeadHtml);
@@ -314,11 +330,12 @@
 
         var initRows = function(){
 
-            console.log(sheetOption.data.efficiencysData);
             arrEfficiency   = [];
-            arrCompanyId    = [];
             arrInfoCompanies = [];
-            for (var i = 0; i < sheetOption.data.companyIdsData.length; (i+=2)) {
+            salariesData    = sheetOption.data.salariesData;
+            companyIdsData  = sheetOption.data.companyIdsData;
+            console.log('sheetOption.data.sheetContentData', sheetOption.data.sheetContentData);
+            for (var i = 0; i < companyIdsData.length; (i+=2)) {
                 totalHours      = 0;
                 hoursOvertime   = 0;
                 hoursSunday     = 0;
@@ -350,16 +367,19 @@
 
                 for (var j = 0; j < sheetOption.data.sheetContentData[i+1].length; j++) {
                     myDate.setDate(j+1);
-                    if (myDate.getDay() == 0) {
-                        hoursSunday     += parseFloat(sheetOption.data.sheetContentData[i+1][j]);
-                    }else{
-                        hoursOvertime   += parseFloat(sheetOption.data.sheetContentData[i+1][j]);
+                    if (!isNaN(parseFloat(sheetOption.data.sheetContentData[i+1][j]))) {
+                        if (myDate.getDay() == 0) {
+                            hoursSunday     += parseFloat(sheetOption.data.sheetContentData[i+1][j]);
+                        }else{
+                            hoursOvertime   += parseFloat(sheetOption.data.sheetContentData[i+1][j]);
+                        }    
                     }
+                    
 
 
                 }
 
-                arrInfoCompanies[sheetOption.data.companyIdsData[i].company_id] =  {
+                arrInfoCompanies[companyIdsData[i].company_id] =  {
                   'info'            : sheetOption.data.infoCompaniesData[i],
                   'name'            : sheetOption.data.nameData[i].name,
                   'efficiency'      : sheetOption.data.efficiencysData[i].efficiency,
@@ -367,10 +387,17 @@
                   'hoursOverTime'   : hoursOvertime,
                   'hoursSunday'     : hoursSunday
                 };
-            }
 
+                for (var j = 0; j < salariesData.length; j++) {
+                    if (salariesData[j].company_id == companyIdsData[i].company_id) {
+                        arrInfoCompanies[companyIdsData[i].company_id].salaries = salariesData[j];
+                    }
+                }
+
+            }
+            console.log('salariesData', salariesData);
             console.log('arrInfoCompanies', arrInfoCompanies);
-            console.log('sheetOption.data.sheetContentData', sheetOption.data.sheetContentData);
+
             workDay = 0;
             colspan = (sheetOption.data.dimensions[1] - (sheetOption.data.dimensions[1] % 4)) /4;
             oddCol  = colspan + (sheetOption.data.dimensions[1] % 4);
@@ -389,7 +416,7 @@
                 rowBonusProductHtml = '';
                 totalBonusMoney = 0;
 
-                curRowHtml= '<tr id="row-'+row+'" class="TimeSheet-row">'
+                curRowHtml= '<tr id="row-'+row+'" data-company-id="'+company_id+'" class="TimeSheet-row">'
                 totalHours = 0;
                 totalOvertime = 0;
                 sundayHours = 0;
@@ -469,28 +496,55 @@
                         console.log('realBasicSalary', realBasicSalary);
 
                         wageSalary = realBasicSalary*parseFloat(arrInfoCompanies[company_id].info.coefficient_salary)/workDay*parseFloat(arrInfoCompanies[company_id].workday)*parseFloat(arrInfoCompanies[company_id].info.coefficient_htcv);
+                        
                         manageSalary = realBasicSalary
                          *parseFloat(arrInfoCompanies[company_id].info.coefficient_manage)
                          /workDay
                          *parseFloat(arrInfoCompanies[company_id].workday)
                          *parseFloat(arrInfoCompanies[company_id].info.coefficient_htcv);
+
                         specializeSalary = parseFloat(arrInfoCompanies[company_id].info.coefficient_specialize)
                          *500000
                          /workDay
                          *parseFloat(arrInfoCompanies[company_id].workday)
                          *parseFloat(arrInfoCompanies[company_id].info.coefficient_htcv);
+
                         senioritySalary = parseFloat(arrInfoCompanies[company_id].info.coefficient_seniority)
                          *500000
                          /workDay
                          *parseFloat(arrInfoCompanies[company_id].workday)
                          *parseFloat(arrInfoCompanies[company_id].info.coefficient_htcv)
                          *parseFloat(arrInfoCompanies[company_id].info.percent_seniority);
+
                         efficiencySalary = parseFloat(arrInfoCompanies[company_id].info.efficiency)
                          *500000
                          *parseFloat(arrInfoCompanies[company_id].info.percent_efficiency)
                          *parseFloat(arrInfoCompanies[company_id].workday)
                          /workDay;
 
+                        overTimeSalary = (wageSalary/workDay/8)*1.5*parseFloat(arrInfoCompanies[company_id].hoursOverTime)
+                         + (specializeSalary/workDay/8*parseFloat(arrInfoCompanies[company_id].hoursOverTime));
+
+                        moreTimeSalary = (wageSalary/workDay/8)*2*parseFloat(arrInfoCompanies[company_id].hoursSunday)
+                         + (specializeSalary/workDay/8*parseFloat(arrInfoCompanies[company_id].hoursSunday));
+
+
+                        checkSalaries = (arrInfoCompanies[company_id].salaries) ? true : false;
+                        if (checkSalaries) {
+                            otherCosts  = (arrInfoCompanies[company_id].salaries.other_costs) ? parseFloat(arrInfoCompanies[company_id].salaries.other_costs) : 0;
+                            diligence   = (arrInfoCompanies[company_id].salaries.diligence) ? parseFloat(arrInfoCompanies[company_id].salaries.diligence) : 0;
+                            attractive  = (arrInfoCompanies[company_id].salaries.attractive) ? parseFloat(arrInfoCompanies[company_id].salaries.attractive) : 0;
+                        }else{
+                            otherCosts  = 0;
+                            diligence   = 0;
+                            attractive  = 0; 
+                        }
+                        
+
+                        totalHTCV = wageSalary+manageSalary+specializeSalary+senioritySalary+efficiencySalary+otherCosts
+                         +diligence+attractive+overTimeSalary+moreTimeSalary;
+
+                        console.log('totalHTCV', totalHTCV);
 
                         curRowHtml += '<td style="color: #ed4444;" class="TimeSheet-remark total'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+finalTotal+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
@@ -504,7 +558,7 @@
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
                         curRowHtml += '<td class="TimeSheet-remark v'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+v+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark l'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+l+'</td>';
-                        curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+formatMoney(sheetOption.data.basicSalariesData[row].basic_salary)+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+formatMoney(realBasicSalary)+'</td>';
 
                         curRowHtml += '<td class="TimeSheet-remark ">'+formatMoney(arrInfoCompanies[company_id].info.social_insurance)+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark ">'+arrInfoCompanies[company_id].info.coefficient_htcv+'</td>';
@@ -521,10 +575,26 @@
                         curRowHtml += '<td class="TimeSheet-remark" title="Lương kỹ năng chuyên môn">'+formatMoney(specializeSalary.toFixed(4))+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark" title="Thâm niên">'+formatMoney(senioritySalary.toFixed(4))+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark" title="Lương hiệu suất">'+formatMoney(efficiencySalary.toFixed(4))+'</td>';
-                        curRowHtml += '<td class="TimeSheet-remark" title="Công tác phí, ĐT+ Đồng phục + Nhà ở + Đi lại"></td>';
-                        curRowHtml += '<td class="TimeSheet-remark" title="Chuyên cần"></td>';
-                        curRowHtml += '<td class="TimeSheet-remark" title="Thu hút"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark edit" data-field-name="other_costs" title="Công tác phí, ĐT+ Đồng phục + Nhà ở + Đi lại" style="background-color: beige;">'
+                        curRowHtml += otherCosts.toFixed(2)
+                        curRowHtml += '</td>';
+                        curRowHtml += '<td class="TimeSheet-remark edit" data-field-name="diligence" title="Chuyên cần" style="background-color: beige;">'
+                        curRowHtml += diligence.toFixed(2)
+                        curRowHtml +='</td>';
+                        curRowHtml += '<td class="TimeSheet-remark edit" data-field-name="attractive" title="Thu hút" style="background-color: beige;">'
+                        curRowHtml += attractive.toFixed(2)
+                        curRowHtml +='</td>';
 
+                        curRowHtml += '<td class="TimeSheet-remark" title="Số giờ tăng ca" style="color: #ed4444;">'+parseFloat(arrInfoCompanies[company_id].hoursOverTime)+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark" title="Thành tiền">'+formatMoney(overTimeSalary.toFixed(4))+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark" title="Số giờ làm thêm" style="color: #ed4444;">'+parseFloat(arrInfoCompanies[company_id].hoursSunday)+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark" title="Thành tiền">'+formatMoney(moreTimeSalary.toFixed(4))+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark" title="Tổng tiền lương theo hệ số HTCV(100%)">'+formatMoney(totalHTCV.toFixed(4))+'</td>';
+
+                        curRowHtml += '<td class="TimeSheet-remark" title="Số xuất ăn">'+25.4.toFixed(0)+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark" title="Thành tiền"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark edit" data-field-name="money_eat_overtime" title="Tiền ăn tăng ca" style="background-color: beige;"></td>';
+                        curRowHtml += '<td class="TimeSheet-remark" title="18%BHXH, 3%BHYT, 2%KPCÑ, 1%BHTN (24%)"></td>';
 
                         curRowHtml += '<td class="TimeSheet-remark salary-daywork'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+formatMoney(totalSalary)+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark bonus'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
@@ -563,6 +633,18 @@
                         curRowHtml += '<td class="TimeSheet-remark "></td>';
                         curRowHtml += '<td class="TimeSheet-remark "></td>';
                         curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+                        curRowHtml += '<td class="TimeSheet-remark "></td>';
+
 
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
@@ -751,11 +833,23 @@
 
                         rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
                         rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                        rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
                         rowBonusProductHtml += '<td class="TimeSheet-remark"></td></tr>';
                         for (var i = 0; i < arrIdProductBonus.length; i++) {
 
                             rowBonusProductHtml += '<tr>'
-                            rowBonusProductHtml += '<td style="color:#428bca; border-left: none;">'+arrNameProductBonus[i]+'</td>'
+                            rowBonusProductHtml += '<td style="color:#428bca; border-left: none; white-space: nowrap;">'+arrNameProductBonus[i]+'</td>'
                             rowBonusProductHtml += '<td class="TimeSheet-cell" data-row="3" data-col="30" colspan="'+colspan+'">'+formatMoney(arrWage[i])+'</td>'
                             rowBonusProductHtml += '<td class="TimeSheet-cell" data-row="3" data-col="30" colspan="'+colspan+'">'+formatMoney(arrQuatityConfig[i])+'</td>'
                             rowBonusProductHtml += '<td class="TimeSheet-cell" data-row="3" data-col="30" colspan="'+colspan+'">'+formatMoney(arrRealCompleted[i])+'</td>'
@@ -789,6 +883,18 @@
                             rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
                             rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
                             rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+
+                            rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
+
                             rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
                             rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
                             rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'

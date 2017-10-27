@@ -86,12 +86,20 @@
                     </div>
                   </div>
 
-
+                  <div class="col-md-3" style="margin-top: 15px;">
+                    <div class="form-group">
+                      <div class="controls">
+                          <button id="btn-save-salaries" type="button" class="btn btn-primary">
+                            <span class="icon fa fa-floppy-o"></span> Lưu bảng lương
+                          </button>
+                      </div>
+                    </div>
+                  </div>
 
                   <div class="col-md-3" style="margin-top: 15px;">
                     <div class="form-group">
                       <div class="controls">
-                          <button id="btn-xls" type="button" class="btn btn-info" disabled>
+                          <button id="btn-xls" type="button" class="btn btn-primary" style="background-color:#367b59; border-color: #3c763d;" disabled>
                             <span class="icon fa fa-file-excel-o"></span> Tải về dạng XLS
                           </button>
                       </div>
@@ -101,7 +109,7 @@
                   <div class="col-md-3" style="margin-top: 15px;">
                     <div class="form-group">
                       <div class="controls">
-                          <button id="btn-general-xls" type="button" class="btn btn-info">
+                          <button id="btn-general-xls" type="button" class="btn btn-primary" style="background-color:#367b59; border-color: #3c763d;">
                             <span class="icon fa fa-file-excel-o"></span> Tải về bảng tổng quát dạng XLS
                           </button>
                       </div>
@@ -134,9 +142,34 @@
 
   var sheetContentData = [];
   var timekeeperDetailIds = null;
-
+  var dataUpdateSalaries = [];
 
   $(document).ready(function () {
+
+    $(document).on('click', '.edit', function() {
+      var input = prompt('Nhập thay đổi: ');
+        if(input != null) {
+          if (input >= 0) {
+            if (input == 0) {
+              $(this).text('');
+            }else{
+              $(this).text(input);
+              console.log($(this).parent().attr('data-company-id'));
+              companyId = $(this).parent().attr('data-company-id');
+              fieldName = $(this).attr('data-field-name');
+
+              if (!dataUpdateSalaries[companyId]) {
+                dataUpdateSalaries[companyId] = {};
+              }
+              dataUpdateSalaries[companyId][fieldName] = input
+
+              console.log(dataUpdateSalaries);
+            }
+          }else{
+            bootbox.alert('Bạn chỉ được nhập số.');
+          }
+        }
+    })
 
     $('#btn-show').click(function(e) {
       sheetContentData = [];
@@ -212,6 +245,7 @@
                         efficiencysData   : response.efficiencys,
                         nameData          : response.timekeeperDetailsName,
                         infoCompaniesData : response.infoCompanies,
+                        salariesData      : response.salaries,
                         month: month,
                         year: year
                     },
@@ -233,6 +267,7 @@
 
     });
 
+
     $('#btn-xls').click(function(e) {
       event.preventDefault();
       window.location.href = '<?= site_url('salaries/xls/'); ?>?department_id='+department_id+'&month='+month+'&year='+year;
@@ -244,6 +279,31 @@
     });
 
 
+    $('#btn-save-salaries').click(function(e) {
+      e.preventDefault();
+      console.log('dataUpdateSalaries', dataUpdateSalaries);
+
+      $.ajax({
+          url: '<?= site_url('salaries/saveSalaries'); ?>',
+          async : false,
+          type: 'post',
+          dataType: 'json',
+          data: {
+              month         : month,
+              year          : year,
+              dataSalaries  : dataUpdateSalaries,
+              <?php echo $this->security->get_csrf_token_name() ?> : '<?php echo $this->security->get_csrf_hash() ?>'
+          },
+          success: function (response) {
+            if (response.status == "success") {
+              bootbox.alert('Lưu bảng lương thành công!');
+            }else{
+              bootbox.alert('Lưu bảng lương thất bại!');
+            }
+          }
+      })
+
+    });
 
   });
 </script>
