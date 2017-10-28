@@ -290,8 +290,8 @@
                 colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3" style="color: #ed4444;"><b>Tiền lương được lĩnh(VNĐ)</b></td>';
                 colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3"><b>Ký nhận</b></td>';
 
-            
-                
+
+
                 colHeadHtml += '<td class="TimeSheet-remarkHead" rowspan="3" style="color: #ed4444;"><b>Tổng lương(VNĐ)</b></td>';
             }
             colHeadHtml += '</tr>';
@@ -451,10 +451,10 @@
                 le  = 0;
 
 
-                
+
                 for(var col= 0, curCell=''; col<=sheetOption.data.dimensions[1]; ++col){
                     if (row % 2 == 0) {
-                        cssAbso = 'position: absolute;width: 163px;';    
+                        cssAbso = 'position: absolute;width: 163px;';
                     }else{
                         cssAbso = '';
                     }
@@ -679,7 +679,7 @@
                         curRowHtml += '<td class="TimeSheet-remark" title="Ký nhận"></td>';
 
 
-                        
+
                         curRowHtml += '<td class="TimeSheet-remark final-salary" style="color: #ed4444;"></td>';
                     }else{
                         curRowHtml += '<td class="TimeSheet-remark"></td>';
@@ -737,7 +737,7 @@
                         curRowHtml += '<td class="TimeSheet-remark "></td>';
                         curRowHtml += '<td class="TimeSheet-remark "></td>';
 
-                        
+
                         curRowHtml += '<td class="TimeSheet-remark "></td>';
 
                         curRowHtml += '<td class="TimeSheet-remark '+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'"></td>';
@@ -1017,7 +1017,7 @@
                             rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
                             rowBonusProductHtml += '<td class="TimeSheet-remark"></td>'
 
-                            
+
                             rowBonusProductHtml += '<td class="TimeSheet-remark"></td></tr>';
                         }
 
