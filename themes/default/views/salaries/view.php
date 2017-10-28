@@ -141,6 +141,55 @@
     return time.getDate();
   }
 
+  function calculatorTNCN(tncn){
+    let a = 0;
+    let b = 0;
+    let c = 0;
+    let d = 0;
+    if (tncn < 0 ) {
+      a = 0;
+    }else{
+      if (tncn <= 5000000) {
+        a = tncn*0.05;
+      }else{
+        if (tncn > 5000000 && tncn <= 10000000) {
+          a = 250000+(tncn-5000000)*0.1;
+        }else{
+          a = 0;
+        }
+      }
+
+    }
+
+    if (tncn > 10000000 && tncn <= 18000000) {
+      b = 750000+(tncn - 10000000)*0.15;
+    }
+
+    if (tncn > 18000000 && tncn <= 32000000){
+      c = 1950000+(tncn-18000000)*0.2;
+    }else{
+      if (tncn > 32000000 && tncn <= 52000000) {
+        c = 4750000+(tncn-32000000)*0.25;
+      }else{
+        c = 0;
+      }
+    }
+
+    if (tncn > 52000000 && tncn <= 80000000) {
+      d = 9750000+(tncn-52000000)*0.30;
+    }else{
+      if (tncn > 80000000) {
+        d = 18150000+(tncn-80000000)*0.35;
+      }else{
+        d = 0;
+      }
+    }
+
+    total = a+b+c+d;
+
+    return total;
+  }
+
   var sheetContentData = [];
   var timekeeperDetailIds = null;
   var dataUpdateSalaries = [];

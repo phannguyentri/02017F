@@ -49,7 +49,7 @@ class Salaries_model extends CI_Model
   }
 
   public function getAllSalaries($year, $month){
-    $this->db->select('company_id, other_costs, diligence, attractive, set_eat, money_eat_overtime, advance_payment');
+    $this->db->select('company_id, other_costs, diligence, attractive, set_eat, money_eat_overtime, advance_payment, family_allowances');
 
     $q = $this->db->get_where('salaries', array('month' => $month, 'year' => $year));
     if ($q->num_rows() > 0) {
