@@ -11,12 +11,18 @@
                 echo form_open("items/add", $attrib)
                 ?>
 
-                <div class="col-md-6">                    
+                <div class="col-md-6">
                     <div class="form-group">
                         <?= lang("Tên nguyên vật liệu", "item") ?>
 
                         <?= form_input('item', (isset($_POST['item']) ? $_POST['item'] : ''), 'class="form-control" id="item" required="required"'); ?>
                     </div>
+
+                    <div class="form-group">
+                        <?= lang("Mã nguyên vật liệu", "item_code") ?>
+                        <?= form_input('item_code', (isset($_POST['item_code']) ? $_POST['item_code'] : ''), 'class="form-control" id="item_code" required="required"'); ?>
+                    </div>
+
                     <div class="form-group all">
                         <?= lang("Quy cách", "specification") ?>
                         <?= form_input('specification', (isset($_POST['specification']) ? $_POST['specification']: ''), 'class="form-control" id="specification"  required="required"') ?>
@@ -44,13 +50,13 @@
                         <?= form_input('size_wide', (isset($_POST['size_wide']) ? $_POST['size_wide']: ''), 'class="form-control" id="size_wide"') ?>
                         </div>
                     </div>
-                    
-                                   
-                    
-                    
+
+
+
+
                 </div>
                 <div class="col-md-6">
-                
+
                     <div class="form-group all">
                         <?= lang("Đơn vị", "unit_id") ?>
                         <?php
@@ -58,17 +64,17 @@
                         foreach ($units as $unit) {
                             $un[$unit->id] = $unit->unit;
                         }
-                        echo form_dropdown('unit_id', $un, (isset($_POST['unit_id']) ? $_POST['unit_id'] : ''), 'class="form-control select" id="unit_id" placeholder="' . lang("select") . " " . lang("đơn vị") . '" required="required" style="width:100%"');                        
+                        echo form_dropdown('unit_id', $un, (isset($_POST['unit_id']) ? $_POST['unit_id'] : ''), 'class="form-control select" id="unit_id" placeholder="' . lang("select") . " " . lang("đơn vị") . '" required="required" style="width:100%"');
                         ?>
                         <?php echo form_hidden('unit', ''); ?>
                     </div>
                     <!-- <div class="form-group all">
                         <?= lang("Số lượng", "quantity") ?>
-                        
+
                         <?php
                             echo form_input('quantity', (isset($_POST['quantity']) ? $_POST['quantity'] : ''), 'class="form-control" id="quantity"');
                             ?>
-                        
+
                     </div>  -->
                     <div class="<?= $product ? 'text-warning' : '' ?>">
                             <strong><?= lang("warehouse_quantity") ?></strong><br>
@@ -92,7 +98,7 @@
                                         echo '</div>';
                                     }
                                     echo '</div><div class="clearfix"></div></div></div></div>';
-                                } else 
+                                } else
                                 {
                                     echo '<div class="row"><div class="col-md-12"><div class="well">';
                                     foreach ($warehouses as $warehouse) {
@@ -133,9 +139,9 @@ $(document).ready(function (e) {
     $('#unit_id').change(function () {
             var v =  $(this).find(":selected").text();
             $('input[name="unit"]').val(v);
-            
+
 
     });
 });
-    
+
 </script>

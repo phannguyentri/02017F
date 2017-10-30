@@ -11,11 +11,17 @@
                 echo form_open("items/edit/".$id, $attrib)
                 ?>
 
-                <div class="col-md-6">                    
+                <div class="col-md-6">
                     <div class="form-group">
                         <?= lang("Tên nguyên vật liệu", "item") ?>
                         <?= form_input('item', (isset($_POST['item']) ? $_POST['item'] : (isset($item) ? $item->item : '')), 'class="form-control" id="item" required="required"'); ?>
                     </div>
+
+                    <div class="form-group">
+                        <?= lang("Mã nguyên vật liệu", "item_code") ?>
+                        <?= form_input('item_code', (isset($_POST['item_code']) ? $_POST['item_code'] : (isset($item) ? $item->item_code : '')), 'class="form-control" id="item" required="required"'); ?>
+                    </div>
+
                     <div class="form-group all">
                         <?= lang("Quy cách", "specification") ?>
                         <?= form_input('specification', (isset($_POST['specification']) ? $_POST['specification']: (isset($item) ? $item->specification : '')), 'class="form-control" id="specification"  required="required"') ?>
@@ -43,13 +49,13 @@
                         <?= form_input('size_wide', (isset($_POST['size_wide']) ? $_POST['size_wide']: (isset($item) ? $item->size_wide : '')), 'class="form-control" id="size_wide"') ?>
                         </div>
                     </div>
-                    
-                                   
-                    
-                    
+
+
+
+
                 </div>
                 <div class="col-md-6">
-                
+
                     <div class="form-group all">
                         <?= lang("Đơn vị", "unit_id") ?>
                         <?php
@@ -57,17 +63,17 @@
                         foreach ($units as $unit) {
                             $un[$unit->id] = $unit->unit;
                         }
-                        echo form_dropdown('unit_id', $un, (isset($_POST['unit_id']) ? $_POST['unit_id'] : (isset($item) ? $item->unit_id : '')), 'class="form-control select" id="unit_id" placeholder="' . lang("select") . " " . lang("đơn vị") . '" required="required" style="width:100%"');                        
+                        echo form_dropdown('unit_id', $un, (isset($_POST['unit_id']) ? $_POST['unit_id'] : (isset($item) ? $item->unit_id : '')), 'class="form-control select" id="unit_id" placeholder="' . lang("select") . " " . lang("đơn vị") . '" required="required" style="width:100%"');
                         ?>
                         <?php echo form_hidden('unit', $item->unit); ?>
                     </div>
                     <!-- <div class="form-group all">
                         <?= lang("Số lượng", "quantity") ?>
-                        
+
                         <?php
                             echo form_input('quantity', (isset($_POST['quantity']) ? $_POST['quantity'] : (isset($item) ? $item->quantity : '')), 'class="form-control" id="quantity"');
                             ?>
-                        
+
                     </div> -->
 
 
@@ -84,7 +90,7 @@
                                 }
                                 echo '<div id="show_wh_edit" style="padding-top:20px"><!--<div class="alert alert-danger margin010"><p>' . lang('edit_quantity_not_recommended_here') . '<input type="hidden" value="0" name="warehouse_quantity" id="warehouse_quantity"></p></div>-->';
                                 foreach ($warehouses as $warehouse) {
-                       
+
                                     //$whs[$warehouse->id] = $warehouse->name;
                                     echo '<div class="col-md-6 col-sm-6 col-xs-6" style="padding-bottom:15px;">' . $warehouse->name . '<br><div class="form-group">' . form_hidden('wh_' . $warehouse->id, $warehouse->id) . form_input('wh_qty_' . $warehouse->id, (isset($_POST['wh_qty_' . $warehouse->id]) ? $_POST['wh_qty_' . $warehouse->id] : (isset($warehouse->quantity) ? $warehouse->quantity : '')), 'class="form-control wh" readonly id="wh_qty_' . $warehouse->id . '" placeholder="' . lang('quantity') . '" ') . '</div>';
                                     if ($this->Settings->racks) {
@@ -141,9 +147,9 @@ $(document).ready(function (e) {
     $('#unit_id').change(function () {
             var v =  $(this).find(":selected").text();
             $('input[name="unit"]').val(v);
-            
+
 
     });
 });
-    
+
 </script>

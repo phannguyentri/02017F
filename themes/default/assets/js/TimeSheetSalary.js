@@ -568,7 +568,7 @@
                                 if((arrInfoCompanies[company_id].workday - Math.floor(arrInfoCompanies[company_id].workday)) == 0.5){
                                     numberSetEat = Math.floor(arrInfoCompanies[company_id].workday);
                                 }else{
-                                    numberSetEat = arrInfoCompanies[company_id].workday.toFixed(0);
+                                    numberSetEat = Math.round(arrInfoCompanies[company_id].workday);
                                 }
                             }else{
                                 numberSetEat   = arrInfoCompanies[company_id].salaries.set_eat;
@@ -582,7 +582,7 @@
                             otherCosts        = 0;
                             diligence         = 0;
                             attractive        = 0;
-                            numberSetEat      = 0;
+                            numberSetEat      = Math.round(arrInfoCompanies[company_id].workday);
                             moneyEatOverTime  = 0;
                             advancePayment    = 0;
                             familyAllowances  = 0;
@@ -593,20 +593,13 @@
                          +efficiencySalary+otherCosts+diligence+attractive+overTimeSalary+moreTimeSalary;
 
                         moneyEat            = parseFloat(numberSetEat)*15000;
-
                         socialInsurance     = parseFloat(arrInfoCompanies[company_id].info.social_insurance)*0.24;
-
                         totalIncome         = totalHTCV+moneyEat+moneyEatOverTime+socialInsurance;
-
                         socialInsurance2    = parseFloat(arrInfoCompanies[company_id].info.social_insurance)*0.15;
-
                         personalIncomeTax   =(totalHTCV-socialInsurance2-9000000-familyAllowances);
                         personalIncomeTax2  = calculatorTNCN(personalIncomeTax);
-
                         sumAJ               = advancePayment+socialInsurance2+personalIncomeTax2;
-
                         salaryReceive       = totalIncome-socialInsurance-sumAJ;
-
                         totalSalaryWorkday  = realBasicSalary/workDay*parseFloat(arrInfoCompanies[company_id].workday);
 
                         console.log('totalHTCV', totalHTCV);

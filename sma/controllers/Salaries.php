@@ -17,7 +17,6 @@ class Salaries extends MY_Controller
         $this->load->model('timekeepers_model');
         $this->load->library('form_validation');
 
-        // $this->load->model('categories_model');
     }
 
     public function view(){
@@ -100,6 +99,7 @@ class Salaries extends MY_Controller
             $this->load->model('timekeepers_model');
             $this->load->model('productions_model');
             $this->load->model('departments_model');
+            $this->load->model('salaries_model');
 
             $allInfoTimekeeperDetails = $this->timekeepers_model->getAllInfoTimekeeperDetails($department_id, $year, $month);
 
@@ -107,10 +107,16 @@ class Salaries extends MY_Controller
                 $productionsInMonthYear = $this->productions_model->getProductionByYearMonth($year, $month);
             }
 
-            $dataCompanyId = $this->timekeepers_model->getCompanyIds($department_id, $year, $month);
-            $dataName  = $this->timekeepers_model->getTimekeeperDetailsName($department_id, $year, $month);
-            $arrInfoCompanies = $this->timekeepers_model->getInfoCompanies($department_id, $year, $month);
-            $allInfoCompanies = array();
+            $dataCompanyId      = $this->timekeepers_model->getCompanyIds($department_id, $year, $month);
+            $dataName           = $this->timekeepers_model->getTimekeeperDetailsName($department_id, $year, $month);
+            $dataSalaries       = $this->salaries_model->getAllSalaries($year, $month);
+            $arrInfoCompanies   = $this->timekeepers_model->getInfoCompanies($department_id, $year, $month);
+            if ($this->departments_model->isProductionById($department_id)) {
+                $productionsInMonthYear = $this->productions_model->getProductionByYearMonth($year, $month);
+            }
+
+            $allInfoCompanies   = array();
+
 
             $onlyDayTimekeeperDetails = $this->timekeepers_model->getTimekeeperDetails($department_id, $year, $month);
             foreach ($dataCompanyId as $key => $val) {
@@ -141,12 +147,23 @@ class Salaries extends MY_Controller
                         'hoursSunday'     => $hoursSunday
                     );
 
-
                     foreach ($arrInfoCompanies[$key] as $kTitle => $info) {
                         $allInfoCompanies[$val->company_id][$kTitle] = $info;
                     }
+
+                    foreach ($dataSalaries as $salary) {
+                        if ($val->company_id == $salary->company_id) {
+                            $allInfoCompanies[$val->company_id]['salaries'] = $salary;
+                        }
+                    }
                 }
             }
+
+
+            // echo "<pre>";
+            // print_r($allInfoCompanies);
+            // echo "</pre>";die();
+
 
             $dayWorkInMonth = 0;
             for ($i=0; $i < cal_days_in_month(CAL_GREGORIAN, $month, $year); $i++) {
@@ -374,62 +391,169 @@ class Salaries extends MY_Controller
             $this->excel->getActiveSheet()->SetCellValue('AE2', 'Tổng thu nhập');
             $this->excel->getActiveSheet()->mergeCells('AE2:AE4');
             $this->excel->getActiveSheet()->getStyle('AE2:AE4')->applyFromArray($styleBold);
-            $this->excel->getActiveSheet()->getColumnDimension('AE2')->setWidth(14);
+            $this->excel->getActiveSheet()->getColumnDimension('AE')->setAutoSize(true);
 
-            $this->excel->getActiveSheet()->SetCellValue('AF2', 'Các khoản phải thu');
-            $this->excel->getActiveSheet()->mergeCells('AF2:AI2');
+            $this->excel->getActiveSheet()->SetCellValue('AF2', 'Thuế TNCN');
+            $this->excel->getActiveSheet()->mergeCells('AF2:AG2');
 
-            $this->excel->getActiveSheet()->SetCellValue('AF3', 'TỨ đợt 1');
-            $this->excel->getActiveSheet()->mergeCells('AF3:AF4');
+            $this->excel->getActiveSheet()->SetCellValue('AF3', 'Giảm trừ gia cảnh');
 
-            $this->excel->getActiveSheet()->SetCellValue('AG3', '8%BHXH, 1.5%BHYT 1%BHTN (10.5%)');
+
+            $this->excel->getActiveSheet()->SetCellValue('AG3', 'Thu nhập chịu thuế');
             $this->excel->getActiveSheet()->mergeCells('AG3:AG4');
-            $this->excel->getActiveSheet()->getColumnDimension('AG')->setWidth(13);
 
-            $this->excel->getActiveSheet()->SetCellValue('AH3', 'Thuế TNCN');
+            $this->excel->getActiveSheet()->getColumnDimension('AF')->setWidth(18);
+            $this->excel->getActiveSheet()->getColumnDimension('AG')->setWidth(18);
+
+            $this->excel->getActiveSheet()->SetCellValue('AH2', 'Các khoản phải thu');
+            $this->excel->getActiveSheet()->mergeCells('AH2:AK2');
+
+            $this->excel->getActiveSheet()->SetCellValue('AH3', 'TỨ đợt 1');
             $this->excel->getActiveSheet()->mergeCells('AH3:AH4');
 
-            $this->excel->getActiveSheet()->SetCellValue('AI3', 'Cộng');
+            $this->excel->getActiveSheet()->SetCellValue('AI3', '8%BHXH, 1.5%BHYT 1%BHTN (10.5%)');
             $this->excel->getActiveSheet()->mergeCells('AI3:AI4');
+            $this->excel->getActiveSheet()->getColumnDimension('AI')->setWidth(13);
 
+            $this->excel->getActiveSheet()->SetCellValue('AJ3', 'Thuế TNCN');
+            $this->excel->getActiveSheet()->mergeCells('AJ3:AJ4');
+            $this->excel->getActiveSheet()->getColumnDimension('AJ')->setAutoSize(true);
 
-            $this->excel->getActiveSheet()->SetCellValue('AJ2', 'Tiền lương được lĩnh');
-            $this->excel->getActiveSheet()->mergeCells('AJ2:AJ4');
-            $this->excel->getActiveSheet()->getStyle('AJ2:AJ4')->applyFromArray($styleBold);
-            $this->excel->getActiveSheet()->getColumnDimension('AJ')->setWidth(14);
+            $this->excel->getActiveSheet()->SetCellValue('AK3', 'Cộng');
+            $this->excel->getActiveSheet()->mergeCells('AK3:AK4');
+            $this->excel->getActiveSheet()->getColumnDimension('AK')->setAutoSize(true);
 
-            $this->excel->getActiveSheet()->SetCellValue('AK2', 'Ký nhận');
-            $this->excel->getActiveSheet()->mergeCells('AK2:AK4');
-            $this->excel->getActiveSheet()->getColumnDimension('AK')->setWidth(11);
+            $this->excel->getActiveSheet()->SetCellValue('AL2', 'Tổng lương sản phẩm');
+            $this->excel->getActiveSheet()->mergeCells('AL2:AL4');
+            $this->excel->getActiveSheet()->getStyle('AL2:AL4')->applyFromArray($styleBold);
 
-            $this->excel->getActiveSheet()->SetCellValue('AL2', 'Thuế TNCN');
-            $this->excel->getActiveSheet()->mergeCells('AL2:AM2');
+            $this->excel->getActiveSheet()->SetCellValue('AM2', 'Tiền lương được lĩnh');
+            $this->excel->getActiveSheet()->mergeCells('AM2:AM4');
+            $this->excel->getActiveSheet()->getStyle('AM2:AM4')->applyFromArray($styleBold);
+            $this->excel->getActiveSheet()->getColumnDimension('AM')->setAutoSize(true);
 
-            $this->excel->getActiveSheet()->SetCellValue('AL3', 'Giảm trừ gia cảnh');
+            $this->excel->getActiveSheet()->SetCellValue('AN2', 'Ký nhận');
+            $this->excel->getActiveSheet()->mergeCells('AN2:AN4');
+            $this->excel->getActiveSheet()->getColumnDimension('AN')->setWidth(11);
 
-
-            $this->excel->getActiveSheet()->SetCellValue('AM3', 'Thu nhập chịu thuế');
-            $this->excel->getActiveSheet()->mergeCells('AM3:AM4');
-
-            $this->excel->getActiveSheet()->getColumnDimension('AL')->setWidth(18);
-            $this->excel->getActiveSheet()->getColumnDimension('AM')->setWidth(18);
+            $this->excel->getActiveSheet()->SetCellValue('AO2', 'Tổng lương');
+            $this->excel->getActiveSheet()->mergeCells('AO2:AO4');
+            $this->excel->getActiveSheet()->getStyle('AO2:AO4')->applyFromArray($styleBold);
 
             // END Init Rows
 
             $i = 1;
             $row = 4;
 
-            // echo "<pre>";
-            // print_r($allInfoCompanies);
-            // echo "</pre>";
-            // echo "dayWorkInMonth: ".$dayWorkInMonth;
-
-            // die();
-
             foreach ($allInfoCompanies as $key => $info) {
                 $row++;
                 $realBasicSalary = $info['basic_salary']*$info['coefficient_salary'];
-                // var_dump($realBasicSalary);die();
+                $companyID = $key;
+
+
+
+
+                $arrProductId = array();
+
+                if ($productionsInMonthYear) {
+                  foreach ($productionsInMonthYear as $production) {
+                    $empIds = explode(',', $production->employee);
+                    foreach ($empIds as $emp) {
+                      if ($emp == $companyID) {
+                        if (!in_array($production->product_id, $arrProductId)) {
+                          $arrProductId[] = $production->product_id;
+                        }
+                      }
+                    }
+                  }
+                }
+
+                if (!empty($arrProductId)) {
+                    foreach ($arrProductId as $productId) {
+                        $soluonghoanthanh   = array();
+                        $realCompleted      = 0;
+                        $tmpIdProt          = null;
+                        $sameEmp            = false;
+                        $teamEmp            = array();
+                        $currentWorkDay     = $info['workday'];
+                        $currentEfficiency  = $info['efficiency'];
+                        $moneyBonusProduct  = 0;
+                    }
+
+                    foreach ($productionsInMonthYear as $kProt => $production) {
+                        if ($production->product_id == $productId) {
+
+                            $tempEmp = explode(',', $production->employee);
+                            $currentWage = $production->wage;
+
+                            if (($kProt != 0) && ($production->id != $tmpIdProt) && ($tmpIdProt != null)) {
+                                if ($sameEmp == true) {
+                                    $min = min($soluonghoanthanh);
+                                    $realCompleted = $realCompleted + $min;
+
+                                    $countEmp = count($teamEmp);
+                                    $totalWorkDay = 0;
+                                    $totalEfficiency = 0;
+
+                                    foreach ($teamEmp as $teamEmpId) {
+                                        $totalWorkDay = $totalWorkDay + $allInfoCompanies[$teamEmpId]['workday'];
+                                        $totalEfficiency = $totalEfficiency + $allInfoCompanies[$teamEmpId]['efficiency'];
+                                    }
+
+                                    $a  = $currentWage*$min*$countEmp;
+
+                                    $b  = $totalWorkDay*$totalEfficiency;
+
+                                    $moneyBonusProduct += (($a/$b) * $currentWorkDay * $currentEfficiency);
+
+                                }
+                                $sameEmp = false;
+
+                                $teamEmp = array();
+                                $soluonghoanthanh = array();
+                            }
+
+                            foreach ($tempEmp as $empId) {
+                                if ($empId == $companyID) {
+                                    $sameEmp = true;
+                                }
+                                if (!in_array($empId, $teamEmp)) {
+                                    $teamEmp[] = $empId;
+                                }
+                            }
+
+                            $tmpIdProt = $production->id;
+
+                            $soluonghoanthanh[] = $production->soluonghoanthanh;
+                        }
+                    }
+
+                    if ($sameEmp == true) {
+
+                        $realCompleted = $realCompleted + min($soluonghoanthanh);
+
+                        $min = min($soluonghoanthanh);
+                        $countEmp = count($teamEmp);
+                        $totalWorkDay = 0;
+                        $totalEfficiency = 0;
+
+                        foreach ($teamEmp as $teamEmpId) {
+                            $totalWorkDay = $totalWorkDay + $allInfoCompanies[$teamEmpId]['workday'];
+                            $totalEfficiency = $totalEfficiency + $allInfoCompanies[$teamEmpId]['efficiency'];
+                        }
+
+                        $a  = $currentWage*$min*$countEmp;
+                        $b  = $totalWorkDay*$totalEfficiency;
+
+                        $moneyBonusProduct += (($a/$b) * $currentWorkDay * $currentEfficiency);
+
+                    }
+                    // echo "<pre>";
+                    // print_r($moneyBonusProduct);
+                    // echo "</pre>";die();
+                }
+
+
 
                 $this->excel->getActiveSheet()->SetCellValue('A'.$row, $i);
                 $this->excel->getActiveSheet()->SetCellValue('B'.$row, $info['name']);
@@ -447,38 +571,92 @@ class Salaries extends MY_Controller
                 $this->excel->getActiveSheet()->SetCellValue('L'.$row, $this->checkZero($info['efficiency']));
                 $this->excel->getActiveSheet()->SetCellValue('M'.$row, $this->checkZero($info['percent_efficiency']));
 
-                $wageSalary = $info['coefficient_salary']*$realBasicSalary/$dayWorkInMonth*$info['workday']*$info['coefficient_htcv'];
+                $wageSalary         = $info['coefficient_salary']*$realBasicSalary/$dayWorkInMonth*$info['workday']*$info['coefficient_htcv'];
+                $manageSalary       = $info['coefficient_manage']*$realBasicSalary/$dayWorkInMonth*$info['workday']*$info['coefficient_htcv'];
+                $specializeSalary   = $info['coefficient_specialize']*500000/$dayWorkInMonth*$info['workday']*$info['coefficient_htcv'];
+                $senioritySalary    = $info['coefficient_seniority']*500000/$dayWorkInMonth*$info['workday']*$info['coefficient_htcv']*$info['percent_seniority'];
+                $efficiencySalary   = $info['efficiency']*500000*$info['percent_efficiency']*$info['workday']/$dayWorkInMonth;
+                $overTimeSalary     = ($wageSalary/$dayWorkInMonth/8)*1.5*$info['hoursOverTime'] + ($specializeSalary/$dayWorkInMonth/8*$info['hoursOverTime']);
+                $moreTimeSalary     = ($wageSalary/$dayWorkInMonth/8)*2*$info['hoursSunday'] + ($specializeSalary/$dayWorkInMonth/8*$info['hoursSunday']);
+
+                $checkSalaries = ($info['salaries']) ? true : false;
+
+                if ($checkSalaries) {
+
+                    $otherCosts     = ($info['salaries']->other_costs) ? $info['salaries']->other_costs : 0;
+                    $diligence      = ($info['salaries']->diligence) ? $info['salaries']->diligence : 0;
+                    $attractive     = ($info['salaries']->attractive) ? $info['salaries']->attractive : 0;
+
+                    if ($info['salaries']->set_eat == null) {
+                        if (($info['workday'] - floor($info['workday']) == 0.5)) {
+                            $numberSetEat = floor($info['workday']);
+                        }else{
+                            $numberSetEat = round($info['workday']);
+                        }
+                    }else{
+                        $numberSetEat   = $info['salaries']->set_eat;
+                    }
+
+                    $moneyEatOverTime   = $info['salaries']->money_eat_overtime;
+                    $familyAllowances   = $info['salaries']->family_allowances;
+                    $advancePayment     = $info['salaries']->advance_payment;
+                }else{
+                    $otherCosts         = 0;
+                    $diligence          = 0;
+                    $attractive         = 0;
+                    $numberSetEat       = round($info['workday']);
+                    $moneyEatOverTime   = 0;
+                    $familyAllowances   = 0;
+                    $advancePayment     = 0;
+                }
+
+                // die();
+                $totalHTCV          = $wageSalary+$manageSalary+$specializeSalary+$senioritySalary
+                 +$efficiencySalary+$otherCosts+$diligence+$attractive+$overTimeSalary+$moreTimeSalary;
+                $moneyEat           = $numberSetEat*15000;
+                $socialInsurance    = $info['social_insurance']*0.24;
+                $totalIncome        = $totalHTCV+$moneyEat+$moneyEatOverTime+$socialInsurance;
+                $socialInsurance2   = $info['social_insurance']*0.15;
+                $personalIncomeTax  = $totalHTCV-$socialInsurance2-9000000-$familyAllowances;
+                $personalIncomeTax2 = $this->calculatorTNCN($personalIncomeTax);
+                $sumAJ              = $advancePayment+$socialInsurance2+$personalIncomeTax2;
+                $salaryReceive      = $totalIncome-$socialInsurance-$sumAJ;
+
                 $this->excel->getActiveSheet()->SetCellValue('N'.$row, $this->checkZero($wageSalary, '-', true));
-                $manageSalary = $info['coefficient_manage']*$realBasicSalary/$dayWorkInMonth*$info['workday']*$info['coefficient_htcv'];
                 $this->excel->getActiveSheet()->SetCellValue('O'.$row, $this->checkZero($manageSalary, '-', true));
-                $specializeSalary = $info['coefficient_specialize']*500000/$dayWorkInMonth*$info['workday']*$info['coefficient_htcv'];
                 $this->excel->getActiveSheet()->SetCellValue('P'.$row, $this->checkZero($specializeSalary, '-', true));
-                $senioritySalary = $info['coefficient_seniority']*500000/$dayWorkInMonth*$info['workday']*$info['coefficient_htcv']*$info['percent_seniority'];
                 $this->excel->getActiveSheet()->SetCellValue('Q'.$row, $this->checkZero($senioritySalary, '-', true));
-                $efficiencySalary = $info['efficiency']*500000*$info['percent_efficiency']*$info['workday']/$dayWorkInMonth;
                 $this->excel->getActiveSheet()->SetCellValue('R'.$row, $this->checkZero($efficiencySalary, '-', true));
-
-
-                $this->excel->getActiveSheet()->SetCellValue('V'.$row, $this->checkZero($info['hoursOverTime']));
+                $this->excel->getActiveSheet()->SetCellValue('S'.$row, $this->checkZero($other_costs, '-'));
+                $this->excel->getActiveSheet()->SetCellValue('T'.$row, $this->checkZero($diligence, '-'));
+                $this->excel->getActiveSheet()->SetCellValue('U'.$row, $this->checkZero($attractive, '-'));
+                $this->excel->getActiveSheet()->SetCellValue('V'.$row, $this->checkZero($info['hoursOverTime'], '-'));
                 $this->excel->getActiveSheet()->getStyle('V'.$row)->applyFromArray($colorRed);
-                $overTimeSalary = ($wageSalary/$dayWorkInMonth/8)*1.5*$info['hoursOverTime'] + ($specializeSalary/$dayWorkInMonth/8*$info['hoursOverTime']);
                 $this->excel->getActiveSheet()->SetCellValue('W'.$row, $this->checkZero($overTimeSalary, '-', true));
-
-                $this->excel->getActiveSheet()->SetCellValue('X'.$row, $this->checkZero($info['hoursSunday']));
+                $this->excel->getActiveSheet()->SetCellValue('X'.$row, $this->checkZero($info['hoursSunday'], '-'));
                 $this->excel->getActiveSheet()->getStyle('X'.$row)->applyFromArray($colorRed);
-                $moreTimeSalary = ($wageSalary/$dayWorkInMonth/8)*2*$info['hoursSunday'] + ($specializeSalary/$dayWorkInMonth/8*$info['hoursSunday']);
                 $this->excel->getActiveSheet()->SetCellValue('Y'.$row, $this->checkZero($moreTimeSalary, '-', true));
-
-
+                $this->excel->getActiveSheet()->SetCellValue('Z'.$row, $this->checkZero($totalHTCV, '-', true));
+                $this->excel->getActiveSheet()->SetCellValue('AA'.$row, $this->checkZero($numberSetEat, '-'));
+                $this->excel->getActiveSheet()->SetCellValue('AB'.$row, $this->checkZero($moneyEat, '-', true));
+                $this->excel->getActiveSheet()->SetCellValue('AC'.$row, $this->checkZero($moneyEatOverTime, '-', true));
+                $this->excel->getActiveSheet()->SetCellValue('AD'.$row, $this->checkZero($socialInsurance, '-', true));
+                $this->excel->getActiveSheet()->SetCellValue('AE'.$row, $this->checkZero($totalIncome, '-', true));
+                $this->excel->getActiveSheet()->SetCellValue('AF'.$row, $this->checkZero($familyAllowances, '-', true));
+                $this->excel->getActiveSheet()->SetCellValue('AG'.$row, $this->checkZero($personalIncomeTax, '-', true));
+                $this->excel->getActiveSheet()->SetCellValue('AH'.$row, $this->checkZero($advancePayment, '-', true));
+                $this->excel->getActiveSheet()->SetCellValue('AI'.$row, $this->checkZero($socialInsurance2, '-', true));
+                $this->excel->getActiveSheet()->SetCellValue('AJ'.$row, $this->checkZero($personalIncomeTax2, '-', true));
+                $this->excel->getActiveSheet()->SetCellValue('AK'.$row, $this->checkZero($sumAJ, '-', true));
+                $this->excel->getActiveSheet()->SetCellValue('AM'.$row, $this->checkZero($salaryReceive, '-', true));
                 /*----- to be continue -----*/
-
 
 
                 $i++;
 
             }
 
-            $this->excel->getActiveSheet()->getStyle('A2:'.'AM'.$row)->getBorders()->getAllBorders()
+            $this->excel->getActiveSheet()->getStyle('A2:'.'AO'.$row)->getBorders()->getAllBorders()
              ->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
             $this->excel->getActiveSheet()->getStyle('G2:'.'M'.$row)->applyFromArray($styleStatic);
 
@@ -1076,5 +1254,55 @@ class Salaries extends MY_Controller
             redirect($_SERVER["HTTP_REFERER"]);
         }
     }
+
+  private function calculatorTNCN($tncn){
+    $a = 0;
+    $b = 0;
+    $c = 0;
+    $d = 0;
+    if ($tncn < 0 ) {
+      $a = 0;
+    }else{
+      if ($tncn <= 5000000) {
+        $a = $tncn*0.05;
+      }else{
+        if ($tncn > 5000000 && $tncn <= 10000000) {
+          $a = 250000+($tncn-5000000)*0.1;
+        }else{
+          $a = 0;
+        }
+      }
+
+    }
+
+    if ($tncn > 10000000 && $tncn <= 18000000) {
+      $b = 750000+($tncn - 10000000)*0.15;
+    }
+
+    if ($tncn > 18000000 && $tncn <= 32000000){
+      $c = 1950000+($tncn-18000000)*0.2;
+    }else{
+      if ($tncn > 32000000 && $tncn <= 52000000) {
+        $c = 4750000+($tncn-32000000)*0.25;
+      }else{
+        $c = 0;
+      }
+    }
+
+    if ($tncn > 52000000 && $tncn <= 80000000) {
+      $d = 9750000+($tncn-52000000)*0.30;
+    }else{
+      if ($tncn > 80000000) {
+        $d = 18150000+($tncn-80000000)*0.35;
+      }else{
+        $d = 0;
+      }
+    }
+
+    $total = $a+$b+$c+$d;
+
+    return $total;
+  }
+
 
 }

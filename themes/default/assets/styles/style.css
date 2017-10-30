@@ -553,6 +553,10 @@ select.form-control option {
 .clearfix:after {
     clear: both;
 }
+
+.sub-menu-margin{
+    margin-left: 10px; 
+}
 a:focus { outline: 0; }
 
 /* Header Styles
@@ -853,7 +857,7 @@ a#main-menu-act i:hover {
     font-size: 13px;
 }
 .nav.main-menu > li > ul > li > a {
-    background: #111;
+    background: #303031;
     border-bottom: 1px solid #222;
 }
 .nav.main-menu > li > ul > li > ul > li > a {

@@ -36,11 +36,6 @@
                         <?php echo form_input('name', $biller->name, 'class="form-control tip" id="name" required="required"'); ?>
                     </div>
 
-                    <div class="form-group person">
-                        <label>Lương hệ số *</label>
-                        <?php echo form_input('basic_salary', $this->sma->formatNumber($biller->basic_salary), 'class="form-control tip" id="basic_salary" required="required"'); ?>
-                    </div>
-
                     <div class="form-group">
                         <label>Phòng ban</label>
                         <select name="department" class="form-control select" id="department" style="width: 100%;">
@@ -55,21 +50,46 @@
                              ?>
                         </select>
                     </div>
-                    <div class="form-group company">
-                        <?= lang("company", "company"); ?>
-                        <?php echo form_input('company', $biller->company, 'class="form-control tip" id="company" required="required"'); ?>
+
+                    <div class="form-group person">
+                        <label>Lương hệ số *</label>
+                        <?php echo form_input('basic_salary', $this->sma->formatNumber($biller->basic_salary), 'class="form-control tip" id="basic_salary" required="required"'); ?>
                     </div>
 
-                    <div class="form-group">
-                        <?= lang("vat_no", "vat_no"); ?>
-                        <?php echo form_input('vat_no', $biller->vat_no, 'class="form-control" id="vat_no"'); ?>
-                    </div>
-                    <div class="form-group">
-                        <?= lang("email_address", "email_address"); ?>
-                        <input type="email" name="email" class="form-control" required="required" id="email_address"
-                               value="<?= $biller->email ?>"/>
+                    <div class="form-group person">
+                        <label>Lương đóng BHXH</label>
+                        <?php echo form_input('social_insurance', $this->sma->formatNumber($biller->social_insurance), 'class="form-control tip" id="basic_salary"'); ?>
                     </div>
 
+                    <div class="form-group person">
+                        <label>Hệ số HTCV</label>
+                        <?php echo form_input('coefficient_htcv', $biller->coefficient_htcv, 'class="form-control tip" "'); ?>
+                    </div>
+
+                    <div class="form-group person">
+                        <label>Hệ số lương</label>
+                        <?php echo form_input('coefficient_salary', $biller->coefficient_salary, 'class="form-control tip" "'); ?>
+                    </div>
+
+                    <div class="form-group person">
+                        <label>Hệ số quản lý</label>
+                        <?php echo form_input('coefficient_manage', $biller->coefficient_manage, 'class="form-control tip"'); ?>
+                    </div>
+
+                    <div class="form-group person">
+                        <label>HS kỹ năng chuyên môn</label>
+                        <?php echo form_input('coefficient_specialize', $biller->coefficient_specialize, 'class="form-control tip"'); ?>
+                    </div>
+
+                    <div class="form-group person">
+                        <label>Hệ số thâm niên</label>
+                        <?php echo form_input('coefficient_seniority', $biller->coefficient_seniority, 'class="form-control tip"'); ?>
+                    </div>
+
+                    <div class="form-group person">
+                        <label>Phần trăm thâm niên</label>
+                        <?php echo form_input('percent_seniority', $biller->percent_seniority, 'class="form-control tip"'); ?>
+                    </div>
 
                 </div>
                 <div class="col-md-6">
@@ -94,6 +114,32 @@
                     <div class="form-group">
                         <?= lang("country", "country"); ?>
                         <?php echo form_input('country', $biller->country, 'class="form-control" id="country"'); ?>
+                    </div>
+
+                    <div class="form-group company">
+                        <?= lang("company", "company"); ?>
+                        <?php echo form_input('company', $biller->company, 'class="form-control tip" id="company" required="required"'); ?>
+                    </div>
+
+                    <div class="form-group">
+                        <?= lang("vat_no", "vat_no"); ?>
+                        <?php echo form_input('vat_no', $biller->vat_no, 'class="form-control" id="vat_no"'); ?>
+                    </div>
+
+                    <div class="form-group">
+                        <?= lang("email_address", "email_address"); ?>
+                        <input type="email" name="email" class="form-control" required="required" id="email_address"
+                               value="<?= $biller->email ?>"/>
+                    </div>
+
+                    <div class="form-group person">
+                        <label>Hệ số hiệu suất</label>
+                        <?php echo form_input('efficiency', $biller->efficiency, 'class="form-control tip"'); ?>
+                    </div>
+
+                    <div class="form-group person">
+                        <label>Phần trăm hiệu suất</label>
+                        <?php echo form_input('percent_efficiency', $biller->percent_efficiency, 'class="form-control tip"'); ?>
                     </div>
                 </div>
                 <div class="col-md-12" style="display: none;">

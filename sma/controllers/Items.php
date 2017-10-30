@@ -87,17 +87,19 @@ class Items extends MY_Controller
 
         $products = $this->items_model->getAllItems();
 
-            foreach ($products as $key => $value) {
+        foreach ($products as $key => $value) {
 
-                if($value->item == $this->input->post('item') && $value->unit_id == $this->input->post('unit_id') &&  $value->specification == $this->input->post('specification')){
-                    array(
-                            $this->form_validation->set_rules('item','Nguyên vật liệu này', 'trim|is_unique[items.item]'),
-                            $this->form_validation->set_rules('specification','trim|is_unique[items.specification]'),
-                            $this->form_validation->set_rules('unit_id','trim|is_unique[items.unit_id]'),
-                        );
-                }
+            if($value->item == $this->input->post('item') && $value->unit_id == $this->input->post('unit_id') &&  $value->specification == $this->input->post('specification')){
+                array(
+                    $this->form_validation->set_rules('item','Nguyên vật liệu này', 'trim|is_unique[items.item]'),
+                    $this->form_validation->set_rules('specification','trim|is_unique[items.specification]'),
+                    $this->form_validation->set_rules('unit_id','trim|is_unique[items.unit_id]'),
+                );
             }
+        }
 
+        $this->form_validation->set_rules('item','Nguyên vật liệu này', 'required|trim|is_unique[items.item]');
+        $this->form_validation->set_rules('item_code','Mã nguyên vật này', 'required|trim|is_unique[items.item_code]');
         $this->form_validation->set_rules('quantity', lang("Số lượng"), 'trim|numeric');
         $this->form_validation->set_rules('cost', lang("Giá"), 'trim|numeric');
         $this->form_validation->set_rules('long', lang("Dài"), 'trim|numeric');
@@ -107,6 +109,7 @@ class Items extends MY_Controller
         if ($this->form_validation->run() == true) {
             $data = array(
                 'item'=>$this->input->post('item'),
+                'item_code' => $this->input->post('item_code'),
                 'specification'=>$this->input->post('specification'),
                 'size_long'=>$this->input->post('size_long'),
                 'size_wide'=>$this->input->post('size_wide'),
@@ -149,18 +152,28 @@ class Items extends MY_Controller
     function edit($id)
     {
 
+        $checkSameCurrentItem = false;
+        $checkSameCurrentCode = false;
         $item = $this->items_model->getItemByID($id);
         $this->load->helper('security');
-        foreach ($item as $key => $value) {
 
-            if($value->item === $this->input->post('item') && $value->unit_id === $this->input->post('unit_id') &&  $value->specification === $this->input->post('specification')){
-                array(
-                        $this->form_validation->set_rules('item','Nguyên vật liệu này', 'trim|is_unique[items.item]'),
-                        $this->form_validation->set_rules('specification','trim|is_unique[items.specification]'),
-                        $this->form_validation->set_rules('unit_id','trim|is_unique[items.unit_id]'),
-                    );
-            }
+        if($item->item == $this->input->post('item')){
+            $checkSameCurrentItem = true;
+
         }
+        if($item->item_code == $this->input->post('item')){
+            $checkSameCurrentCode = true;
+
+        }
+
+        if (!$checkSameCurrentItem) {
+            $this->form_validation->set_rules('item','Nguyên vật liệu này', 'trim|is_unique[items.item]');
+        }
+        if (!$checkSameCurrentCode) {
+            $this->form_validation->set_rules('item_code','Mã nguyên vật này', 'required|trim|is_unique[items.item_code]');
+        }
+
+
         $this->form_validation->set_rules('quantity', lang("Số lượng"), 'trim|numeric');
         $this->form_validation->set_rules('cost', lang("Giá"), 'trim|numeric');
         $this->form_validation->set_rules('long', lang("Dài"), 'trim|numeric');
@@ -171,14 +184,15 @@ class Items extends MY_Controller
         if ($this->form_validation->run() == true) {
             $data = array(
                 'item'=>$this->input->post('item'),
+                'item_code' => $this->input->post('item_code'),
                 'specification'=>$this->input->post('specification'),
                 'size_long'=>$this->input->post('size_long'),
                 'size_wide'=>$this->input->post('size_wide'),
                 'unit_id'=>$this->input->post('unit_id'),
                 'unit'=>$this->input->post('unit'),
-                 'note'=>$this->input->post('note'),
-                 'weight'=>$this->input->post('weight'),
-                 'cost' =>$this->input->post('cost')
+                'note'=>$this->input->post('note'),
+                'weight'=>$this->input->post('weight'),
+                'cost' =>$this->input->post('cost')
                 );
             $wh_total_quantity = 0;
             foreach ($warehouses as $warehouse) {
@@ -197,7 +211,8 @@ class Items extends MY_Controller
 
         } elseif ($this->input->post('edit')) {
             $this->session->set_flashdata('error', validation_errors());
-            redirect('$_SERVER["HTTP_REFERER"]');
+
+            redirect($_SERVER["HTTP_REFERER"]);
         }
         if ($this->form_validation->run() == true && $this->items_model->updateItem($id,$data,$warehouse_qty)) {
             $this->session->set_flashdata('message', 'Sửa nguyên vật liệu thành công');
@@ -261,11 +276,11 @@ class Items extends MY_Controller
                     redirect("items/import_csv");
                 }
 
-                $filename      = $this->upload->file_name;
-                $fullfile      = $this->digital_upload_path . $filename;
-                $inputFileType = PHPExcel_IOFactory::identify($fullfile);
+                $filename       = $this->upload->file_name;
+                $fullfile       = $this->digital_upload_path . $filename;
+                $inputFileType  = PHPExcel_IOFactory::identify($fullfile);
 
-                $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+                $objReader      = PHPExcel_IOFactory::createReader($inputFileType);
 
                 $objReader->setReadDataOnly(true);
 
@@ -285,8 +300,8 @@ class Items extends MY_Controller
 
                 for ($row = 2; $row <= $highestRow; ++$row) {
                     for ($col = 0; $col < $highestColumnIndex; ++$col) {
-                        $value                     = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
-                        if ($col == 0 && empty($value)) {
+                        $value      = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
+                        if ($col == 1 && empty($value)) {
                             $this->session->set_flashdata('error', "Tên nguyên vật liệu không được trống, lỗi tại dòng " . $row);
                             redirect("items/import_xls");
                         }
@@ -296,6 +311,7 @@ class Items extends MY_Controller
                 }
 
                 $keys = array(
+                    'item_code',
                     'item',
                     'unit',
                     'cost',
@@ -323,6 +339,23 @@ class Items extends MY_Controller
                     }
                     $rw++;
                 }
+
+
+                $dataItems = $this->items_model->getAllNameCodeItems();
+
+                foreach ($finals as $kFinal => $final) {
+                    foreach ($dataItems as $item) {
+                        if ($final['item_code'] == $item->item_code || $final['item'] == $item->item) {
+                            unset($finals[$kFinal]);
+                        }
+                    }
+
+                }
+
+
+                echo "<pre>";
+                print_r($finals);
+                echo "</pre>";die();
 
 
                 if ($this->items_model->addByImportXls($finals)) {

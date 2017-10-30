@@ -158,6 +158,20 @@ class Items_model extends CI_Model
         return FALSE;
     }
 
+    public function getAllNameCodeItems()
+    {
+        $this->db->select('item, item_code');
+        $q = $this->db->get("items");
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
+    }
+
+
     public function getUnitByName($name)
     {
         $q = $this->db->get_where('units', array('unit' => $name), 1);

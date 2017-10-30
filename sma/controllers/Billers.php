@@ -50,6 +50,8 @@ class Billers extends MY_Controller
         $this->sma->checkPermissions();
 
         $this->form_validation->set_rules('email', $this->lang->line("email_address"), 'is_unique[companies.email]');
+        // $this->form_validation->set_rules('social_insurance', $this->lang->line("bảo hiểm xã hội"), 'decimal');
+
 
         if ($this->form_validation->run() == true) {
 
@@ -57,6 +59,19 @@ class Billers extends MY_Controller
                 'name' => $this->input->post('name'),
                 'department_id' => $this->input->post('department'),
                 'basic_salary' => $this->input->post('basic_salary'),
+
+                'social_insurance' => ($this->input->post('social_insurance')) ? $this->input->post('social_insurance') : 0,
+                'coefficient_htcv' => ($this->input->post('coefficient_htcv')) ? $this->input->post('coefficient_htcv') : 0,
+                'coefficient_salary' => ($this->input->post('coefficient_salary')) ? $this->input->post('coefficient_salary') : 0,
+                'coefficient_manage' => ($this->input->post('coefficient_manage')) ? $this->input->post('coefficient_manage') : 0,
+                'coefficient_specialize' => ($this->input->post('coefficient_specialize')) ? $this->input->post('coefficient_specialize') : 0,
+                'coefficient_seniority' => ($this->input->post('coefficient_seniority')) ? $this->input->post('coefficient_seniority') : 0,
+                'percent_seniority' => ($this->input->post('percent_seniority')) ? $this->input->post('percent_seniority') : 0,
+                'efficiency' => ($this->input->post('efficiency')) ? $this->input->post('efficiency') : 0,
+                'percent_efficiency' => ($this->input->post('percent_efficiency')) ? $this->input->post('percent_efficiency') : 0,
+
+
+
                 'email' => $this->input->post('email'),
                 'group_id' => NULL,
                 'group_name' => 'biller',
@@ -113,7 +128,18 @@ class Billers extends MY_Controller
             $data = array(
                 'name' => $this->input->post('name'),
                 'department_id' => $this->input->post('department'),
-                'basic_salary' => $this->input->post('basic_salary'),
+                'basic_salary' => str_replace(',', '', $this->input->post('basic_salary')),
+
+                'social_insurance' => ($this->input->post('social_insurance')) ? str_replace(',', '', $this->input->post('social_insurance')) : 0,
+                'coefficient_htcv' => ($this->input->post('coefficient_htcv')) ? $this->input->post('coefficient_htcv') : 0,
+                'coefficient_salary' => ($this->input->post('coefficient_salary')) ? $this->input->post('coefficient_salary') : 0,
+                'coefficient_manage' => ($this->input->post('coefficient_manage')) ? $this->input->post('coefficient_manage') : 0,
+                'coefficient_specialize' => ($this->input->post('coefficient_specialize')) ? $this->input->post('coefficient_specialize') : 0,
+                'coefficient_seniority' => ($this->input->post('coefficient_seniority')) ? $this->input->post('coefficient_seniority') : 0,
+                'percent_seniority' => ($this->input->post('percent_seniority')) ? $this->input->post('percent_seniority') : 0,
+                'efficiency' => ($this->input->post('efficiency')) ? $this->input->post('efficiency') : 0,
+                'percent_efficiency' => ($this->input->post('percent_efficiency')) ? $this->input->post('percent_efficiency') : 0,
+
                 'email' => $this->input->post('email'),
                 'group_id' => NULL,
                 'group_name' => 'biller',
