@@ -83,7 +83,7 @@ class Productions extends MY_Controller
         // $this->datatables->select("productions.id, created_at, reference_no, customer, GROUP_CONCAT(CONCAT(" . $this->db->dbprefix('production_deliveries') . ".delivery_date_start, ' - ', " . $this->db->dbprefix('production_deliveries') . ".delivery_date_end, '') SEPARATOR '<br>') as iname, sale_status, grand_total, SUM(".$this->db->dbprefix('payments_new').".amount), (grand_total - SUM(".$this->db->dbprefix('payments_new').".amount)) as conlai, payment_status")
 
         // ->from('productions');
-        $this->datatables->select("productions.id, created_at, reference_no, customer, sale_status, grand_total, SUM(".$this->db->dbprefix('payments_new').".amount), (grand_total - SUM(".$this->db->dbprefix('payments_new').".amount)) as conlai, payment_status")
+        $this->datatables->select("productions.id, 1, created_at, reference_no, customer, sale_status, grand_total, SUM(".$this->db->dbprefix('payments_new').".amount), (grand_total - SUM(".$this->db->dbprefix('payments_new').".amount)) as conlai, payment_status")
 
         ->from('productions');
 
@@ -100,7 +100,14 @@ class Productions extends MY_Controller
             $this->datatables->where('customer_id', $this->session->userdata('user_id'));
         }
         $this->datatables->add_column("Actions", $action, "productions.id");
-        echo $this->datatables->generate();
+        // $this->datatables->unset_column('productions.id');
+
+        $result = json_decode($this->datatables->generate());
+
+        foreach($result->aaData as $key=>$item) {
+            $result->aaData[$key][1] = $key+1;
+        }
+        echo (json_encode($result));
     }
 
     function add_delivery($id){

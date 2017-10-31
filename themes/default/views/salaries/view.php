@@ -310,6 +310,13 @@
                     }
                 });
 
+                widthTd   =  $('.TimeSheet-head').width();
+                console.log('width', widthTd);
+                $('#set-width').width(widthTd);
+                $('.comp-name').addClass('absolute-td').width(widthTd);
+                $('.TimeSheet-rowHead').width(widthTd);
+                $('.product-td').addClass('absolute-td').width(widthTd);
+
               }else{
                 bootbox.alert('Không tồn tại bảng chấm công tháng '+month+' năm '+year+' của phòng ban '+$("#department option:selected" ).text().toLowerCase());
               }
@@ -358,10 +365,19 @@
 
     });
 
+
   });
+
+
+
 </script>
 <style type="text/css">
   .color-blue{
     background-color: #c6e7f9;
+  }
+  .absolute-td{
+    position: absolute;
+    border-top: 1px !important;
+    background-color: #f5f5f5;
   }
 </style>

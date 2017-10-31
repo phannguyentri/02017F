@@ -36,7 +36,7 @@
             "aoColumns": [{
                 "bSortable": false,
                 "mRender": checkbox
-            }, {"mRender": fsd}, null, null, {"mRender": row_status}, {"mRender": format_money}, {"mRender": format_money},{"mRender": format_money},{"mRender": trangthai}, {"bSortable": false}],
+            }, null, {"mRender": fsd}, null, null, {"mRender": row_status}, {"mRender": format_money}, {"mRender": format_money},{"mRender": format_money},{"mRender": trangthai}, {"bSortable": false}],
             "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
                 var gtotal = 0, paid = 0, balance = 0;
                 for (var i = 0; i < aaData.length; i++) {
@@ -275,6 +275,7 @@
                             <th style="text-align: center; width: 3% !important;">
                                 <input class="checkbox checkft" type="checkbox" name="check"/>
                             </th>
+                            <th>STT</th>
                             <th>Ngày tạo lệnh</th>
                             <th>Lệnh sản xuất</th>
                             <th><?php echo $this->lang->line("customer"); ?></th>

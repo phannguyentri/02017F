@@ -324,7 +324,7 @@
                             </li>
                             <li class="mm_products">
                                 <a class="dropmenu" href="#"><i class="fa fa-barcode"></i><span
-                                        class="text"> <?= lang('products'); ?> </span> <span
+                                        class="text"> <?= lang('Bán thành phẩm'); ?> </span> <span
                                         class="chevron closed"></span></a>
                                 <ul>
                                     <li id="products_index"><a class="submenu" href="<?= site_url('products'); ?>"><i
@@ -336,7 +336,7 @@
                                                 class="text"> <?= lang('categories'); ?></span></a></li>
                                     <li id="products_add"><a class="submenu" href="<?= site_url('products/add'); ?>"><i
                                                 class="fa fa-plus-circle sub-menu-margin"></i><span
-                                                class="text"> <?= lang('add_product'); ?></span></a></li>
+                                                class="text"> <?= lang('Thêm bán thành phẩm'); ?></span></a></li>
 <!--                                     <li id="products_sheet"><a class="submenu"
                                                                href="<?= site_url('products/print_barcodes'); ?>"><i
                                                 class="fa fa-tags"></i><span
@@ -348,7 +348,7 @@
                                     <li id="products_import_csv"><a class="submenu"
                                                                     href="<?= site_url('products/import_csv'); ?>"><i
                                                 class="fa fa-file-text sub-menu-margin"></i><span
-                                                class="text"> <?= lang('import_products'); ?></span></a></li>
+                                                class="text"> <?= lang('Import bán thành phẩm'); ?></span></a></li>
                                    <!--  <li id="products_update_price"><a class="submenu"
                                                                       href="<?= site_url('products/update_price'); ?>"><i
                                                 class="fa fa-money"></i><span

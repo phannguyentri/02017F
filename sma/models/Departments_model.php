@@ -55,4 +55,13 @@ class Departments_model extends CI_Model
       }
       return FALSE;
     }
+
+    public function getName($department_id){
+      $this->db->select('name');
+      $q = $this->db->get_where('departments', array('id' => $department_id), 1);
+      if ($q->num_rows() > 0) {
+          return $q->row();
+      }
+      return FALSE;
+    }
 }

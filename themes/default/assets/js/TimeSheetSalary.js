@@ -242,7 +242,7 @@
             var colHeadHtml = '<tr>';
             for(var i=0,curColHead=''; i<=sheetOption.data.dimensions[1]; ++i){
                 if(i===0){
-                    curColHead = '<td class="TimeSheet-head" rowspan="3" style="'+(sheetOption.data.sheetHead.style?sheetOption.data.sheetHead.style:'')+';"><b>'+sheetOption.data.sheetHead.name+'</b></td>';
+                    curColHead = '<td class="TimeSheet-head" rowspan="3"><p id="set-width"><b>'+sheetOption.data.sheetHead.name+'</b></p></td>';
                 }else{
                     myDate.setDate(i);
                     if (myDate.getDay() == 0) {
@@ -324,7 +324,7 @@
             colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>TỨ đợt 1</b></td>';
             colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>8%BHXH, 1.5%BHYT 1%BHTN (10.5%)</b></td>';
             colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Thuế TNCN</b></td>';
-            colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2"><b>Cộng</b></td>';
+            colHeadHtml +=  '<td class="TimeSheet-remarkHead" rowspan="2" style="color: #ed4444;"><b>Cộng</b></td>';
 
 
 
@@ -397,7 +397,6 @@
                     }
 
 
-
                 }
 
                 arrInfoCompanies[companyIdsData[i].company_id] =  {
@@ -416,8 +415,6 @@
                 }
 
             }
-            console.log('salariesData', salariesData);
-            console.log('arrInfoCompanies', arrInfoCompanies);
 
             workDay = 0;
             colspan = (sheetOption.data.dimensions[1] - (sheetOption.data.dimensions[1] % 4)) /4;
@@ -431,7 +428,7 @@
                 }
             }
 
-            cssAbso = '';
+            classAbso = '';
             for(var row=0,curRowHtml=''; row<sheetOption.data.dimensions[0]; ++row){
                 company_id = sheetOption.data.companyIdsData[row].company_id;
 
@@ -454,12 +451,12 @@
 
                 for(var col= 0, curCell=''; col<=sheetOption.data.dimensions[1]; ++col){
                     if (row % 2 == 0) {
-                        cssAbso = 'position: absolute;width: 163px;';
+                        classAbso = 'comp-name';
                     }else{
-                        cssAbso = '';
+                        classAbso = '';
                     }
                     if(col===0){
-                        curCell = '<td title="" class="TimeSheet-rowHead " style="color:#428bca;'+cssAbso+'"><b>'+sheetOption.data.rowHead[row].name+'</b></td>';
+                        curCell = '<td title="" class="TimeSheet-rowHead '+classAbso+'" style="color:#428bca;white-space: nowrap;"><b>'+sheetOption.data.rowHead[row].name+'</b></td>';
                     }else{
                         text = (sheetOption.data.sheetContentData[row][col-1] == 0) ? '' : sheetOption.data.sheetContentData[row][col-1];
                         hours = (sheetOption.data.sheetContentData[row][col-1] == 0) ? 0 : sheetOption.data.sheetContentData[row][col-1];
@@ -522,7 +519,6 @@
                     if (row % 2 == 0) {
 
                         realBasicSalary = parseFloat(arrInfoCompanies[company_id].info.basic_salary)*parseFloat(arrInfoCompanies[company_id].info.coefficient_salary);
-                        console.log('realBasicSalary', realBasicSalary);
 
                         wageSalary = realBasicSalary*parseFloat(arrInfoCompanies[company_id].info.coefficient_salary)/workDay*parseFloat(arrInfoCompanies[company_id].workday)*parseFloat(arrInfoCompanies[company_id].info.coefficient_htcv);
 
@@ -602,7 +598,6 @@
                         salaryReceive       = totalIncome-socialInsurance-sumAJ;
                         totalSalaryWorkday  = realBasicSalary/workDay*parseFloat(arrInfoCompanies[company_id].workday);
 
-                        console.log('totalHTCV', totalHTCV);
 
                         curRowHtml += '<td style="color: #ed4444;" class="TimeSheet-remark total'+(row===sheetOption.data.dimensions[0]-1?'bottomMost ':' ')+'">'+finalTotal+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark "></td>';
@@ -616,10 +611,10 @@
                         curRowHtml += '<td class="TimeSheet-remark "></td>';
                         curRowHtml += '<td class="TimeSheet-remark v">'+v+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark l">'+l+'</td>';
-                        curRowHtml += '<td class="TimeSheet-remark " style="color: #ed4444;">'+formatMoney(realBasicSalary)+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark " style="color: #ed4444;" title="Lương hệ số">'+formatMoney(realBasicSalary)+'</td>';
 
-                        curRowHtml += '<td class="TimeSheet-remark ">'+formatMoney(arrInfoCompanies[company_id].info.social_insurance)+'</td>';
-                        curRowHtml += '<td class="TimeSheet-remark ">'+arrInfoCompanies[company_id].info.coefficient_htcv+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark " title="Lương đóng BHXH">'+formatMoney(arrInfoCompanies[company_id].info.social_insurance)+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark " title="Hệ số HTCV">'+arrInfoCompanies[company_id].info.coefficient_htcv+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark color-blue" title="Hệ số lương">'+parseFloat(arrInfoCompanies[company_id].info.coefficient_salary).toFixed(2)+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark color-blue" title="Hệ số quản lý">'+parseFloat(arrInfoCompanies[company_id].info.coefficient_manage).toFixed(2)+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark color-blue" title="Hệ số kỹ năng chuyên môn">'+parseFloat(arrInfoCompanies[company_id].info.coefficient_specialize).toFixed(2)+'</td>';
@@ -665,7 +660,7 @@
                         curRowHtml += '<td class="TimeSheet-remark edit" data-field-name="advance_payment" title="TỨ đợt 1" style="background-color: #f7f7f7;">'+formatMoney(advancePayment)+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark" title="8%BHXH, 1.5%BHYT 1%BHTN (10.5%)">'+formatMoney(socialInsurance2)+'</td>';
                         curRowHtml += '<td class="TimeSheet-remark" title="Thuế TNCN">'+formatMoney(personalIncomeTax2)+'</td>';
-                        curRowHtml += '<td class="TimeSheet-remark" title="Cộng">'+formatMoney(sumAJ)+'</td>';
+                        curRowHtml += '<td class="TimeSheet-remark" title="Cộng" style="color: #ed4444;">'+formatMoney(sumAJ)+'</td>';
 
                         curRowHtml += '<td class="TimeSheet-remark bonus" style="color: #ed4444;"></td>';
                         curRowHtml += '<td class="TimeSheet-remark salary-receive" title="Tiền lương được lĩnh" style="color: #ed4444;">'+formatMoney(salaryReceive)+'</td>';
@@ -835,7 +830,6 @@
                                     }
 
                                     if (sameEmp == true) {
-                                        console.log('teamEmp', teamEmp);
                                         totalRealCompleted += Math.min(...arrQuantityCompleted);
 
                                         countEmp = teamEmp.length;
@@ -946,7 +940,7 @@
                         for (var i = 0; i < arrIdProductBonus.length; i++) {
 
                             rowBonusProductHtml += '<tr>'
-                            rowBonusProductHtml += '<td style="color:#428bca; border-left: none;white-space: nowrap;">'+arrNameProductBonus[i]+'</td>'
+                            rowBonusProductHtml += '<td class="product-td" style="color:#428bca; border-left: none;white-space: nowrap;">'+arrNameProductBonus[i]+'</td>'
                             rowBonusProductHtml += '<td class="TimeSheet-cell" data-row="3" data-col="30" colspan="'+colspan+'">'+formatMoney(arrWage[i])+'</td>'
                             rowBonusProductHtml += '<td class="TimeSheet-cell" data-row="3" data-col="30" colspan="'+colspan+'">'+formatMoney(arrQuatityConfig[i])+'</td>'
                             rowBonusProductHtml += '<td class="TimeSheet-cell" data-row="3" data-col="30" colspan="'+colspan+'">'+formatMoney(arrRealCompleted[i])+'</td>'
@@ -1022,6 +1016,7 @@
                 thisSheet.append(curRowHtml);
             }
         };
+
 
 
         var removeSelecting = function(){

@@ -343,9 +343,21 @@ class Items extends MY_Controller
 
                 $dataItems = $this->items_model->getAllNameCodeItems();
 
+
+                $preSameName = "Trùng tên nguyên vật liệu tại dòng ";
+                $name         = array();
+                $preSameCode = "Trùng mã nguyên vật liệu tại dòng ";
+                $code         = array();
+
                 foreach ($finals as $kFinal => $final) {
                     foreach ($dataItems as $item) {
-                        if ($final['item_code'] == $item->item_code || $final['item'] == $item->item) {
+                        if ($final['item_code'] == $item->item_code) {
+                            $code[]     = $kFinal + 2;
+                            unset($finals[$kFinal]);
+
+                        }
+                        if ($final['item'] == $item->item) {
+                            $name[]     = $kFinal + 2;
                             unset($finals[$kFinal]);
                         }
                     }
@@ -353,10 +365,30 @@ class Items extends MY_Controller
                 }
 
 
-                echo "<pre>";
-                print_r($finals);
-                echo "</pre>";die();
+                if (empty($name)) {
+                    $messSameName   = '';
+                }else{
+                    $messSameName   = $preSameName.implode(', ', $name);
+                }
+                if (empty($code)) {
+                    $messSameName   = '';
+                }else{
+                    $messSameCode   = $preSameCode.implode(', ', $code);
+                }
 
+                $finalMess  = '';
+                if (!$messSameName == '') {
+                    $finalMess  .= $messSameName;
+                    if (!$messSameCode == '') {
+                        $finalMess .= '. '.$messSameCode;
+                    }
+                }else{
+                    $finalMess  = $messSameCode;
+                }
+
+                if ($finalMess != '') {
+                    $this->session->set_flashdata('warning', $finalMess);
+                }
 
                 if ($this->items_model->addByImportXls($finals)) {
                     $this->session->set_flashdata('message', 'Nguyên vật liệu đã được thêm thành công!');
@@ -365,6 +397,7 @@ class Items extends MY_Controller
                     $this->session->set_flashdata('error', 'Thêm nguyên vật liệu thất bại.');
                     redirect('items/import_xls');
                 }
+
             }
 
         }else {
