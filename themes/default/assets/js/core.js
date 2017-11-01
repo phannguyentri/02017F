@@ -855,6 +855,10 @@ function formatSA (x) {
     return res;
 }
 
+function textcenter (x){
+    return '<div style="text-align:center;">'+x+'</div>';
+}
+
 $(document).ready(function() {
     $('body').on('click', '.product_link td:not(:first-child, :nth-child(2), :last-child)', function() {
         $('#myModal').modal({remote: site.base_url + 'products/modal_view/' + $(this).parent('.product_link').attr('id')});

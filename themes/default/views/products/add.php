@@ -19,7 +19,7 @@
                     <div class="panel-heading">Thông tin thành phẩm</div>
                     <div class="panel-body">
                         <div class="form-group all">
-                            <?= lang("Danh mục thành phẩm", "unit_id") ?>
+                            <?= lang("Thành phẩm", "unit_id") ?>
                             <?php
                             $cate[''] = "";
                             foreach ($categories as $category) {
@@ -32,11 +32,11 @@
                             <?php echo form_hidden('unit', ''); ?>
                         </div>
                             <div class="form-group all">
-                            <?= lang("product_name", "name") ?>
+                            <?= lang("Tên bán thành phẩm", "name") ?>
                             <?= form_input('name', (isset($_POST['name']) ? $_POST['name'] : ($product ? $product->name : '')), 'class="form-control" id="name" required="required"'); ?>
                         </div>
                         <div class="form-group all">
-                            <?= lang("product_code", "code") ?>
+                            <?= lang("Mã bán thành phẩm", "code") ?>
                             <?= form_input('code', (isset($_POST['code']) ? $_POST['code'] : ($product ? $product->code : '')), 'class="form-control" id="code"  required="required"') ?>
                             <!-- <span class="help-block"><?= lang('you_scan_your_barcode_too') ?></span> -->
                         </div>

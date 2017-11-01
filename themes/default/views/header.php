@@ -324,16 +324,16 @@
                             </li>
                             <li class="mm_products">
                                 <a class="dropmenu" href="#"><i class="fa fa-barcode"></i><span
-                                        class="text"> <?= lang('Bán thành phẩm'); ?> </span> <span
+                                        class="text"> <?= lang('Bán - thành phẩm'); ?> </span> <span
                                         class="chevron closed"></span></a>
                                 <ul>
-                                    <li id="products_index"><a class="submenu" href="<?= site_url('products'); ?>"><i
-                                                class="fa fa-th-list sub-menu-margin"></i><span
-                                                class="text"> <?= lang('Bán thành phẩm'); ?></span></a></li>
                                     <li id="products_categories"><a
                                             href="<?= site_url('system_settings/categories') ?>"><i
                                                 class="fa fa-folder-open sub-menu-margin"></i><span
                                                 class="text"> <?= lang('categories'); ?></span></a></li>
+                                    <li id="products_index"><a class="submenu" href="<?= site_url('products'); ?>"><i
+                                                class="fa fa-th-list sub-menu-margin"></i><span
+                                                class="text"> <?= lang('Bán thành phẩm'); ?></span></a></li>
                                     <li id="products_add"><a class="submenu" href="<?= site_url('products/add'); ?>"><i
                                                 class="fa fa-plus-circle sub-menu-margin"></i><span
                                                 class="text"> <?= lang('Thêm bán thành phẩm'); ?></span></a></li>

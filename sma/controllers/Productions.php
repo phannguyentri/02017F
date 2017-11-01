@@ -56,7 +56,7 @@ class Productions extends MY_Controller
         $detail_link       = anchor('productions/view_update/$1', '<i class="fa fa-plus-circle"></i> ' . lang('Cập nhật tiến độ'), 'data-toggle="modal" data-target="#myModal"');
         $payments_link     = anchor('productions/payments/$1', '<i class="fa fa-money"></i> Lịch sử thanh toán', 'data-toggle="modal" data-target="#myModal"');
         $add_payment_link  = anchor('productions/add_payment/$1', '<i class="fa fa-money"></i> ' . lang('add_payment'), 'data-toggle="modal" data-target="#myModal"');
-        $deliveries_link     = anchor('productions/deliveries/$1', '<i class="fa fa-file-text-o"></i> Lịch sử giao nhận', 'data-toggle="modal" data-target="#myModal"');
+        $deliveries_link   = anchor('productions/deliveries/$1', '<i class="fa fa-file-text-o"></i> Lịch sử giao nhận', 'data-toggle="modal" data-target="#myModal"');
         $add_delivery_link = anchor('productions/add_delivery/$1', '<i class="fa fa-truck"></i> ' . lang('add_delivery'), 'data-toggle="modal" data-target="#myModal"');
         $email_link        = anchor('productions/email/$1', '<i class="fa fa-envelope"></i> ' . lang('email_sale'), 'data-toggle="modal" data-target="#myModal"');
         $edit_link         = anchor('productions/edit/$1', '<i class="fa fa-edit"></i> ' . lang('Sửa lệnh sản xuất'), 'class="sledit"');
@@ -64,11 +64,13 @@ class Productions extends MY_Controller
         $return_link       = anchor('productions/return_sale/$1', '<i class="fa fa-angle-double-left"></i> ' . lang('return_sale'));
         $delete_link       = "<a href='#' class='po' title='<b>" . lang("Hủy bỏ lệnh sản xuất") . "</b>' data-content=\"<p>" . lang('r_u_sure') . "</p><a class='btn btn-danger po-cancel' href='" . site_url('productions/cancel/$1') . "'>" . lang('i_m_sure') . "</a> <button class='btn po-close'>" . lang('no') . "</button>\"  rel='popover'><i class=\"fa fa-trash-o\"></i> " . lang('Hủy bỏ lệnh sản xuất') . "</a>";
         $update_status_production_link       = "<a href='#' class='po' title='<b>" . lang("Đưa vào sản xuất") . "</b>' data-content=\"<p>" . lang('r_u_sure') . "</p><a class='btn btn-danger po-update-status-production' href='" . site_url('productions/updateStatusProduction/$1') . "'>" . lang('i_m_sure') . "</a> <button class='btn po-close'>" . lang('no') . "</button>\"  rel='popover'><i class=\"fa fa-exchange\"></i> " . lang('Đưa vào sản xuất') . "</a>";
+        $update_status_production_link2   = anchor('productions/updateStatusProduction2/$1', '<i class="fa fa-exchange"></i> Đưa vào sản xuất', 'data-toggle="modal" data-target="#myModal"');
         $action            = '<div class="text-center"><div class="btn-group text-left">' . '<button type="button" class="btn btn-default btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">' . lang('actions') . ' <span class="caret"></span></button>
         <ul class="dropdown-menu pull-right" role="menu">
             <li>' . $detail_link . '</li>
             <li>' . $process_link . '</li>
             <li>' . $update_status_production_link . '</li>
+
             <li>' . $add_payment_link . '</li>
             <li>' . $payments_link . '</li>
             <li>' . $add_delivery_link . '</li>
@@ -465,6 +467,7 @@ class Productions extends MY_Controller
 
             $total_tax   = $this->sma->formatDecimal($product_tax + $order_tax);
             // $grand_total = $this->sma->formatDecimal($this->sma->formatDecimal($total) + $total_tax + $this->sma->formatDecimal($shipping) - $order_discount);
+            $create_at = date('Y-m-d');
             $data        = array(
                 'date' => $date,
                 'due_date' => $due_date,
@@ -494,7 +497,7 @@ class Productions extends MY_Controller
                 'due_date' => $due_date,
                 'paid' => 0,
                 'created_by' => $this->session->userdata('user_id'),
-                'created_at' => date('Y-m-d')
+                'created_at' => $create_at
                 // 'employees' => json_encode($this->input->post('employees'));
             );
             $delivery_mode=$this->input->post('delivery_mode');
@@ -574,7 +577,25 @@ class Productions extends MY_Controller
 
         $production_id = '';
         if ($this->form_validation->run() == true && $production_id = $this->productions_model->addProduction($data, $products, $payment,$arrDeliveries)) {
+            $cssBorder = 'style="border: 1px solid black;padding: 4px;margin-left: 10.5%;"';
             // $this->session->set_userdata('remove_slls', 1);
+            $message =  'Đơn hàng sản xuất <b>'.$reference.'</b> đã được tạo vào <b>'.$create_at.'</b><hr></br>';
+            $message .= '<div style="text-align:center;margin-top: 20px;" >';
+            $message .= '<table style="border-collapse: collapse;border: 1px solid black;">';
+            $message .=   '<tr '.$cssBorder.'>';
+            $message .=     '<th '.$cssBorder.'>Tên bán thành phẩm</td>';
+            $message .=     '<th '.$cssBorder.'>Số lượng cấu thành</td>';
+            $message .=     '<th '.$cssBorder.'>Giá</td>';
+            $message .=     '<th '.$cssBorder.'>Trọng lượng</td>';
+            $message .=     '<th '.$cssBorder.'>Số lượng sản xuất</td>';
+            $message .=     '<th '.$cssBorder.'>Tổng số chi tiết</td>';
+            $message .=     '<th '.$cssBorder.'>Tổng tiền</td>';
+            $message .=     '<th '.$cssBorder.'>Tổng khối lượng</td>';
+            $message .=     '<th '.$cssBorder.'>Nhân viên</th>';
+            $message .=   '</tr>';
+            $message .= '</table>';
+
+            $this->sma->send_email('phannguyentri.fososoft@gmail.com', 'Lệnh sản xuất được tạo', $message);
             if ($quote_id) {
                 $this->db->update('quotes', array(
                     'status' => 'completed'
@@ -1339,8 +1360,7 @@ class Productions extends MY_Controller
 
         $i=0;
         foreach ($b as $key => $value) {
-            $a  = $this->productions_model->get_items($value->item_id);
-
+            $a  = $this->productions_model->getItemsInWarehousesAvailable($value->item_id);
 
             $value->rquatity = $a[0]->quantity;
 
@@ -1359,11 +1379,73 @@ class Productions extends MY_Controller
         echo json_encode($data);
     }
 
+    public function send_mail(){
+        $this->load->library('parser');
+        $parse_data = array(
+            'reference_number' => 'PO1111',
+            'contact_person' => 'Tri',
+            'company' => 'FOSO',
+            'site_name' => $this->Settings->site_name,
+        );
+        $msg = 'sale';
+        $message = $this->parser->parse_string($msg, $parse_data);
+
+        $this->sma->send_email('phannguyentri.fososoft@gmail.com', 'Tiêu đề zzz', $message, NULL, NULL, NULL, NULL, NULL);
+
+        echo "OK";
+    }
+
+
+    function updateStatusProduction2($id = NULL){
+
+        $this->sma->checkPermissions();
+
+        $this->data['production'] = $this->productions_model->getProduction($id);
+        $this->data['deliveries'] = $this->productions_model->getDeliveryTimeByProductionID($id);
+        $this->data['group_material_norms'] = $this->productions_model->get_group_material_norms_join_warehouse($id);
+
+        foreach ($this->data['group_material_norms'] as $material) {
+            $numAvailable = $this->productions_model->getItemsInWarehousesAvailable($material->item_id);
+            $material->available = $numAvailable->quantity;
+        }
+
+        $this->load->view($this->theme . 'productions/view_info_items', $this->data);
+                // $group_material_norms = $this->productions_model->get_group_material_norms($id);
+                // foreach ($group_material_norms as $material) {
+                //     $numAvailable = $this->productions_model->getItemsInWarehousesAvailable($material->item_id);
+                //     echo "<pre>";
+                //     print_r($numAvailable->quantity);
+                //     echo "</pre>";
+                //     if ($numAvailable->quantity>=$material->total_quantity1) {
+                //         $exNum = $numAvailable->quantity-$material->total_quantity1;
+                //     }else{
+                //         $exNum = $numAvailable->quantity;
+                //     }
+                // }
+                // echo "<pre>";
+                // print_r($group_material_norms);
+                // echo "</pre>";die();
+
+        // $a = $this->productions_model->getProduction($id);
+        // if($a->sale_status=='not_start'){
+        //     if ($this->productions_model->updateStatusProduction($id)) {
+        //         echo json_encode(array('status'=>'success','msg'=>'Cập nhật trạng thái thành công'));
+
+        //     }
+        // } else {
+        //     echo json_encode(array('status'=>'fail','msg'=>'Cập nhật trạng thái thất bại'))  ;
+
+        // }
+    }
+
     function updateStatusProduction($id = NULL){
         $a = $this->productions_model->getProduction($id);
+
         if($a->sale_status=='not_start'){
             if ($this->productions_model->updateStatusProduction($id)) {
-                echo json_encode(array('status'=>'success','msg'=>'Cập nhật trạng thái thành công'))  ;
+
+
+                echo json_encode(array('status'=>'success','msg'=>'Cập nhật trạng thái thành công'));
 
             }
         } else {

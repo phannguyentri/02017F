@@ -107,9 +107,9 @@
                                 <input class="checkbox checkth" type="checkbox" name="check"/>
                             </th>
                             <th style="min-width:40px; width: 40px; text-align: center;"><?php echo $this->lang->line("image"); ?></th>
-                            <th><?= lang("product_code") ?></th>
-                            <th><?= lang("product_name") ?></th>
-                            <th>Danh mục</th>
+                            <th><?= lang("Mã bán thành phẩm") ?></th>
+                            <th><?= lang("Bán thành phẩm") ?></th>
+                            <th>Thành phẩm</th>
                             <th><?= lang("Quy cách") ?></th>
                             <th><?= lang("Trọng lượng") ?></th>
                             <th><?= lang("Đơn vị") ?></th>

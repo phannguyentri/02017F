@@ -36,7 +36,7 @@
             "aoColumns": [{
                 "bSortable": false,
                 "mRender": checkbox
-            }, null, {"mRender": fsd}, null, null, {"mRender": row_status}, {"mRender": format_money}, {"mRender": format_money},{"mRender": format_money},{"mRender": trangthai}, {"bSortable": false}],
+            }, {"mRender": textcenter}, {"mRender": fsd}, null, null, {"mRender": row_status}, {"mRender": currencyFormat}, {"mRender": currencyFormat},{"mRender": currencyFormat},{"mRender": trangthai}, {"bSortable": false}],
             "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
                 var gtotal = 0, paid = 0, balance = 0;
                 for (var i = 0; i < aaData.length; i++) {

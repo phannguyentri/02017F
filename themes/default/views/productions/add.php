@@ -471,7 +471,7 @@
                                            class="table items table-striped table-bordered table-condensed table-hover">
                                         <thead>
                                         <tr>
-                                            <th><?= lang("product_name") . " (" . lang("product_code") . ")"; ?></th><!--
+                                            <th><?= lang("Tên bán thành phẩm") . " (" . lang("code") . ")"; ?></th><!--
                                             <?php
                                             if ($Settings->product_serial) {
                                                 echo '<th class="col-md-2">' . lang("serial_no") . '</th>';

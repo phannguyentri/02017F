@@ -1421,6 +1421,24 @@ class Productions_model extends CI_Model
         }
     }
 
+    public function get_group_material_norms_join_warehouse($id)
+    {
+        $this->db->select('material_norms.production_id, items.item_code, material_norms.product_id, material_norms.item_id, material_norms.item, warehouses_products.quantity, SUM(total_quantity) as total_quantity1')
+            ->where('material_norms.production_id',$id)
+            ->group_by('material_norms.item_id');
+
+        $this->db->join('items', 'items.id = material_norms.item_id');
+        $this->db->join('warehouses_products', 'warehouses_products.item_id = material_norms.item_id');
+        $this->db->where('warehouses_products.warehouse_id', 1);
+
+        $q = $this->db->get('material_norms');
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+    }
 
 
     public function get_group_material_norms_item($id,$item_id)
@@ -1442,6 +1460,16 @@ class Productions_model extends CI_Model
 
         if ($q->num_rows() > 0) {
             return $q->result();
+        }
+        return FALSE;
+    }
+
+    public function getItemsInWarehousesAvailable($id)
+    {
+        $q = $this->db->get_where('warehouses_products', array('item_id' => $id, 'warehouse_id' => 1));
+
+        if ($q->num_rows() > 0) {
+            return $q->row();
         }
         return FALSE;
     }
@@ -1486,31 +1514,34 @@ class Productions_model extends CI_Model
     public function updateStatusProduction($id){
 
         if($this->db->update('productions', array('sale_status' => 'pending'), array('id' => $id))){
-           $items = $this->get_group_material_norms($id);
+            $items = $this->get_group_material_norms($id);
             $productions = $this->getProduction($id);
 
-             if($productions->sale_status == 'pending' || $productions->sale_status =='completed'){
-
-                foreach ($items as $key => $value) {
-                    $item1 = $this->getItems1($value->item_id);
-                    $pur = $this->getPurchasedItems1($value->item_id);
 
 
-                    if($pur){
-                        if($this->db->delete('purchase_items',array('purchase_id' => null,'item_id' => $value->item_id ))){
-                              $this->db->insert('purchase_items', array('purchase_id' => null,'warehouse_id'=>$item1->warehouse_id,'item_id' => $value->item_id,'product_name' => $value->item,'quantity' => -$value->total_quantity,'quantity_balance' => -$value->total_quantity));
 
-                        }
-                    }else{
-                        $this->db->insert('purchase_items', array('purchase_id' => null,'warehouse_id'=>$item1->warehouse_id,'item_id' => $value->item_id,'product_name' => $value->item,'quantity' => -$value->total_quantity,'quantity_balance' => -$value->total_quantity));
-                    }
+            // if($productions->sale_status == 'pending' || $productions->sale_status =='completed'){
+
+            //     foreach ($items as $key => $value) {
+            //         $item1 = $this->getItems1($value->item_id);
+            //         $pur = $this->getPurchasedItems1($value->item_id);
 
 
-                    $this->syncQuantity1(null,$item_id[$i]);
-                }
+            //         if($pur){
+            //             if($this->db->delete('purchase_items',array('purchase_id' => null,'item_id' => $value->item_id ))){
+            //                   $this->db->insert('purchase_items', array('purchase_id' => null,'warehouse_id'=>$item1->warehouse_id,'item_id' => $value->item_id,'product_name' => $value->item,'quantity' => -$value->total_quantity,'quantity_balance' => -$value->total_quantity));
 
-             }
-                return true;
+            //             }
+            //         }else{
+            //             $this->db->insert('purchase_items', array('purchase_id' => null,'warehouse_id'=>$item1->warehouse_id,'item_id' => $value->item_id,'product_name' => $value->item,'quantity' => -$value->total_quantity,'quantity_balance' => -$value->total_quantity));
+            //         }
+
+
+            //         $this->syncQuantity1(null,$item_id[$i]);
+            //     }
+
+            // }
+            return true;
         }
         return false;
     }

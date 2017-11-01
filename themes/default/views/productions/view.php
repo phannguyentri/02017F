@@ -311,7 +311,7 @@
                         <thead>
                            <tr>
                               <th><?= lang("#"); ?></th>
-                              <th><?= lang("Thành phẩm"); ?> (<?= lang("code"); ?>)</th>
+                              <th><?= lang("Bán thành phẩm"); ?> (<?= lang("code"); ?>)</th>
                               <th>Số lượng cấu thành</th>
                               <th>Số lượng sản xuất</th>
                               <th>Tổng số chi tiết</th>

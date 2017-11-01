@@ -396,7 +396,7 @@
                                            class="table items table-striped table-bordered table-condensed table-hover">
                                         <thead>
                                         <tr>
-                                            <th><?= lang("product_name") . " (" . lang("product_code") . ")"; ?></th>
+                                            <th><?= lang("Tên bán thành phẩm") . " (" . lang("code") . ")"; ?></th>
                                             <th>Số lượng cấu thành</th>
                                             <th>Giá</th>
                                             <th>Trọng lượng</th>
@@ -470,7 +470,7 @@
                                             }
                                             ?>
                                             <div class="form-group all">
-                                                <?= lang("product", "items") ?>
+                                                <?= lang("Bán thành phẩm", "items") ?>
                                                 <?php
                                                 $cat[''] = "";
                                                 foreach ($items as $item) {
@@ -893,7 +893,7 @@ $(document).ready(function () {
                                     html +='<tr class="attr"><td><input type="hidden" name="id[]" value="'+this.id+'"><input type="hidden" name="item[]" value="'+this.item+'">'+this.item+'</td><td><input type="hidden" name="ord_quantity[]" id="ord_quantity'+index+'" value="'+item_quantity+'"><input type="text" name="quantity[]"  class="form-control" id="quantity'+index+'" value="'+this.quantity+'" data-old="'+this.quantity+'" data-norms="'+norms+'" /></td><td><input type="hidden" name="total_quantity[]"  class="form-control" id="total_quantity'+index+'" value="'+total_quantity+'" /><p>'+formatMoney(total_quantity)+'</p></td><td class="text-center"><i class="fa fa-times delAttr"></i></td></tr>'
                                     });
                                 }else{
-                                    if(confirm("Thành phẩm "+ scdata.product.name + " chưa khai báo Định mức nguyên vật liệu, bạn có muốn quay lại chỉnh sửa thành phẩm "+ scdata.product.name + " không?")){
+                                    if(confirm("Bán thành phẩm "+ scdata.product.name + " chưa khai báo Định mức nguyên vật liệu, bạn có muốn quay lại chỉnh sửa bán thành phẩm "+ scdata.product.name + " không?")){
                                         window.location.href = '<?= base_url(); ?>products/edit/'+ scdata.product.id;
                                     }
                                     return;
