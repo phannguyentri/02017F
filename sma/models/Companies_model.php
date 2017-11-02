@@ -89,6 +89,51 @@ class Companies_model extends CI_Model
         return FALSE;
     }
 
+    public function getCompanyNameByID($id)
+    {
+        $this->db->select('name');
+        $q = $this->db->get_where('companies', array('id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+    public function getCompanyEmailByID($id)
+    {
+        $this->db->select('email');
+        $q = $this->db->get_where('companies', array('id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+    public function getUsersEmailByGroupId($group_id)
+    {
+        $this->db->select('email');
+        $q = $this->db->get_where('users', array('group_id' => $group_id));
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
+
+    }
+
+    public function getUserEmailById($id)
+    {
+        $this->db->select('email');
+        $q = $this->db->get_where('users', array('id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+
+    }
+
     public function getCompanyByEmail($email)
     {
         $q = $this->db->get_where('companies', array('email' => $email), 1);

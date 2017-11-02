@@ -995,6 +995,19 @@ class Productions_model extends CI_Model
         return FALSE;
     }
 
+    public function getAllStagesEmployeeByProductionAndProductId($production_id, $product_id)
+    {
+        $this->db->select('employee');
+        $q = $this->db->get_where('production_stages', array('production_id' => $production_id, 'product_id' => $product_id));
+        if ($q->num_rows() > 0) {
+             foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+
+        return FALSE;
+    }
 
     public function getAllStagesT ($production_id,$product_id,$delivery_time)
     {
@@ -2528,12 +2541,8 @@ class Productions_model extends CI_Model
 
         $this->db->where('MONTH(created_at) = '.$month);
         $this->db->where('YEAR(created_at) = '.$year);
-        // $this->db->where('production_items.status', 'completed');
         $this->db->where('production_stages.product_id = production_items.product_id');
         $this->db->where('production_stages.date_start <>','NULL');
-        // $this->db->where('products.id','production_items.product_id');
-
-
         $this->db->join('production_items', 'production_items.sale_id = productions.id');
         $this->db->join('products','products.id = production_items.product_id');
         $this->db->join('production_stages', 'production_stages.production_id = productions.id');
@@ -2545,6 +2554,29 @@ class Productions_model extends CI_Model
             }
             return $data;
         }
+        return FALSE;
+    }
+
+    public function getProductionName($id)
+    {
+        $this->db->select('reference_no');
+        $q = $this->db->get_where('productions', array('id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+
+        return FALSE;
+    }
+
+    public function getStageName($id)
+    {
+        $this->db->select('stage');
+        $q = $this->db->get_where('production_stages', array('id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            echo $id;
+            return $q->row();
+        }
+
         return FALSE;
     }
 }

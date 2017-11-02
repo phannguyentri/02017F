@@ -576,14 +576,24 @@ class Productions extends MY_Controller
         }
 
         $production_id = '';
+
         if ($this->form_validation->run() == true && $production_id = $this->productions_model->addProduction($data, $products, $payment,$arrDeliveries)) {
-            $cssBorder = 'style="border: 1px solid black;padding: 4px;margin-left: 10.5%;"';
-            // $this->session->set_userdata('remove_slls', 1);
-            $message =  'Đơn hàng sản xuất <b>'.$reference.'</b> đã được tạo vào <b>'.$create_at.'</b><hr></br>';
+
+            /* BEGIN Send Mail */
+            $this->load->model('products_model');
+            $this->load->model('companies_model');
+
+            $cssBorder = 'style="border: 1px solid black;padding: 4px;"';
+            $message  = '<p>Đơn hàng sản xuất <b>'.$reference.'</b> đã được tạo vào <b>'.$create_at.'</b></p>';
+            $message .= '<p>Đơn vị thức hiện: <b>'.$data['working'].'</b></p>';
+            $message .= '<p>Khách hàng: <b>'.$data['customer'].'</b></p>';
+            $message .= '<p>Ngày bắt đầu: <b>'.$date.'</b> | Ngày giao hàng: <b>'.$due_date.'</b></p>';
+            $message .= 'Ghi chú: '.str_replace(array("\r", "\n"), "", $this->sma->decode_html($note));
+            $message .= '<hr></br>';
             $message .= '<div style="text-align:center;margin-top: 20px;" >';
-            $message .= '<table style="border-collapse: collapse;border: 1px solid black;">';
+            $message .= '<table style="border-collapse: collapse;border: 1px solid black;margin-left:15px;">';
             $message .=   '<tr '.$cssBorder.'>';
-            $message .=     '<th '.$cssBorder.'>Tên bán thành phẩm</td>';
+            $message .=     '<th '.$cssBorder.'>Tên bán thành phẩm(Mã)</td>';
             $message .=     '<th '.$cssBorder.'>Số lượng cấu thành</td>';
             $message .=     '<th '.$cssBorder.'>Giá</td>';
             $message .=     '<th '.$cssBorder.'>Trọng lượng</td>';
@@ -593,9 +603,58 @@ class Productions extends MY_Controller
             $message .=     '<th '.$cssBorder.'>Tổng khối lượng</td>';
             $message .=     '<th '.$cssBorder.'>Nhân viên</th>';
             $message .=   '</tr>';
+
+            $products = array_reverse($products);
+
+            $arrEmpSendMail  = array();
+            $arrEmail        = array();
+
+            foreach ($products as $product) {
+                $infoProduct = $this->products_model->getProductByID($product['product_id']);
+                $totalDetail = $product['quantity']*$infoProduct->quantity_config;
+                $totalMoney  = $product['quantity']*$infoProduct->price;
+                $totalWeight = $product['quantity']*$infoProduct->cf2;
+
+                $arrEmployeeId      = explode(',', $product['employees']);
+                $arrEmployeeName    = array();
+                foreach ($arrEmployeeId as $employeeId) {
+                    if (!in_array($employeeId, $arrEmpSendMail)) {
+                        $arrEmpSendMail[]   = $employeeId;
+                        $arrEmail[]          = $this->companies_model->getCompanyEmailByID($employeeId)->email;
+                    }
+
+                    $arrEmployeeName[]  = $this->companies_model->getCompanyNameByID($employeeId)->name;
+                }
+
+                $message .= '<tr '.$cssBorder.'>';
+                $message .=   '<td '.$cssBorder.'>'.$product['product_name'].'('.$product['product_code'].')</td>';
+                $message .=   '<td '.$cssBorder.'>'.$infoProduct->quantity_config.'</td>';
+                $message .=   '<td '.$cssBorder.'>'.$this->sma->formatMoney($infoProduct->price).'</td>';
+                $message .=   '<td '.$cssBorder.'>'.$infoProduct->cf2.'</td>';
+                $message .=   '<td '.$cssBorder.'>'.$product['quantity'].'</td>';
+                $message .=   '<td '.$cssBorder.'>'.$totalDetail.'</td>';
+                $message .=   '<td '.$cssBorder.'>'.$this->sma->formatMoney($totalMoney).'</td>';
+                $message .=   '<td '.$cssBorder.'>'.$totalWeight.'</td>';
+                $message .=   '<td '.$cssBorder.'>'.implode(', ', $arrEmployeeName).'</td>';
+                $message .= '</tr>';
+            }
+
             $message .= '</table>';
 
-            $this->sma->send_email('phannguyentri.fososoft@gmail.com', 'Lệnh sản xuất được tạo', $message);
+            $arrUser  = $this->companies_model->getUsersEmailByGroupId(1);
+
+            if($arrUser){
+                foreach ($arrUser as $user) {
+                    $arrEmail[] = $user->email;
+                }
+            }
+
+            foreach ($arrEmail as $email) {
+                $this->sma->send_email($email, 'Lệnh sản xuất được tạo', $message);
+            }
+
+            /* END Send Mail */
+
             if ($quote_id) {
                 $this->db->update('quotes', array(
                     'status' => 'completed'
@@ -643,10 +702,6 @@ class Productions extends MY_Controller
             $this->page_construct('productions/add', $meta, $this->data);
         }
     }
-
-
-
-
 
     function getAllStages($production_id = NULL, $product_id = NULL,$delivery_id=NULL)
     {
@@ -1334,10 +1389,7 @@ class Productions extends MY_Controller
 
         }
 
-
-
         return false;
-
 
     }
 
@@ -1378,23 +1430,6 @@ class Productions extends MY_Controller
         }
         echo json_encode($data);
     }
-
-    public function send_mail(){
-        $this->load->library('parser');
-        $parse_data = array(
-            'reference_number' => 'PO1111',
-            'contact_person' => 'Tri',
-            'company' => 'FOSO',
-            'site_name' => $this->Settings->site_name,
-        );
-        $msg = 'sale';
-        $message = $this->parser->parse_string($msg, $parse_data);
-
-        $this->sma->send_email('phannguyentri.fososoft@gmail.com', 'Tiêu đề zzz', $message, NULL, NULL, NULL, NULL, NULL);
-
-        echo "OK";
-    }
-
 
     function updateStatusProduction2($id = NULL){
 
@@ -2338,13 +2373,78 @@ class Productions extends MY_Controller
             redirect("productions");
         }
 
+
         if ($this->form_validation->run() == true && $this->productions_model->updateStage($id, $data)) {
+
+            /* BEGIN Send Mail */
+
+            $this->load->model('products_model');
+            $this->load->model('companies_model');
+
+            $arrEmail = array();
+            $arrUser  = $this->companies_model->getUsersEmailByGroupId(1);
+
+            if($arrUser){
+                foreach ($arrUser as $user) {
+                    $arrEmail[] = $user->email;
+                }
+            }
+
+            $currentEmailUser = $this->companies_model->getUserEmailById($data['user_id'])->email;
+            if ($currentEmailUser) {
+                if (!in_array($currentEmailUser, $arrEmail)) {
+                    $arrEmail[] = $currentEmailUser;
+                }
+            }
+
+            $allInfoStages = $this->productions_model->getAllStagesEmployeeByProductionAndProductId($id, $data['product_id']);
+
+            $arrEmpSendMail = array();
+
+            foreach ($allInfoStages as $stage) {
+                $arrEmpId = explode(",", $stage->employee);
+                foreach ($arrEmpId as $empId) {
+                    if (!in_array($empId, $arrEmpSendMail)) {
+                        $arrEmpSendMail[] = $empId;
+                        $arrEmail[]       = $this->companies_model->getCompanyEmailByID($empId)->email;
+                    }
+                }
+            }
+
+            $reference      = $this->productions_model->getProductionName($id)->reference_no;
+            $infoStage      = $this->productions_model->getStageName($data['stage_id']);
+            $infoProduct    = $this->products_model->getProductByID($data['product_id']);
+
+            if ($data['stage_status'] == 0) {
+                $txtStatus = 'Chưa bắt đầu';
+            }elseif ($data['stage_status'] == 1) {
+                $txtStatus = 'Đang xử lý';
+            }else{
+                $txtStatus = 'Hoàn thành';
+            }
+
+            $message  = '<p><b>Đơn hàng sản xuất '.$reference.'</b></p>';
+            $message .= '<hr></br>';
+            $message .= '<p>Tên nhân viên báo cáo: <b>'.$data['user_name'].'</b></p>';
+            $message .= '<p>Tên bán sản phẩm: <b>'.$infoProduct->name.'</b></p>';
+            $message .= '<p>Giai đoạn: <b>'.$infoStage->stage.'</b></p>';
+            $message .= '<p>Trạng thái: <b>'.$txtStatus.'</b></p>';
+            if ($data['stage_status'] != 2) {
+                $message .= '<p>Số lượng hoàn thành: <b>'.$data['quantity'].'</b></p>';
+            }
+            $message .= 'Ghi chú: '.str_replace(array("\r", "\n"), "", $this->sma->decode_html($data['note']));
+
+            foreach ($arrEmail as $email) {
+                $this->sma->send_email($email, 'Cập nhật tiến độ sản xuất đơn hàng sản xuất '.$reference, $message);
+            }
+
+            /* END Send Mail */
+
             $this->session->set_flashdata('message', lang("Cập nhật giai đoạn thành công"));
             redirect("productions/view_process/".$id);
         } else {
             $this->data['error']    = validation_errors() ? validation_errors() : $this->session->flashdata('error');
             $this->data['comments'] = $this->productions_model->getAllStageCommments($id);
-            // str_replace(array("\r", "\n"), "", $this->sma->decode_html($inv->note));
 
             $this->data['inv']      = $this->productions_model->getInvoiceByID($id);
             $this->data['deliveries']=$this->data['inv']->deliveries;

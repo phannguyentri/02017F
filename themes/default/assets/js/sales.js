@@ -968,7 +968,7 @@ function loadItems(billers = null, edit = null, production_items = null) {
 			tr_html += '<td class="total-detail">'+formatMoney(total_detail)+'</td>'
 			money = item.row.qty*item.row.price;
 			tr_html += '<td ><input class="total-money" name="total_money[]" type="hidden" value="'+money+'"><span class="text-total-money">'+formatMoney(money)+'</span></td>'
-			tr_html += '<td class="total-weight">'+formatMoney(item_qty*item.row.cf2)+'</td>'
+			tr_html += '<td class="total-weight">'+formatDecimal(item_qty*item.row.cf2)+'</td>'
 
 			// if (site.settings.product_discount == 1) {
 			// 	tr_html += '<td class="text-right"><input class="form-control input-sm rdiscount" name="product_discount[]" type="hidden" id="discount_' + row_no + '" value="' + item_ds + '"><span class="text-right sdiscount text-danger" id="sdiscount_' + row_no + '">' + formatMoney(0 - (item_discount * item_qty)) + '</span></td>';
