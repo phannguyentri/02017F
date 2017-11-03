@@ -921,10 +921,7 @@ $(document).ready(function () {
 
                             });
 
-
-
                            if(scdata['group_material_norms']){
-
 
                             enquiry +='<div class="title_enquiry ">Số lượng vật liệu chung cần nhập hàng</div>'
                             enquiry +='<table style="margin: 15px auto;width: 95%;" class="table table-bordered table-condensed table-striped ">'
@@ -940,8 +937,6 @@ $(document).ready(function () {
                                 }else{
                                     quantityNeed = (vbillerslue['total_quantity1']*1);
                                 }
-
-
 
                                 if((quantityNeed) > (vbillerslue['rquatity']*1)){
                                     flag = true;
