@@ -183,10 +183,42 @@ class Items_model extends CI_Model
     }
 
     public function addByImportXls($data){
-        if ($this->db->insert_batch('items', $data)) {
+
+        $warehouses = $this->getAllWarehouses();
+
+        if (empty($data)) {
+            return FALSE;
+        }else{
+            foreach ($data as $item) {
+                if ($this->db->insert("items", $item)) {
+                    $item_id = $this->db->insert_id();
+                    if ($warehouses) {
+                        foreach ($warehouses as $warehouse) {
+                            $dataWareHouse = array(
+                                'item_id'       => $item_id,
+                                'warehouse_id'  => $warehouse->id,
+                                'quantity'      => 0
+                            );
+
+                            $this->db->insert("warehouses_products", $dataWareHouse);
+                        }
+                    }
+                }
+            }
             return true;
         }
-        return false;
+
+    }
+
+    public function getAllWarehouses(){
+        $q = $this->db->get("warehouses");
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
     }
 
 }

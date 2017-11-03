@@ -1434,9 +1434,19 @@ class Productions_model extends CI_Model
         }
     }
 
+    public function getExWarehouseQuantityByProductionItemId($production_id, $item_id){
+        $this->db->select('production_id, item_id, SUM(ex_quantity) as total_ex');
+        $this->db->group_by('item_id');
+        $q = $this->db->get_where('ex_warehouses', array('production_id' => $production_id, 'item_id' => $item_id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
     public function get_group_material_norms_join_warehouse($id)
     {
-        $this->db->select('material_norms.production_id, items.item_code, material_norms.product_id, material_norms.item_id, material_norms.item, warehouses_products.quantity, SUM(total_quantity) as total_quantity1')
+        $this->db->select('material_norms.production_id, items.item_code, material_norms.product_id, material_norms.item_id, material_norms.item, warehouses_products.quantity as available, SUM(total_quantity) as total_quantity1')
             ->where('material_norms.production_id',$id)
             ->group_by('material_norms.item_id');
 

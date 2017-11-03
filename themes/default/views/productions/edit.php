@@ -859,16 +859,16 @@ $(document).ready(function () {
                            html+='<div class="input-group-addon" style="padding: 2px 5px;"><a href="#" id="addAttrConfig"><i class="fa fa-2x fa-plus-circle" id="addIcon"></i></a></div></div><div style="clear:both;"></div></div>';
                            html+='<div class="table-responsive"><table id="attrTableConfig" class="table table-bordered table-condensed table-striped" style="margin-bottom: 0; margin-top: 10px;"><thead><tr class="active"><th><?= lang('Nguyên vật liệu') ?></th><th><?= lang('Số lượng') ?></th><th><?= lang('Tổng số lượng') ?></th><th style="width :35px"><i class="fa fa-times attr-remove-all"></i></th></tr></thead><tbody>';
 
+
+
                            if(scdata.material_norms!=null && scdata.material_norms!=false)
                            {
-
-                                if(scdata.productions['sale_status'] == 'not_start' || scdata.productions['sale_status'] == 'completed' ){
+                                if(scdata.productions['sale_status'] == 'not_start' || scdata.productions['sale_status'] == 'pending' ){
                                     $.each(scdata.material_norms, function( index, vbillerslue ) {
 
                                         $.each(scdata.product.cf5, function( i, item) {
                                             if (vbillerslue.item_id == item.id) {
                                                 norms = item.quantity;
-                                                console.log('norms', norms);
                                             }
                                         })
                                         html +='<tr data-id="'+ vbillerslue['item_id'] +'" class="attr"><td><input type="hidden" name="id[]" value="'+this.item_id+'"><input type="hidden" name="item[]" value="'+this.item+'">'+this.item+'</td><td><input type="hidden" name="ord_quantity[]" id="ord_quantity'+index+'" value="'+this.ord_quantity+'"><input type="text" name="quantity[]"  class="form-control" id="quantity'+index+'" value="'+this.quantity+'" data-old="'+this.quantity+'" data-norms="'+norms+'" /></td><td><input type="hidden" name="total_quantity[]"  class="form-control" id="total_quantity'+index+'" value="'+this.total_quantity+'"/><p>'+formatMoney(this.total_quantity)+'</p></td><td class="text-center" ><i class="fa fa-times delAttr"></i></td></tr>'
@@ -928,17 +928,24 @@ $(document).ready(function () {
 
                             enquiry +='<div class="title_enquiry ">Số lượng vật liệu chung cần nhập hàng</div>'
                             enquiry +='<table style="margin: 15px auto;width: 95%;" class="table table-bordered table-condensed table-striped ">'
-                            enquiry +='<thead><tr><td>Nguyên vật liệu</td><td>Số lượng cần nhập</td></tr></thead>'
+                            enquiry +='<thead><tr><th>Nguyên vật liệu</th><th>Số lượng cần nhập</th></tr></thead>'
                             ltotal=0;
                             enquiry +='<tbody>'
                             console.log('group_material_norms', scdata['group_material_norms']);
                             flag = false;
 
                             $.each(scdata['group_material_norms'], function( index, vbillerslue ) {
+                                if (vbillerslue['ex_warehouse']) {
+                                    quantityNeed = (vbillerslue['total_quantity1']*1)-vbillerslue['ex_warehouse']['total_ex'];
+                                }else{
+                                    quantityNeed = (vbillerslue['total_quantity1']*1);
+                                }
 
-                                if((vbillerslue['total_quantity1']*1) > (vbillerslue['rquatity']*1)){
+
+
+                                if((quantityNeed) > (vbillerslue['rquatity']*1)){
                                     flag = true;
-                                    ltotal = vbillerslue['total_quantity1'] - vbillerslue['rquatity'];
+                                    ltotal = quantityNeed - vbillerslue['rquatity'];
 
                                     enquiry +='<tr data-id="'+vbillerslue['item_id'] +'"><td>'+ vbillerslue['item'] +'</td><td>'+ formatMoney(ltotal) +'</td><input type="hidden" name="item_total[]" value="'+ (ltotal) +'"></tr>'
                                 }
@@ -956,9 +963,6 @@ $(document).ready(function () {
                             }
 
                            }
-
-
-
 
 
                             if(scdata.machine_list!=null)
@@ -1154,15 +1158,6 @@ $(document).ready(function () {
 
         });
 
-        // $("input").blur(function(){
-
-        // })
-
-        // $("input[name='quantity[]']").keyup(function(){
-        // alert('sdvd');
-        // });
-
-
         $(document).on('click', '.delAttr', function () {
             $(this).closest("tr").remove();
         });
@@ -1288,43 +1283,6 @@ $(document).ready(function () {
             }
         });
 
-
-        // $('#enquiry').on('click','#quick_enquiry',function(){
-        //     var arr = [];
-        //     $.each( $('#enquiry').find('tbody tr'), function( key, value ) {
-        //         var obj = {};
-        //         obj.id = $(value).attr('data-id');
-        //         obj.value = $(value).find('input[name="item_total[]"]').val();
-        //         arr.push(obj);
-        //     });
-
-        //     if(arr){
-        //           $.ajax({
-        //             type: "get",
-        //             async: false,
-        //             url: "<?= site_url('productions/addQuickEnquiry') ?>/",
-        //             data : {
-        //                 'arr' : arr,
-        //                 'warehouse_id' : $('#slwarehouse option:checked').val(),
-        //             },
-        //             dataType: "json",
-        //             success: function (scdata) {
-
-        //                 if(scdata){
-        //                     bootbox.alert('<?= lang('Thêm yêu cầu nhập hàng thành công') ?>');
-        //                     $('#enquiry tbody').empty();
-        //                     $('#modal-loading').hide();
-        //                 }else{
-        //                     bootbox.alert('<?= lang('Thêm yêu cầu nhập hàng thất bại') ?>');
-
-        //                     $('#modal-loading').hide()
-        //                 }
-        //             },
-
-        //         });
-        //     }
-
-        // });
     });
 
     $(document).on("focus", '.rquantity', function () {
@@ -1341,18 +1299,7 @@ $(document).ready(function () {
         $(this).closest('tr').find('.total-money').val(total_money);
         $(this).closest('tr').find('.text-total-money').text(formatMoney(total_money));
         $(this).closest('tr').find('.total-weight').text(formatMoney(total_weight));
-        // if (!is_numeric($(this).val())) {
-        //     $(this).val(old_row_qty);
-        //     bootbox.alert(lang.unexpected_value);
-        //     return;
-        // }
-        // var new_qty = parseFloat($(this).val()),
-        // item_id = row.attr('data-item-id');
-        // slitems[item_id].row.qty = new_qty;
-        // localStorage.setItem('slitems', JSON.stringify(slitems));
 
-        // // console.log(JSON.stringify(slitems));
-        // loadItems(billers);
     });
 
 </script>

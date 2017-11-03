@@ -63,14 +63,13 @@ class Productions extends MY_Controller
         $pdf_link          = anchor('productions/pdf/$1', '<i class="fa fa-file-pdf-o"></i> ' . lang('download_pdf'));
         $return_link       = anchor('productions/return_sale/$1', '<i class="fa fa-angle-double-left"></i> ' . lang('return_sale'));
         $delete_link       = "<a href='#' class='po' title='<b>" . lang("Hủy bỏ lệnh sản xuất") . "</b>' data-content=\"<p>" . lang('r_u_sure') . "</p><a class='btn btn-danger po-cancel' href='" . site_url('productions/cancel/$1') . "'>" . lang('i_m_sure') . "</a> <button class='btn po-close'>" . lang('no') . "</button>\"  rel='popover'><i class=\"fa fa-trash-o\"></i> " . lang('Hủy bỏ lệnh sản xuất') . "</a>";
-        $update_status_production_link       = "<a href='#' class='po' title='<b>" . lang("Đưa vào sản xuất") . "</b>' data-content=\"<p>" . lang('r_u_sure') . "</p><a class='btn btn-danger po-update-status-production' href='" . site_url('productions/updateStatusProduction/$1') . "'>" . lang('i_m_sure') . "</a> <button class='btn po-close'>" . lang('no') . "</button>\"  rel='popover'><i class=\"fa fa-exchange\"></i> " . lang('Đưa vào sản xuất') . "</a>";
-        $update_status_production_link2   = anchor('productions/updateStatusProduction2/$1', '<i class="fa fa-exchange"></i> Đưa vào sản xuất', 'data-toggle="modal" data-target="#myModal"');
+        // $update_status_production_link       = "<a href='#' class='po' title='<b>" . lang("Đưa vào sản xuất") . "</b>' data-content=\"<p>" . lang('r_u_sure') . "</p><a class='btn btn-danger po-update-status-production' href='" . site_url('productions/updateStatusProduction/$1') . "'>" . lang('i_m_sure') . "</a> <button class='btn po-close'>" . lang('no') . "</button>\"  rel='popover'><i class=\"fa fa-exchange\"></i> " . lang('Đưa vào sản xuất') . "</a>";
+        $update_status_production_link   = anchor('productions/updateStatusProduction/$1', '<i class="fa fa-exchange"></i> Đưa vào sản xuất', 'data-toggle="modal" data-target="#myModal"');
         $action            = '<div class="text-center"><div class="btn-group text-left">' . '<button type="button" class="btn btn-default btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">' . lang('actions') . ' <span class="caret"></span></button>
         <ul class="dropdown-menu pull-right" role="menu">
             <li>' . $detail_link . '</li>
             <li>' . $process_link . '</li>
             <li>' . $update_status_production_link . '</li>
-
             <li>' . $add_payment_link . '</li>
             <li>' . $payments_link . '</li>
             <li>' . $add_delivery_link . '</li>
@@ -1407,17 +1406,14 @@ class Productions extends MY_Controller
         $data['qproduction']     = $this->productions_model->getQProduction($production_id,$product_id)->quantity;
         $this->load->model('settings_model');
         $data['variants']        = $this->site->getAllVariants();
-
         $b = $this->productions_model->get_group_material_norms($production_id, $product_id);
 
         $i=0;
         foreach ($b as $key => $value) {
             $a  = $this->productions_model->getItemsInWarehousesAvailable($value->item_id);
-
-            $value->rquatity = $a[0]->quantity;
-
+            $value->rquatity        = $a->quantity;
+            $value->ex_warehouse    = $this->productions_model->getExWarehouseQuantityByProductionItemId($production_id, $value->item_id);
         }
-
         $data['group_material_norms'] = $b;
 
         if ($rows = $this->productions_model->getProductByID($product_id)) {
@@ -1431,62 +1427,65 @@ class Productions extends MY_Controller
         echo json_encode($data);
     }
 
-    function updateStatusProduction2($id = NULL){
+    function updateStatusProduction($id = NULL){
 
         $this->sma->checkPermissions();
 
+        $production = $this->productions_model->getProduction($id);
         $this->data['production'] = $this->productions_model->getProduction($id);
         $this->data['deliveries'] = $this->productions_model->getDeliveryTimeByProductionID($id);
         $this->data['group_material_norms'] = $this->productions_model->get_group_material_norms_join_warehouse($id);
+        $this->data['id']         = $id;
+        $this->data['status']     = TRUE;
+
+        if ($production->sale_status != 'not_start') {
+            $this->data['status']     = FALSE;
+        }
+
+        $dataExWarehouse        = array();
+        $dataUpdateWarehouse    = array();
 
         foreach ($this->data['group_material_norms'] as $material) {
-            $numAvailable = $this->productions_model->getItemsInWarehousesAvailable($material->item_id);
-            $material->available = $numAvailable->quantity;
-        }
-
-        $this->load->view($this->theme . 'productions/view_info_items', $this->data);
-                // $group_material_norms = $this->productions_model->get_group_material_norms($id);
-                // foreach ($group_material_norms as $material) {
-                //     $numAvailable = $this->productions_model->getItemsInWarehousesAvailable($material->item_id);
-                //     echo "<pre>";
-                //     print_r($numAvailable->quantity);
-                //     echo "</pre>";
-                //     if ($numAvailable->quantity>=$material->total_quantity1) {
-                //         $exNum = $numAvailable->quantity-$material->total_quantity1;
-                //     }else{
-                //         $exNum = $numAvailable->quantity;
-                //     }
-                // }
-                // echo "<pre>";
-                // print_r($group_material_norms);
-                // echo "</pre>";die();
-
-        // $a = $this->productions_model->getProduction($id);
-        // if($a->sale_status=='not_start'){
-        //     if ($this->productions_model->updateStatusProduction($id)) {
-        //         echo json_encode(array('status'=>'success','msg'=>'Cập nhật trạng thái thành công'));
-
-        //     }
-        // } else {
-        //     echo json_encode(array('status'=>'fail','msg'=>'Cập nhật trạng thái thất bại'))  ;
-
-        // }
-    }
-
-    function updateStatusProduction($id = NULL){
-        $a = $this->productions_model->getProduction($id);
-
-        if($a->sale_status=='not_start'){
-            if ($this->productions_model->updateStatusProduction($id)) {
-
-
-                echo json_encode(array('status'=>'success','msg'=>'Cập nhật trạng thái thành công'));
-
+            if ($material->available >= $material->total_quantity1) {
+                $quantityWarehouseUpdate        = $material->available-$material->total_quantity1;
+                $material->quantity_need_ex     = $material->total_quantity1;
+            }else{
+                $quantityWarehouseUpdate        = 0;
+                $material->quantity_need_ex     = $material->available;
             }
-        } else {
-            echo json_encode(array('status'=>'fail','msg'=>'Cập nhật trạng thái thất bại'))  ;
 
+            if ($material->quantity_need_ex != 0) {
+                $dataExWarehouse[] = array(
+                    'production_id' => $id,
+                    'item_id'       => $material->item_id,
+                    'ex_quantity'   => $material->quantity_need_ex,
+                    'created_at'    => date('Y-m-d')
+                );
+            }
         }
+
+        $this->data['dataExWarehouse'] = $dataExWarehouse;
+
+        if ($this->input->post('confirm')) {
+            if($production->sale_status == 'not_start'){
+                if ($this->productions_model->updateStatusProduction($id)) {
+                    $this->session->set_flashdata('message', 'Cập nhật trạng thái thành công');
+
+                    $this->load->model('exwarehouses_model');
+                    $this->exwarehouses_model->insertBatch($dataExWarehouse);
+
+                }else{
+                    $this->session->set_flashdata('error', 'Cập nhật trạng thái thất bại');
+                }
+            } else {
+                $this->session->set_flashdata('error', 'Cập nhật trạng thái thất bại');
+            }
+            redirect("productions");
+        }else{
+            $this->load->view($this->theme . 'productions/view_info_items', $this->data);
+        }
+
+
     }
 
     function cancel($id = NULL){
@@ -1497,7 +1496,7 @@ class Productions extends MY_Controller
 
             }
         } else {
-            echo json_encode(array('status'=>'fail','msg'=>'Hủy bỏ lệnh sản xuất thất bại'))  ;
+            echo json_encode(array('status'=>'fail','msg'=>'Hủy bỏ lệnh sản xuất thất bại'));
 
         }
     }

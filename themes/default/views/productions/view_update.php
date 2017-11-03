@@ -234,6 +234,7 @@
                             $('.iradio_square-blue').removeClass('checked');
                             $('.iradio_square-blue').attr("aria-checked","false")
                             $('#not_start').removeAttr('checked');
+                            $('#pending')[0].checked = true;
                             $('#pending').parent().addClass('checked');
                             $('#pending').parent().attr("aria-checked","true");
                             $('.quantity').slideDown();
