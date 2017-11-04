@@ -364,7 +364,7 @@ class Purchases_model extends CI_Model
         return FALSE;
     }
 
-    public function addPurchase($data, $items)
+    public function addPurchase($data, $items, $warehouse_id)
     {
         if($data['enquiery']){
 
@@ -385,7 +385,7 @@ class Purchases_model extends CI_Model
                 $oldpus = $this->getItemByIDP($id);
                 $flag = 0;
                 foreach ($items as $item) {
-                    $this->updateQuantityItems($item['item_id'], $item['quantity']);
+                    $this->updateQuantityItems($item['item_id'], $item['quantity'], 0, $warehouse_id);
                     $item['purchase_id'] = $id;
 
                     foreach ($oldpus as $oldpu) {
@@ -493,7 +493,7 @@ class Purchases_model extends CI_Model
         }
     }
 
-    public function updatePurchase($id, $data, $items = array(), $list_del, $parent_id)
+    public function updatePurchase($id, $data, $items = array(), $list_del, $parent_id, $warehouse_id)
     {
 
         $enquiery_id = $opurchase->parent_id;
@@ -525,7 +525,7 @@ class Purchases_model extends CI_Model
                 $current_qty = $item['quantity'];
                 unset($item['old_quantity']);
                 if ($this->updatePurchaseItem($item, $old_qty, $current_qty, $enquiries)) {
-                    $this->updateQuantityItemsWhenEdit($item['item_id'], $old_qty, $current_qty);
+                    $this->updateQuantityItemsWhenEdit($item['item_id'], $old_qty, $current_qty, $warehouse_id);
                 }
             }
 
@@ -586,13 +586,15 @@ class Purchases_model extends CI_Model
     }
 
     // update quantity item when edit purchases items
-    public function updateQuantityItemsWhenEdit($item_id, $old_qty, $current_qty){
+    public function updateQuantityItemsWhenEdit($item_id, $old_qty, $current_qty, $warehouse_id){
         $this->db->set('quantity', 'quantity-'.$old_qty, FALSE);
-        $this->db->where('id', $item_id);
-        if ($this->db->update('items')) {
+        $this->db->where('item_id', $item_id);
+        $this->db->where('warehouse_id', $warehouse_id);
+        if ($this->db->update('warehouses_products')) {
             $this->db->set('quantity', 'quantity+'.$current_qty, FALSE);
-            $this->db->where('id', $item_id);
-            if ($this->db->update('items')) {
+            $this->db->where('warehouse_id', $warehouse_id);
+            $this->db->where('item_id', $item_id);
+            if ($this->db->update('warehouses_products')) {
                 return true;
             }
         }
@@ -601,15 +603,16 @@ class Purchases_model extends CI_Model
     }
 
     // $option 0: when add purchases, $option 1: when delete purchases
-    public function updateQuantityItems($item_id, $item_quantity, $option=0){
+    public function updateQuantityItems($item_id, $item_quantity, $option=0, $warehouse_id){
         if ($option == 0) {
             $this->db->set('quantity', 'quantity+'.$item_quantity, FALSE);
         }else{
             $this->db->set('quantity', 'quantity-'.$item_quantity, FALSE);
         }
 
-        $this->db->where('id', $item_id);
-        $this->db->update('items');
+        $this->db->where('warehouse_id', $warehouse_id);
+        $this->db->where('item_id', $item_id);
+        $this->db->update('warehouses_products');
     }
 
     public function updateQuantityItemsWhenDelete($purchase_items){

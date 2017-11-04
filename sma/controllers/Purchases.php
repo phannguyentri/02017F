@@ -567,7 +567,7 @@ class Purchases extends MY_Controller
             // $this->sma->print_arrays($data, $products);
         }
 
-        if ($this->form_validation->run() == true && $this->purchases_model->addPurchase($data, $products)) {
+        if ($this->form_validation->run() == true && $this->purchases_model->addPurchase($data, $products, $warehouse_id)) {
             $this->session->set_userdata('remove_pols', 1);
             $this->session->set_flashdata('message', $this->lang->line("purchase_added"));
             redirect('purchases');
@@ -886,7 +886,7 @@ class Purchases extends MY_Controller
             // $this->sma->print_arrays($data, $products);
         }
 
-        if ($this->form_validation->run() == true && $this->purchases_model->updatePurchase($id, $data, $products, $list_del, $this->input->post('parent_id'))) {
+        if ($this->form_validation->run() == true && $this->purchases_model->updatePurchase($id, $data, $products, $list_del, $this->input->post('parent_id'), $warehouse_id)) {
             $this->session->set_userdata('remove_pols', 1);
             $this->session->set_flashdata('message', $this->lang->line("purchase_added"));
             redirect('purchases');

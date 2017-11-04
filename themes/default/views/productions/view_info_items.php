@@ -50,7 +50,8 @@
                     <?php else: ?>
                         <div class="row">
                         <div class="col-md-12">
-                            <div class="alert alert-info"><button type="button" class="close" data-dismiss="alert">×</button><b>Đơn hàng sản xuất này chưa có bán sản phẩm nào được đưa vào kế hoạch sản xuất.</br>Bấm xác nhận để tiếp tục!</b></div>
+                            <div class="alert alert-info"><button type="button" class="close" data-dismiss="alert">×</button><b>Đơn hàng sản xuất này chưa lập kế hoạch sản xuất.</b>
+                            </div>
                         </div>
                         </div>
                     <?php endif ?>
@@ -66,11 +67,16 @@
         </div>
         <div class="modal-footer">
             <?php if ($status): ?>
-                <?php echo form_open("productions/updateStatusProduction/".$id); ?>
-                    <input type="submit" name="confirm" id="confirm" value="Xác nhận" class="btn btn-success">
-                <?php echo form_close(); ?>
+                <?php if (empty($group_material_norms)): ?>
+                    <a href="<?=base_url().'productions/edit/'.$id.'/#statistics-con'?>"><button class="btn btn-success">Lập kế hoạch</button></a>
+                <?php else: ?>
+                    <?php echo form_open("productions/updateStatusProduction/".$id); ?>
+                        <input type="submit" name="confirm" id="confirm" value="Xác nhận" class="btn btn-success">
+                    <?php echo form_close(); ?>
+                <?php endif ?>
 
             <?php endif ?>
+
         </div>
     </div>
 

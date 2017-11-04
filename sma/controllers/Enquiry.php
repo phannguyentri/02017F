@@ -270,7 +270,7 @@ class Enquiry extends MY_Controller
 
     /* -------------------------------------------------------------------------------------------------------------------------------- */
 
-     function add($quote_id = NULL)
+    function add($quote_id = NULL)
     {
         $this->sma->checkPermissions();
 
@@ -1199,6 +1199,11 @@ class Enquiry extends MY_Controller
         $production_id = $this->input->get('production_id');
         $this->load->model('productions_model');
         if ($data = $this->productions_model->getMaterialNormsByProductionId($production_id)) {
+            foreach ($data as $material) {
+                $material->available = $this->productions_model->getItemsInWarehousesAvailable($material->item_id);
+                $material->ex_ware = $this->productions_model->getExWarehouseQuantityByProductionItemId($production_id, $material->item_id);
+            }
+
             echo json_encode($data);
         }else{
             json_encode(array('error' => 1));

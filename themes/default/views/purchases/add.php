@@ -315,7 +315,7 @@
                                             <?php echo form_input('reference_no', (isset($_POST['reference_no']) ? $_POST['reference_no'] : $ponumber), 'class="form-control input-tip" id="poref"'); ?>
                                         </div>
                                     </div>
-                                    <div class="col-md-4" style="display: none">
+                                    <div class="col-md-4" style="">
                                         <div class="form-group">
                                             <?= lang("warehouse", "powarehouse"); ?>
                                             <?php

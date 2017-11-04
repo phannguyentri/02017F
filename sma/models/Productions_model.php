@@ -1487,9 +1487,9 @@ class Productions_model extends CI_Model
         return FALSE;
     }
 
-    public function getItemsInWarehousesAvailable($id)
+    public function getItemsInWarehousesAvailable($item_id)
     {
-        $q = $this->db->get_where('warehouses_products', array('item_id' => $id, 'warehouse_id' => 1));
+        $q = $this->db->get_where('warehouses_products', array('item_id' => $item_id, 'warehouse_id' => 1));
 
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -2318,11 +2318,10 @@ class Productions_model extends CI_Model
     //
     public function getMaterialNormsByProductionId($production_id){
 
-        $this->db->select('material_norms.id, item_id, material_norms.item, items.cost, items.quantity as items_quantity');
-        $this->db->join('items','items.id=material_norms.item_id','left');
+        $this->db->select('material_norms.id, material_norms.item_id, material_norms.item, items.cost, items.quantity as items_quantity');
+        $this->db->join('items','items.id = material_norms.item_id','left');
         $this->db->group_by('material_norms.item_id');
-        // $this->db->select_sum('material_norms.ord_quantity');
-        // $this->db->select_sum('material_norms.quantity');
+
         $this->db->select_sum('material_norms.total_quantity');
         $q = $this->db->get_where('material_norms',array('material_norms.production_id'=>$production_id));
         if ($q->num_rows() > 0) {
@@ -2333,6 +2332,26 @@ class Productions_model extends CI_Model
         }
         return FALSE;
     }
+
+    // public function get_group_material_norms_join_warehouse($id)
+    // {
+    //     $this->db->select('material_norms.production_id, items.item_code, material_norms.product_id, material_norms.item_id, material_norms.item, warehouses_products.quantity as available, SUM(total_quantity) as total_quantity1')
+    //         ->where('material_norms.production_id',$id)
+    //         ->group_by('material_norms.item_id');
+
+    //     $this->db->join('items', 'items.id = material_norms.item_id');
+    //     $this->db->join('warehouses_products', 'warehouses_products.item_id = material_norms.item_id');
+    //     $this->db->where('warehouses_products.warehouse_id', 1);
+
+    //     $q = $this->db->get('material_norms');
+    //     if ($q->num_rows() > 0) {
+    //         foreach (($q->result()) as $row) {
+    //             $data[] = $row;
+    //         }
+    //         return $data;
+    //     }
+    // }
+
 
     public function getPurchasesByProductionId($production_id){
         $this->db->where('production_id', $production_id);

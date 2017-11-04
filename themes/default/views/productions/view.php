@@ -583,7 +583,7 @@
 
                                     <?php else: ?>
                                       <div class="alert alert-info" style="margin-bottom: 0px;">
-                                        <strong>Sản phẩm này chưa đưa vào kế hoạch sản xuất</strong>.
+                                        <strong>Sản phẩm này chưa đưa vào kế hoạch sản xuất</strong>. <a href="<?=base_url().'productions/edit/'.$inv->id.'/#statistics-con' ?>" target='_blank'><button class='btn-xs btn-success'>Lập kế hoạch</button></a>
                                       </div>
                                     <?php endif ?>
 

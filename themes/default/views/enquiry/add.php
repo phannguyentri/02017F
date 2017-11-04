@@ -162,9 +162,15 @@
                             success: function (data2) {
                                 if (data2[0].id !== 0) {
 
-                                    if (parseInt(data[i].items_quantity) < parseInt(data[i].total_quantity)) {
-                                        quantity_need = parseInt(data[i].total_quantity - data[i].items_quantity);
-                                        data2[0].row.qty = quantity_need;
+                                    if (data[i].ex_ware) {
+                                        quantityNeed = (data[i].total_quantity*1)-data[i].ex_ware.total_ex;
+                                    }else{
+                                        quantityNeed = (data[i].total_quantity*1);
+                                    }
+
+                                    if (parseInt(data[i].available.quantity) < parseInt(data[i].total_quantity)) {
+                                        finalQuantityNeed = parseInt(quantityNeed - data[i].available.quantity);
+                                        data2[0].row.qty = finalQuantityNeed;
 
                                         var item_id = site.settings.item_addition == 1 ? data2[0].item_id : data2[0].id;
                                         if (poitemss[item_id]) {
@@ -548,6 +554,7 @@
 
         if ($('#production_id').attr('data-exist') == 'true') {
             event.preventDefault();
+
             var production_id = $( "#production_id" ).val();
 
             for (var k in poitemss){
@@ -565,6 +572,7 @@
                     production_id: production_id
                 },
                 success: function (data) {
+                    console.log('getMaterialNorms', data);
                     item = {};
 
                     for(i in data){
@@ -580,9 +588,15 @@
                             success: function (data2) {
                                 if (data2[0].id !== 0) {
 
-                                    if (parseInt(data[i].items_quantity) < parseInt(data[i].total_quantity)) {
-                                        quantity_need = parseInt(data[i].total_quantity - data[i].items_quantity);
-                                        data2[0].row.qty = quantity_need;
+                                    if (data[i].ex_ware) {
+                                        quantityNeed = (data[i].total_quantity*1)-data[i].ex_ware.total_ex;
+                                    }else{
+                                        quantityNeed = (data[i].total_quantity*1);
+                                    }
+
+                                    if (parseInt(data[i].available.quantity) < parseInt(data[i].total_quantity)) {
+                                        finalQuantityNeed = parseInt(quantityNeed - data[i].available.quantity);
+                                        data2[0].row.qty = finalQuantityNeed;
 
                                         var item_id = site.settings.item_addition == 1 ? data2[0].item_id : data2[0].id;
                                         if (poitemss[item_id]) {
