@@ -616,11 +616,16 @@
                      <div class="clearfix"></div>
                   </div>
 
+                  <div class="col-xs-12 notify" style="display: none"></div>
+
+
                   <div class="table-responsive">
                     <?php
                       $ids = $this->productions_model->getPurchasesByProductionId($inv->id);
                       $arr_total_boughts = $this->productions_model->getTotalBought($ids);
-
+                      // echo("<pre>");
+                      // print_r($arr_total_boughts);
+                      // echo('</pre>');
                       $arr_purchases_id = array();
                       foreach ($enquiery as $value) {
                         if ($this->productions_model->getPurchasesByParentId($value)) {
@@ -638,31 +643,55 @@
                               <th>Tên nguyên vật liệu</th>
                               <th>Đơn giá</th>
                               <th>Số lượng cần sử dụng</th>
-                              <th>Số lượng tồn kho</th>
+                              <th>Số lượng tồn kho có sẵn</th>
                               <th>Số lượng cần thu mua</th>
                               <th>Ngày nhập(Chi tiết)</th>
                               <th>Số lượng đã thu mua</th>
+                              <th>Số lượng đã xuất</th>
                               <th>Trạng thái</th>
+                              <th>Xuất kho đưa vào sản xuất</th>
                            </tr>
                         </thead>
                         <tbody>
+                        <?php
+                          // echo("<pre>");
+                          // print_r($material_norms);
+                          // echo("</pre>");
+                         ?>
                         <?php foreach ($material_norms as $value): ?>
                             <tr>
                                 <td><?=$value->item ?></td>
-                                <td><?=$this->sma->formatNumber($value->cost) ?></td>
-                                <td><?=$this->sma->formatNumber($value->total_quantity) ?></td>
-                                <td>
+                                <td class="right"><?=$this->sma->formatNumber($value->cost) ?></td>
+                                <td class="right"><?=$this->sma->formatNumber($value->total_quantity) ?></td>
+                                <td class="right">
                                   <?php
-                                    if ($value->total_quantity <= $value->items_quantity){
-                                      $purchase = 0;
+                                    $quantity_available = $this->productions_model->getItemsInWarehousesAvailable($value->item_id)->quantity;
+
+                                    $exWarehouse = $this->productions_model->getExWarehouseQuantityByProductionItemId($inv->id, $value->item_id);
+                                    $exported = $exWarehouse->total_ex;
+
+                                    if ($exWarehouse) {
+                                      $quantity_need = $value->total_quantity-$exported;
+                                    }else{
+                                      $quantity_need = $value->total_quantity;
+                                    }
+
+
+                                    if ($quantity_need > $quantity_available) {
+                                      $needBuy = $quantity_need - $quantity_available;
+                                    }else{
+                                      $needBuy = 0;
+                                    }
+
+
+                                    if ($value->total_quantity <= $quantity_available){
                                       echo $this->sma->formatNumber($value->total_quantity);
                                     }else{
-                                      $purchase = $value->total_quantity - $value->items_quantity;
-                                      echo $this->sma->formatNumber($value->items_quantity);
+                                      echo $this->sma->formatNumber($quantity_available);
                                     }
                                    ?>
                                 </td>
-                                <td><?=$this->sma->formatNumber($purchase) ?></td>
+                                <td class="right"><?= $this->sma->formatNumber($quantity_need) ?></td>
                                 <td class="text-center">
                                   <?php
                                     if (!empty($arr_purchases_id)) {
@@ -685,19 +714,32 @@
                                   ?>
 
                                 </td>
-                                <td class="text-center">
+                                <td class="right">
                                   <?php
+                                    $flagEnough = false;
+                                    $existEx = false;
+
                                     foreach ($arr_total_boughts as $arr_total_bought) {
                                       if ($arr_total_bought->item_id == $value->item_id) {
-                                        echo $this->sma->formatNumber($arr_total_bought->quantity);
+                                        $bought     = $arr_total_bought->quantity;
+                                        $existEx = true;
+                                        break;
                                       }
                                     }
-
+                                    if (!$existEx) {
+                                      $bought = 0;
+                                    }
+                                    echo $this->sma->formatNumber($bought);
                                    ?>
 
                                 </td>
+                                <td class="right">
+                                  <?php
+                                    echo $this->sma->formatNumber($exported);
+                                  ?>
+                                </td>
                                 <td>
-                                  <?php if ($purchase == 0): ?>
+                                  <?php if ($exported >= $value->total_quantity): ?>
                                     <div class="text-center">
                                       <span class="label label-success">Đã đủ</span>
                                     </div>
@@ -706,6 +748,17 @@
                                       <span class="label label-warning">Chưa thu đủ</span>
                                     </div>
                                   <?php endif ?>
+                                </td>
+                                <td class="text-center">
+                                  <?php if ($existEx): ?>
+                                    <?php if ($exported >= $value->total_quantity): ?>
+
+                                    <?php else: ?>
+                                      <button class="btn-xs btn-success btn-export" data-production-id="<?php echo $inv->id ?>" data-item-id="<?php echo $value->item_id ?>" data-quan-export="<?php echo $bought ?>" >Xuất kho</button>
+                                    <?php endif ?>
+
+                                  <?php endif ?>
+
                                 </td>
                             </tr>
 
@@ -926,13 +979,55 @@
    }
 </style>
 <script type="text/javascript">
-   $(document).ready(function () {
+  $(document).ready(function () {
 
-       $('.xls').click(function (event) {
-           event.preventDefault();
-           window.location.href = "<?=site_url('productions/view_process/0/xls/?v=1'.'&id='.$inv->id.'&xls=1')?>";
-           return false;
-       });
+    $('.xls').click(function (event) {
+       event.preventDefault();
+       window.location.href = "<?=site_url('productions/view_process/0/xls/?v=1'.'&id='.$inv->id.'&xls=1')?>";
+       return false;
+    });
 
-   });
+    $('.btn-export').click(function(e) {
+      e.preventDefault();
+      itemId        = $(this).attr('data-item-id');
+      quanExport    = parseFloat($(this).attr('data-quan-export'));
+      productionId  = $(this).attr('data-production-id');
+      console.log(site.base_url + 'productions/exportWarehouse');
+
+      $.ajax({
+        url: site.base_url + 'productions/exportWarehouse',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          item_id         : itemId,
+          quan_export     : quanExport,
+          production_id   : productionId,
+          <?= $this->security->get_csrf_token_name(); ?>: "<?= $this->security->get_csrf_hash(); ?>"
+        },
+      })
+      .done(function(responses) {
+        console.log(responses);
+        if (responses.status) {
+          window.location = site.base_url + 'productions/view_process/<?php echo $inv->id ?>/#material-norms';
+        }else{
+          mess    = 'Xuất kho thất bại!';
+          clsBtn  = 'danger';
+          html_notify = '<div class="alert alert-'+clsBtn+' fade in alert-dismissable" style="margin-top:18px;"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><strong>'+mess+'</strong></div>';
+          $('.notify').html(html_notify);
+          $('.notify').slideToggle();
+
+          setTimeout(function() {
+            $('.notify').slideToggle();
+          }, 3000);
+        }
+
+
+      })
+      .fail(function() {
+        console.log("error");
+      })
+
+
+    });
+  });
 </script>

@@ -2593,5 +2593,18 @@ class Productions extends MY_Controller
         }
     }
 
+    public function exportWarehouse(){
+        $itemId         = $this->input->post('item_id');
+        $quanExport     = $this->input->post('quan_export');
+        $productionId   = $this->input->post('production_id');
+        // redirect(base_url()."productions/");
+        if ($this->productions_model->exportWarehouse($productionId, $itemId, $quanExport)) {
+            $this->session->set_flashdata('message', 'Xuất kho thành công!');
+            echo json_encode(array('status' => true));
+        }else{
+            echo json_encode(array('status' => false));
+        }
 
+
+    }
 }

@@ -1489,7 +1489,7 @@ class Productions_model extends CI_Model
 
     public function getItemsInWarehousesAvailable($item_id)
     {
-        $q = $this->db->get_where('warehouses_products', array('item_id' => $item_id, 'warehouse_id' => 1));
+        $q = $this->db->get_where('warehouses_products', array('item_id' => $item_id, 'warehouse_id' => 1), 1);
 
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -2608,4 +2608,30 @@ class Productions_model extends CI_Model
 
         return FALSE;
     }
+
+    public function exportWarehouse($productionId, $itemId, $quanExport){
+        $data = array(
+            'production_id' => $productionId,
+            'item_id'       => $itemId,
+            'ex_quantity'   => $quanExport,
+            'created_at'    => date('Y-m-d')
+        );
+
+        if ($this->db->insert('ex_warehouses', $data)) {
+            $this->updateQuantityWhenExport($itemId, $quanExport);
+            return true;
+        }
+        return false;
+    }
+
+    public function updateQuantityWhenExport($itemId, $quanExport){
+        $this->db->set('quantity', 'quantity-'.$quanExport, false);
+        $this->db->where('warehouse_id', 2);
+        $this->db->where('item_id', $itemId);
+        if ($this->db->update('warehouses_products')) {
+            return true;
+        }
+        return false;
+    }
+
 }
