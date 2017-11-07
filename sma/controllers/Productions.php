@@ -2594,11 +2594,23 @@ class Productions extends MY_Controller
     }
 
     public function exportWarehouse(){
-        $itemId         = $this->input->post('item_id');
-        $quanExport     = $this->input->post('quan_export');
-        $productionId   = $this->input->post('production_id');
-        // redirect(base_url()."productions/");
-        if ($this->productions_model->exportWarehouse($productionId, $itemId, $quanExport)) {
+        $itemId             = $this->input->post('item_id');
+        $quanExport         = $this->input->post('quan_export');
+        $productionId       = $this->input->post('production_id');
+        $purchaseIds        = $this->input->post('purchase_ids');
+
+        $ids                = $this->productions_model->getPurchasesByProductionId($productionId);
+        $arrTotalCanEx      = $this->productions_model->getTotalCanEx($ids);
+
+        $arrPurchaseIdCanEx   = array();
+        foreach ($arrTotalCanEx as $ex) {
+          if ($ex->item_id == $itemId) {
+            $arrPurchaseIdCanEx[]  = $ex->id;
+          }
+
+        }
+
+        if ($this->productions_model->exportWarehouse($productionId, $itemId, $quanExport, $arrPurchaseIdCanEx)) {
             $this->session->set_flashdata('message', 'Xuất kho thành công!');
             echo json_encode(array('status' => true));
         }else{

@@ -219,6 +219,12 @@
 
                 <div class="row">
                     <div class="col-lg-12">
+<!--                         <div class="col-md-4 ">
+                            <div class="form-group">
+                                <input type="checkbox" class="checkbox"><label class="padding05" >Xuất theo đơn hàng sản xuất</label>
+                            </div>
+                        </div>
+                        <div class="row"></div> -->
 
                         <?php if ($Owner || $Admin) { ?>
                             <div class="col-md-4">

@@ -37,6 +37,7 @@
    padding: 5px 0px;
    }
 </style>
+
 <div class="box">
    <div class="box-header">
       <h2 class="blue"><i class="fa-fw fa fa-file"></i><?= lang("Lệnh sản xuất") . ' ' . $inv->reference_no; ?></h2>
@@ -622,9 +623,12 @@
                   <div class="table-responsive">
                     <?php
                       $ids = $this->productions_model->getPurchasesByProductionId($inv->id);
-                      $arr_total_boughts = $this->productions_model->getTotalBought($ids);
+                      $arr_total_boughts  = $this->productions_model->getTotalBought($ids);
+                      $arr_total_can_ex   = $this->productions_model->getTotalCanEx($ids);
+                      $arr_ids_can_ex     = $this->productions_model->getIdsCanEx($ids);
                       // echo("<pre>");
-                      // print_r($arr_total_boughts);
+                      // print_r($arr_ids_can_ex);
+                      // print_r($arr_total_can_ex);
                       // echo('</pre>');
                       $arr_purchases_id = array();
                       foreach ($enquiery as $value) {
@@ -648,6 +652,7 @@
                               <th>Ngày nhập(Chi tiết)</th>
                               <th>Số lượng đã thu mua</th>
                               <th>Số lượng đã xuất</th>
+                              <th>Số lượng có thể xuất</th>
                               <th>Trạng thái</th>
                               <th>Xuất kho đưa vào sản xuất</th>
                            </tr>
@@ -738,6 +743,20 @@
                                     echo $this->sma->formatNumber($exported);
                                   ?>
                                 </td>
+                                <td class="right">
+                                  <?php
+                                    $quanCanEx = 0;
+                                    $arrPurchaseIdCanEx   = array();
+                                    foreach ($arr_total_can_ex as $ex) {
+                                      if ($ex->item_id == $value->item_id) {
+                                        $quanCanEx            += $ex->quantity;
+                                        $arrPurchaseIdCanEx[]  = $ex->id;
+                                      }
+
+                                    }
+                                    echo $this->sma->formatNumber($quanCanEx);
+                                   ?>
+                                </td>
                                 <td>
                                   <?php if ($exported >= $value->total_quantity): ?>
                                     <div class="text-center">
@@ -750,13 +769,11 @@
                                   <?php endif ?>
                                 </td>
                                 <td class="text-center">
-                                  <?php if ($existEx): ?>
-                                    <?php if ($exported >= $value->total_quantity): ?>
+                                  <?php if ($quanCanEx > 0): ?>
+                                      <button class="btn btn-xs btn-success btn-export" data-production-id="<?php echo $inv->id ?>" data-item-id="<?php echo $value->item_id ?>" data-quan-export="<?php echo $quanCanEx ?>" data-purchase-item-ids="<?php echo json_encode($arrPurchaseIdCanEx); ?>">Xuất kho</button>
 
-                                    <?php else: ?>
-                                      <button class="btn-xs btn-success btn-export" data-production-id="<?php echo $inv->id ?>" data-item-id="<?php echo $value->item_id ?>" data-quan-export="<?php echo $bought ?>" >Xuất kho</button>
-                                    <?php endif ?>
-
+                                  <?php else: ?>
+                                      <button class="btn btn-xs btn-success disabled" style="cursor: not-allowed;    background-color: #727f72; border-color: #727f72;" disabled>Xuất kho</button>
                                   <?php endif ?>
 
                                 </td>
@@ -774,6 +791,8 @@
       </div>
    </div>
 </div>
+
+
 <script src="<?= $assets; ?>js/hc/highcharts.js"></script>
 <script type="text/javascript">
     console.log(<?= json_encode($products); ?>);
@@ -989,44 +1008,47 @@
 
     $('.btn-export').click(function(e) {
       e.preventDefault();
-      itemId        = $(this).attr('data-item-id');
-      quanExport    = parseFloat($(this).attr('data-quan-export'));
-      productionId  = $(this).attr('data-production-id');
-      console.log(site.base_url + 'productions/exportWarehouse');
+      if (confirm("Bạn có chắc chắn không?")) {
+        itemId          = $(this).attr('data-item-id');
+        quanExport      = parseFloat($(this).attr('data-quan-export'));
+        productionId    = $(this).attr('data-production-id');
+        purchaseItemIds = $(this).attr('data-purchase-item-ids')
 
-      $.ajax({
-        url: site.base_url + 'productions/exportWarehouse',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-          item_id         : itemId,
-          quan_export     : quanExport,
-          production_id   : productionId,
-          <?= $this->security->get_csrf_token_name(); ?>: "<?= $this->security->get_csrf_hash(); ?>"
-        },
-      })
-      .done(function(responses) {
-        console.log(responses);
-        if (responses.status) {
-          window.location = site.base_url + 'productions/view_process/<?php echo $inv->id ?>/#material-norms';
-        }else{
-          mess    = 'Xuất kho thất bại!';
-          clsBtn  = 'danger';
-          html_notify = '<div class="alert alert-'+clsBtn+' fade in alert-dismissable" style="margin-top:18px;"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><strong>'+mess+'</strong></div>';
-          $('.notify').html(html_notify);
-          $('.notify').slideToggle();
 
-          setTimeout(function() {
+        $.ajax({
+          url: site.base_url + 'productions/exportWarehouse',
+          type: 'POST',
+          dataType: 'json',
+          data: {
+            item_id         : itemId,
+            quan_export     : quanExport,
+            production_id   : productionId,
+            <?= $this->security->get_csrf_token_name(); ?>: "<?= $this->security->get_csrf_hash(); ?>"
+          },
+        })
+        .done(function(responses) {
+          console.log(responses);
+          if (responses.status) {
+            window.location = site.base_url + 'productions/view_process/<?php echo $inv->id ?>/#material-norms';
+            location.reload();
+          }else{
+            mess    = 'Xuất kho thất bại!';
+            clsBtn  = 'danger';
+            html_notify = '<div class="alert alert-'+clsBtn+' fade in alert-dismissable" style="margin-top:18px;"><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a><strong>'+mess+'</strong></div>';
+            $('.notify').html(html_notify);
             $('.notify').slideToggle();
-          }, 3000);
-        }
+
+            setTimeout(function() {
+              $('.notify').slideToggle();
+            }, 3000);
+          }
 
 
-      })
-      .fail(function() {
-        console.log("error");
-      })
-
+        })
+        .fail(function() {
+          console.log("error");
+        })
+      }
 
     });
   });

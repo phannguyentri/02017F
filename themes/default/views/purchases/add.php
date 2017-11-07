@@ -372,18 +372,17 @@
                         </div>
 
                         <div class="col-md-12">
-
-                                <div class="form-group">
-                                    <?= lang("Phiếu yêu cầu mua hàng", "enquiery"); ?>
-                                    <?php
-                                        $e[''] = '';
-                                        foreach ($enquiries as $enquiery) {
-                                            $e[$enquiery->id] = $enquiery->reference_no;
-                                        }
-                                        echo form_dropdown('enquiery', $e, (isset($_POST['enquiery']) ? $_POST['enquiery'] : ''), 'id="enquiery" class="form-control input-tip select" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("phiếu yêu cầu mua hàng") . '" style="width:100%;" ');
-                                        ?>
-                                        </div>
-                                    </div>
+                            <div class="form-group">
+                                <?= lang("Phiếu yêu cầu mua hàng", "enquiery"); ?>
+                                <?php
+                                    $e[''] = '';
+                                    foreach ($enquiries as $enquiery) {
+                                        $e[$enquiery->id] = $enquiery->reference_no;
+                                    }
+                                    echo form_dropdown('enquiery', $e, (isset($_POST['enquiery']) ? $_POST['enquiery'] : ''), 'id="enquiery" class="form-control input-tip select" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("phiếu yêu cầu mua hàng") . '" style="width:100%;" ');
+                                ?>
+                            </div>
+                        </div>
 
 
 
@@ -452,8 +451,7 @@
 
                         <div class="col-md-12">
                             <div class="form-group">
-                                <input type="checkbox" class="checkbox" id="extras" value=""/><label for="extras"
-                                                                                                     class="padding05"><?= lang('more_options') ?></label>
+                                <input type="checkbox" class="checkbox" id="extras" value=""/><label for="extras" class="padding05"><?= lang('more_options') ?></label>
                             </div>
                             <div class="row" id="extras-con" style="display: none;">
                                 <?php if ($Settings->tax1) { ?>

@@ -2396,6 +2396,37 @@ class Productions_model extends CI_Model
         return FALSE;
     }
 
+    public function getIdsCanEx($ids){
+        $this->db->select('id, reference_no');
+        $this->db->where_in('parent_id', $ids);
+        $this->db->where('status_ex', NULL);
+        $q = $this->db->get('purchases');
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row->id;
+            }
+            return $data;
+        }
+        return FALSE;
+    }
+
+    public function getTotalCanEx($ids){
+        $this->db->select('purchase_items.id, product_name, item_id, quantity');
+        // $this->db->select_sum('quantity');
+        $this->db->where_in('parent_id', $ids);
+        $this->db->where('purchase_items.status_ex', NULL);
+        $this->db->join('purchase_items','purchase_items.purchase_id = purchases.id', 'left');
+        // $this->db->group_by('item_id');
+        $q = $this->db->get('purchases');
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+              }
+            return $data;
+        }
+        return FALSE;
+    }
+
     public function getDatePurchaseItems($arr_purchases_id, $item_id){
         // $this->db->select('purchase_items.id, reference_no, purchase_items.item_id, product_name');
         $this->db->where_in('purchases.id', $arr_purchases_id);
@@ -2609,7 +2640,7 @@ class Productions_model extends CI_Model
         return FALSE;
     }
 
-    public function exportWarehouse($productionId, $itemId, $quanExport){
+    public function exportWarehouse($productionId, $itemId, $quanExport, $arrPurchaseIdCanEx){
         $data = array(
             'production_id' => $productionId,
             'item_id'       => $itemId,
@@ -2619,6 +2650,10 @@ class Productions_model extends CI_Model
 
         if ($this->db->insert('ex_warehouses', $data)) {
             $this->updateQuantityWhenExport($itemId, $quanExport);
+            foreach ($arrPurchaseIdCanEx as $purchaseItemId) {
+                $this->updatePurchaseItemExStatus($purchaseItemId);
+            }
+
             return true;
         }
         return false;
@@ -2629,6 +2664,13 @@ class Productions_model extends CI_Model
         $this->db->where('warehouse_id', 2);
         $this->db->where('item_id', $itemId);
         if ($this->db->update('warehouses_products')) {
+            return true;
+        }
+        return false;
+    }
+
+    public function updatePurchaseItemExStatus($purchaseItemId){
+        if ($this->db->update('purchase_items', array('status_ex' => 'exported'), array('id' => $purchaseItemId))) {
             return true;
         }
         return false;

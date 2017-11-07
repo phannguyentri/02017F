@@ -133,4 +133,9 @@ class Welcome extends MY_Controller
         exit();
     }
 
+    public function setup_home(){
+        $bc = array(array('link' => '#', 'page' => lang('dashboard')));
+        $meta = array('page_title' => lang('dashboard'), 'bc' => $bc);
+        $this->page_construct('setup_home', $meta, $this->data);
+    }
 }
