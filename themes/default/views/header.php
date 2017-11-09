@@ -29,7 +29,7 @@
     </script>
 </head>
 
-<body>
+<body class="sidebar-minified">
 <noscript>
     <div class="global-site-notice noscript">
         <div class="notice-inner">
@@ -235,7 +235,7 @@
             <div id="sidebar-left" class="col-lg-2 col-md-2">
                 <div class="sidebar-nav nav-collapse collapse navbar-collapse" id="sidebar_menu">
                     <ul class="nav main-menu">
-                        <li class="mm_welcome"><a href="<?= site_url() ?>"><i class="fa fa-dashboard"></i><span
+                        <li class="mm_welcome"><a href="<?= site_url() ?>welcome/dashboard"><i class="fa fa-dashboard"></i><span
                                     class="text"> <?= lang('dashboard'); ?></span></a></li>
 
                         <?php
@@ -873,6 +873,7 @@
                 <a href="#" id="main-menu-act" class="full visible-md visible-lg"><i
                         class="fa fa-angle-double-left"></i></a>
             </div>
+
 
             <div id="content" class="col-lg-10 col-md-10">
                 <div class="row">

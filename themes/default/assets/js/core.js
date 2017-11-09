@@ -1,4 +1,5 @@
 $(window).load(function () {
+    $.cookie('the_sidebar', 'minified');
     $("#loading").fadeOut("slow");
 });
 function cssStyle() {

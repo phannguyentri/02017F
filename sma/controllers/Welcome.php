@@ -17,6 +17,13 @@ class Welcome extends MY_Controller
 
     public function index()
     {
+        $hiddenDashBoard    = array('status' => true);
+        $bc = array(array('link' => '#', 'page' => lang('dashboard')));
+        $meta = array('page_title' => lang('dashboard'), 'bc' => $bc);
+        $this->page_construct('setup_home', $meta, $this->data);
+    }
+
+    function dashboard(){
         if ($this->Settings->version == '2.3') {
             $this->session->set_flashdata('warning', 'Please complete your update by synchronizing your database.');
             redirect('sync');
@@ -45,7 +52,6 @@ class Welcome extends MY_Controller
         $bc = array(array('link' => '#', 'page' => lang('dashboard')));
         $meta = array('page_title' => lang('dashboard'), 'bc' => $bc);
         $this->page_construct('dashboard', $meta, $this->data);
-
     }
 
     function promotions()
@@ -131,11 +137,5 @@ class Welcome extends MY_Controller
         $this->load->helper('download');
         force_download('./files/'.$file, NULL);
         exit();
-    }
-
-    public function setup_home(){
-        $bc = array(array('link' => '#', 'page' => lang('dashboard')));
-        $meta = array('page_title' => lang('dashboard'), 'bc' => $bc);
-        $this->page_construct('setup_home', $meta, $this->data);
     }
 }

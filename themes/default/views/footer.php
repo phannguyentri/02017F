@@ -59,6 +59,13 @@ $s2_file_date = $this->parser->parse_string($s2_lang_file, $s2_data, true);
         $('#<?=$m?>_<?=$v?>').addClass('active');
         $('.mm_<?=$m?> a .chevron').removeClass("closed").addClass("opened");
     });
+
+
+    $(document).ready(function() {
+        if (hiddenDashBoard) {
+            $('#content')[0].style.setProperty('border-left', '0px', 'important' );
+        }
+    });
 </script>
 </body>
 </html>

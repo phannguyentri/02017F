@@ -42,6 +42,7 @@ function row_status($x)
         $mtax3[] = $month_sale->ptax;
     }
     ?>
+
     <div class="box" style="margin-bottom: 15px;">
         <div class="box-header">
             <h2 class="blue"><i class="fa-fw fa fa-bar-chart-o"></i><?= lang('overview_chart'); ?></h2>
@@ -674,21 +675,10 @@ function row_status($x)
 
     }
 
-    // echo "<pre>";
-    // print_r($arr_total_final_process);
-    // echo "</pre>";
-
-
-
-
     $arr_reference_no   = array();
     $arr_amount         = array();
     $arr_grand_total    = array();
     $arr_unpaid         = array();
-
-    echo "<pre>";
-    print_r($productions_chart);
-    echo "</pre>";
 
     foreach ($productions_chart as $val) {
         $arr_reference_no[] = '<a href="'.base_url().'productions/view_process/'.$val->id.'" >'.$val->reference_no.'</a>';
